@@ -11,9 +11,12 @@
 
 #include <iostream> // Standard libraries.
 #include <string>
+#include <cstddef>
 
 #include <SDL\SDL.h> // SDL/Glew for OpenGL behaviours.
 #include <GL\glew.h>
 
 #include "SimulationGame.h" // Created classes/files.
 #include "GameState.h"
+#include "TerrainChunk.h"
+#include "Vertex.h"

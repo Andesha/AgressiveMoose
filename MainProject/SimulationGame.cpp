@@ -15,6 +15,7 @@ SimulationGame::~SimulationGame() {
 // Start will call initialize to build all windows, followed by jumping into the game loop.
 void SimulationGame::start() {
 	this->initialize(); // Build.
+	tc.initialize(0.0f,0.0f);
 	this->gameLoop(); // Run.
 }
 
@@ -23,7 +24,7 @@ void SimulationGame::initialize() {
 	SDL_Init(SDL_INIT_EVERYTHING); // SDL initial call.
 
 	// SDL Window building.
-	this->window = SDL_CreateWindow("Flight Simulation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,this->windowWidth,this->windowHeight, SDL_WINDOW_OPENGL);
+	this->window = SDL_CreateWindow("Flight Simulation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->windowWidth, this->windowHeight, SDL_WINDOW_OPENGL);
 	if (this->window == NULL)outputError("Window failed to build.");
 
 	// Build the OpenGL context.
@@ -36,13 +37,13 @@ void SimulationGame::initialize() {
 
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); // Enable double buffering.
 
-	glClearColor(0.0f,0.0f,1.0f,1.0f);
+	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 }
 
 // Input polling.
 void SimulationGame::examineInput() {
 	SDL_Event input; // Input event.
-	
+
 	while (SDL_PollEvent(&input)) { // Pass reference to our input object.
 		switch (input.type) {
 		case SDL_QUIT: // Exiting.
@@ -82,17 +83,11 @@ void SimulationGame::outputError(std::string error) {
 }
 
 // Method call for drawing all objects we need.
-void SimulationGame::drawWorld(){
+void SimulationGame::drawWorld() {
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glEnableClientState(GL_COLOR_ARRAY);
-	glBegin(GL_TRIANGLES);
-	glColor3f(1.0,0.0,0.0);
-	glVertex2f(-1, -1);
-	glVertex2f(0, -1);
-	glVertex2f(0, 0);
-	glEnd();
+	tc.draw();
 
 	SDL_GL_SwapWindow(this->window);
 }
