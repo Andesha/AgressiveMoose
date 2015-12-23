@@ -85,5 +85,6 @@ void SimulationGame::drawWorld() {
 void SimulationGame::initializeShaders() {
 	program.compileShaders("Shaders\\basicShader.vtx","Shaders\\basicShader.frg");
 	program.addAttribute("vertexPosition");
+	program.addAttribute("vertexColor");
 	program.linkShaders();
 }
