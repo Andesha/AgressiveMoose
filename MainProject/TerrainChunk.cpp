@@ -3,7 +3,6 @@
 
 // Default constructor.
 TerrainChunk::TerrainChunk() : vaoID(0), vboID(0), eboID(0), drawing(false) {
-	
 }
 
 
@@ -41,26 +40,36 @@ void TerrainChunk::initialize(float cX, float cY) {
 
 	for (int i = vertStart; i >= -vertStart; i--) {
 		for (int j = -vertStart; j <= vertStart; j++) {
-			//std::cout << "(" << j << "," << i << ")";
+			std::cout << "(" << j << "," << i << ")";
 			vertices[count].position.x = (float)j / 2;
 			vertices[count].position.y = (float)i / 2;
 			vertices[count].position.z = examinePerlin((int)this->centerX + j, (int)this->centerY + i);
 			++count; // I don't know?
 		}
-		//std::cout << std::endl;
+		std::cout << std::endl;
 	}
 
 	GLuint indices[] = {
 		1, 4, 0,
-		4, 3, 0
+		4, 3, 0,
+		2, 5, 1,
+		5, 4, 1,
+		4, 7, 3,
+		7, 6, 3,
+		5, 8, 4,
+		8, 7, 4
 	};
 
 	for (int i = 0; i < 9; i++) { // Set all to the same color.
 		vertices[i].color.r = 255;
 		vertices[i].color.g = 0;
-		vertices[i].color.b = 255;
+		vertices[i].color.b = 0;
 		vertices[i].color.a = 255;
 	}
+
+	vertices[4].color.r = 0;
+	vertices[4].color.g = 0;
+	vertices[4].color.b = 0;
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
@@ -98,7 +107,7 @@ void TerrainChunk::draw() {
 
 	glBindVertexArray(this->vaoID);
 
-	glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, (void*)0);
+	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, (void*)0);
 
 	glBindVertexArray(0);
 

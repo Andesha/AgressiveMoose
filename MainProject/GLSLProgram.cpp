@@ -125,3 +125,9 @@ void GLSLProgram::unuseProg() {
 		glDisableVertexAttribArray(i);
 	}
 }
+
+GLint GLSLProgram::getUniformLocation(const std::string& uniformName) {
+	GLint location = glGetUniformLocation(progID, uniformName.c_str());
+	if (location == GL_INVALID_INDEX) outputError("Uniform name not found: " + uniformName);
+	return location;
+}

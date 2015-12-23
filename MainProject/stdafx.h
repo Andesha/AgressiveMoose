@@ -17,6 +17,7 @@
 
 #include <SDL\SDL.h> // SDL/Glew for OpenGL behaviours.
 #include <GL\glew.h>
+#include <glm\glm.hpp>
 
 #include "SimulationGame.h" // Created classes/files.
 #include "GameState.h"

@@ -12,6 +12,7 @@ SimulationGame::~SimulationGame() {
 // Start will call initialize to build all windows, followed by jumping into the game loop.
 void SimulationGame::start() {
 	this->initialize(); // Build.
+
 	tc.initialize(0.0f,0.0f);
 	initializeShaders();
 
