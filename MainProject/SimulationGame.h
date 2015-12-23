@@ -1,6 +1,7 @@
 #pragma once
 #include "stdafx.h"
 #include "GameState.h"
+#include "GLSLProgram.h"
 #include "TerrainChunk.h"
 
 // Main class which specifies all behaviour of our game engine.
@@ -12,11 +13,13 @@ private:
 
 	TerrainChunk tc;
 
+	GLSLProgram program;
+
 	GameState gameState; // See GameState.h
 
-	void outputError(std::string error);
-
 	void initialize(); // Builds all objects like OpenGL contexts and our window.
+
+	void initializeShaders(); // Call all needed attributes of the GLSL program.
 
 	void examineInput(); // SDL input polling.
 

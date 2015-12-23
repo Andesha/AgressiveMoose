@@ -10,8 +10,10 @@
 #include <tchar.h>
 
 #include <iostream> // Standard libraries.
+#include <fstream>
 #include <string>
 #include <cstddef>
+#include <vector>
 
 #include <SDL\SDL.h> // SDL/Glew for OpenGL behaviours.
 #include <GL\glew.h>
@@ -20,3 +22,5 @@
 #include "GameState.h"
 #include "TerrainChunk.h"
 #include "Vertex.h"
+#include "ErrorHandling.h"
+#include "GLSLProgram.h"

@@ -86,7 +86,9 @@ if not exist "$(TargetDir)glew32.dll" copy "$(SolutionDir)\ThirdParty\glew\glew3
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ErrorHandling.h" />
     <ClInclude Include="GameState.h" />
+    <ClInclude Include="GLSLProgram.h" />
     <ClInclude Include="SimulationGame.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
@@ -94,6 +96,8 @@ if not exist "$(TargetDir)glew32.dll" copy "$(SolutionDir)\ThirdParty\glew\glew3
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ErrorHandling.cpp" />
+    <ClCompile Include="GLSLProgram.cpp" />
     <ClCompile Include="MainProject.cpp" />
     <ClCompile Include="SimulationGame.cpp" />
     <ClCompile Include="stdafx.cpp">

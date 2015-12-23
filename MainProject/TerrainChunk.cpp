@@ -2,11 +2,8 @@
 #include "TerrainChunk.h"
 
 // Default constructor.
-TerrainChunk::TerrainChunk() {
-	this->vaoID = 0;
-	this->vboID = 0; // Null ID.
-	this->eboID = 0;
-	this->drawing = false;
+TerrainChunk::TerrainChunk() : vaoID(0), vboID(0), eboID(0), drawing(false) {
+	
 }
 
 

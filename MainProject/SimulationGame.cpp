@@ -1,11 +1,8 @@
 #include "stdafx.h"
 
 // Initialize game object to default values.
-SimulationGame::SimulationGame() {
-	this->window = NULL;
-	this->windowWidth = 1024;
-	this->windowHeight = 720;
-	this->gameState = GameState::PLAYING;
+SimulationGame::SimulationGame() : window(NULL), windowWidth(1024), windowHeight(720), gameState(GameState::PLAYING) {
+
 }
 
 // Currently no destructor.
@@ -16,6 +13,8 @@ SimulationGame::~SimulationGame() {
 void SimulationGame::start() {
 	this->initialize(); // Build.
 	tc.initialize(0.0f,0.0f);
+	initializeShaders();
+
 	this->gameLoop(); // Run.
 }
 
@@ -69,25 +68,22 @@ void SimulationGame::gameLoop() {
 	}
 }
 
-// Helper method for determining any crashes when actually debugging the game.
-void SimulationGame::outputError(std::string error) {
-	std::cout << "An error has occurred:" << std::endl; // Pretty output formatting:
-	std::cout << error << std::endl;
-	std::cout << "Press any key to exit the application" << std::endl;
-
-	int t; // Pause.
-	std::cin >> t;
-
-	SDL_Quit();
-	exit(1); // Exit with error code.
-}
-
 // Method call for drawing all objects we need.
 void SimulationGame::drawWorld() {
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	this->program.useProg();
+
 	tc.draw();
 
+	this->program.unuseProg();
+
 	SDL_GL_SwapWindow(this->window);
+}
+
+void SimulationGame::initializeShaders() {
+	program.compileShaders("Shaders\\basicShader.vtx","Shaders\\basicShader.frg");
+	program.addAttribute("vertexPosition");
+	program.linkShaders();
 }
