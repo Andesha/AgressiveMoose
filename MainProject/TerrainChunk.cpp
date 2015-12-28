@@ -35,11 +35,11 @@ void TerrainChunk::initialize(float cX, float cY) {
 	glBindVertexArray(this->vaoID);
 
 	Vertex vertices[9]; // Size of grid.
-	int vertStart = 3 / 2;
+	int vertStart = 1;
 	int count = 0;
 
 	for (int i = vertStart; i >= -vertStart; i--) {
-		for (int j = -vertStart; j <= vertStart; j++) {
+		for (int j = -1*vertStart; j <= vertStart; j++) {
 			std::cout << "(" << j << "," << i << ")";
 			vertices[count].position.x = (float)j / 2;
 			vertices[count].position.y = (float)i / 2;
@@ -62,7 +62,7 @@ void TerrainChunk::initialize(float cX, float cY) {
 
 	for (int i = 0; i < 9; i++) { // Set all to the same color.
 		vertices[i].color.r = 255;
-		vertices[i].color.g = 0;
+		vertices[i].color.g = 234;
 		vertices[i].color.b = 0;
 		vertices[i].color.a = 255;
 	}
