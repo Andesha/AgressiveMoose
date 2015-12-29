@@ -1,1 +1,3 @@
 ThirdParty/
+*.opensdf
+*.sdf

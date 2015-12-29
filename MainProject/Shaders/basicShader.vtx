@@ -5,9 +5,9 @@ in vec4 vertexColor;
 
 out vec4 fragmentColor;
 
-void main(){
-	gl_Position.xyz = vertexPosition;
-	gl_Position.w = 1.0;
+uniform mat4 transform;
 
+void main(){
+	gl_Position = transform * vec4(vertexPosition, 1.0);
 	fragmentColor = vertexColor;
 }

@@ -75,7 +75,15 @@ void SimulationGame::drawWorld() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	this->program.useProg();
+	//GLfloat timePassed = SDL_GetTicks()/500;
+	//GLfloat blueValue = (sin(timePassed)/2)+0.5;
+	//glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
+	glm::mat4 trans;
+	trans = glm::rotate(trans, (GLfloat)SDL_GetTicks()/1000.f, glm::vec3(0.0f, 0.3f, 1.0f));
+	//vec = trans * vec;
 
+	GLuint transformLoc = program.getUniformLocation("transform");
+	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
 	tc.draw();
 
 	this->program.unuseProg();

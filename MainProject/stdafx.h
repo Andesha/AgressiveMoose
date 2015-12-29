@@ -18,6 +18,10 @@
 #include <SDL\SDL.h> // SDL/Glew for OpenGL behaviours.
 #include <GL\glew.h>
 #include <glm\glm.hpp>
+#include <glm\gtc\matrix_transform.hpp>
+#include <glm\gtc\type_ptr.hpp>
+
+#include <SOIL\SOIL.h> // Simple OpenGL Image Library
 
 #include "SimulationGame.h" // Created classes/files.
 #include "GameState.h"

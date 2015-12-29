@@ -1,6 +1,9 @@
 #pragma once
 #include "stdafx.h"
 
+/// <summary>
+///	Main class for 3d camera object
+/// </summary>
 class Camera3D {
 public:
 	Camera3D();
@@ -17,9 +20,8 @@ public:
 	}
 
 
-
 private:
 	glm::vec3 position;
-	glm::mat4 orthoMatrix;
+	glm::vec3 direction;
 };
 

@@ -31,7 +31,7 @@ void TerrainChunk::initialize(float cX, float cY) {
 	if (this->vaoID == 0) {
 		glGenVertexArrays(1,&vaoID);
 	}
-
+	
 	glBindVertexArray(this->vaoID);
 
 	Vertex vertices[9]; // Size of grid.

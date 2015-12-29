@@ -1,6 +1,6 @@
 #version 130
 
-in vec4 fragmentColor;
+uniform vec4 fragmentColor;
 
 out vec4 color;
 

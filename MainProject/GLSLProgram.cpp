@@ -69,7 +69,7 @@ void GLSLProgram::linkShaders() {
 }
 
 void GLSLProgram::compileShader(const std::string& shaderPath, GLuint id) {
-
+	
 	std::ifstream vertexFile(shaderPath);
 	if (vertexFile.fail()) outputError("Failed to open " + shaderPath);
 
