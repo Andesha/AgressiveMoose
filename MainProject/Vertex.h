@@ -15,7 +15,7 @@ struct Color {
 	GLubyte b;
 	GLubyte a;
 };
-                                                                              
+                                                                                
 // Vertex struct for passing into the GPU5
 struct Vertex {
 	Position position;

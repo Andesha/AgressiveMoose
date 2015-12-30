@@ -2,8 +2,10 @@
 
 // Initialize game object to default values.
 SimulationGame::SimulationGame() : 
-    window(NULL), windowWidth(1024), 
-    windowHeight(720), gameState(GameState::PLAYING) {
+    window(NULL),
+    windowWidth(1024), 
+    windowHeight(720), 
+    gameState(GameState::PLAYING){
 
 }
 
@@ -76,27 +78,39 @@ void SimulationGame::gameLoop() {
 void SimulationGame::drawWorld() {
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    
+  glm::mat4 proj;
+  proj = glm::perspective(
+      45.0f, (float)this->windowWidth / (float)this->windowHeight, 
+      0.1f, 100.0f);
+ 
+  glm::mat4 view;
+  // Note that we're translating the scene in the reverse direction of where we want to move
+  view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+
+  glm::mat4 model;
+  model = glm::rotate(model, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 
 	this->program.useProg();
-	//GLfloat timePassed = SDL_GetTicks()/500;
-	//GLfloat blueValue = (sin(timePassed)/2)+0.5;
-	//glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
-	glm::mat4 trans;
-	trans = glm::rotate(trans, (GLfloat)SDL_GetTicks()/1000.f, 
-                      glm::vec3(0.0f, 0.3f, 1.0f));
-	//vec = trans * vec;
 
-	GLuint transformLoc = program.getUniformLocation("transform");
-	glUniformMatrix4fv(transformLoc, 1, GL_FALSE, glm::value_ptr(trans));
+  GLint modelLoc = this->program.getUniformLocation("model");
+  glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+ 
+  GLint viewLoc = this->program.getUniformLocation("view");
+  glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+  
+  GLint projLoc = this->program.getUniformLocation("proj");
+  glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+
 	tc.draw();
-
 	this->program.unuseProg();
 
 	SDL_GL_SwapWindow(this->window);
 }
 
 void SimulationGame::initializeShaders() {
-	program.compileShaders("Shaders\\basicShader.vtx","Shaders\\basicShader.frg");
+	program.compileShaders("Shaders\\basicShader.vtx",
+                         "Shaders\\basicShader.frg");
 	program.addAttribute("vertexPosition");
 	program.addAttribute("vertexColor");
 	program.linkShaders();

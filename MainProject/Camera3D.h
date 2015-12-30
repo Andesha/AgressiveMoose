@@ -11,17 +11,29 @@ public:
 
 	// setter for position.
 	void setPos(glm::vec3& newPos){
-		position = newPos;
+		pos = newPos;
 	}
 
 	// Getter for position.
 	glm::vec3 getPos() {
-		return position;
+		return pos;
 	}
 
+  // setter for direction.
+  void setPos(glm::vec3& newDir){
+      dir = newDir;
+  }
+
+  // Getter for direction.
+  glm::vec3 getPos() {
+      return pos;
+  }
 
 private:
-	glm::vec3 position;
-	glm::vec3 direction;
+	glm::vec3 pos;
+	glm::vec3 dir;
+  glm::vec3 target;
+  glm::vec3 camRight;
+  glm::vec3 camUp
 };
 

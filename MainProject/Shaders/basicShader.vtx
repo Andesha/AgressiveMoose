@@ -5,9 +5,12 @@ in vec4 vertexColor;
 
 out vec4 fragmentColor;
 
-uniform mat4 transform;
+uniform mat4 proj;
+uniform mat4 view;
+uniform mat4 model;
+
 
 void main(){
-	gl_Position = transform * vec4(vertexPosition, 1.0);
+	gl_Position = proj * view * model * vec4(vertexPosition, 1.0);
 	fragmentColor = vertexColor;
 }

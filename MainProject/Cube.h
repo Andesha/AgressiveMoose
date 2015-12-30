@@ -9,7 +9,9 @@
 class Cube{
 private:
 	glm::vec3 position;
+  glm::vec3 orientation;
 
 public:
+    
 
 };
