@@ -1,7 +1,9 @@
 #include "stdafx.h"
 
 // Initialize game object to default values.
-SimulationGame::SimulationGame() : window(NULL), windowWidth(1024), windowHeight(720), gameState(GameState::PLAYING) {
+SimulationGame::SimulationGame() : 
+    window(NULL), windowWidth(1024), 
+    windowHeight(720), gameState(GameState::PLAYING) {
 
 }
 
@@ -9,7 +11,8 @@ SimulationGame::SimulationGame() : window(NULL), windowWidth(1024), windowHeight
 SimulationGame::~SimulationGame() {
 }
 
-// Start will call initialize to build all windows, followed by jumping into the game loop.
+// Start will call initialize to build all windows, followed by jumping 
+// into the game loop.
 void SimulationGame::start() {
 	this->initialize(); // Build.
 
@@ -24,9 +27,9 @@ void SimulationGame::initialize() {
 	SDL_Init(SDL_INIT_EVERYTHING); // SDL initial call.
 
 	// SDL Window building.
-	this->window = SDL_CreateWindow("Flight Simulation", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->windowWidth, this->windowHeight, SDL_WINDOW_OPENGL);
-	if (this->window == NULL)outputError("Window failed to build.");
-
+	this->window = SDL_CreateWindow("Flight Simulation", SDL_WINDOWPOS_CENTERED, 
+									SDL_WINDOWPOS_CENTERED, this->windowWidth, 
+									this->windowHeight, SDL_WINDOW_OPENGL);                                                                                                              
 	// Build the OpenGL context.
 	SDL_GLContext context = SDL_GL_CreateContext(this->window);
 	if (context == NULL)outputError("OpenGL context failed to build.");
@@ -79,7 +82,8 @@ void SimulationGame::drawWorld() {
 	//GLfloat blueValue = (sin(timePassed)/2)+0.5;
 	//glm::vec4 vec(1.0f, 0.0f, 0.0f, 1.0f);
 	glm::mat4 trans;
-	trans = glm::rotate(trans, (GLfloat)SDL_GetTicks()/1000.f, glm::vec3(0.0f, 0.3f, 1.0f));
+	trans = glm::rotate(trans, (GLfloat)SDL_GetTicks()/1000.f, 
+                      glm::vec3(0.0f, 0.3f, 1.0f));
 	//vec = trans * vec;
 
 	GLuint transformLoc = program.getUniformLocation("transform");
