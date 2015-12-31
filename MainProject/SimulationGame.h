@@ -3,6 +3,7 @@
 #include "GameState.h"
 #include "GLSLProgram.h"
 #include "TerrainChunk.h"
+#include "Camera3D.h"
 
 // Main class which specifies all behaviour of our game engine.
 class SimulationGame {
@@ -16,6 +17,8 @@ private:
 	GLSLProgram program;
 
 	GameState gameState; // See GameState.h
+
+    Camera3D camera;
 
 	void initialize(); // Builds all objects like OpenGL contexts and our window.
 

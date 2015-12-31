@@ -17,7 +17,7 @@ SimulationGame::~SimulationGame() {
 // into the game loop.
 void SimulationGame::start() {
 	this->initialize(); // Build.
-
+    this->camera = Camera3D();
 	tc.initialize(0.0f,0.0f);
 	initializeShaders();
 
@@ -86,7 +86,8 @@ void SimulationGame::drawWorld() {
  
   glm::mat4 view;
   // Note that we're translating the scene in the reverse direction of where we want to move
-  view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+  //view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
+  view = camera.getViewMatrix();
 
   glm::mat4 model;
   model = glm::rotate(model, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
