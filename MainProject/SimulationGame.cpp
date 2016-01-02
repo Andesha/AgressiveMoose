@@ -29,7 +29,7 @@ void SimulationGame::initialize() {
 	SDL_Init(SDL_INIT_EVERYTHING); // SDL initial call.
 
 	// SDL Window building.
-	this->window = SDL_CreateWindow("Flight Simulation", SDL_WINDOWPOS_CENTERED, 
+	this->window = SDL_CreateWindow("Flight Simulation", SDL_WINDOWPOS_CENTERED,                      
 									SDL_WINDOWPOS_CENTERED, this->windowWidth, 
 									this->windowHeight, SDL_WINDOW_OPENGL);                                                                                                              
 	// Build the OpenGL context.
@@ -40,7 +40,7 @@ void SimulationGame::initialize() {
 	GLenum error = glewInit();
 	if (error != GLEW_OK)outputError("Glew failed to initialize");
 
-	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); // Enable double buffering.
+	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); // Enable double buffering.   
 
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 }
@@ -85,7 +85,7 @@ void SimulationGame::drawWorld() {
       0.1f, 100.0f);
  
   glm::mat4 view;
-  // Note that we're translating the scene in the reverse direction of where we want to move
+  // Note :translating the scene in the reverse direction of where we want to move
   //view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
   view = camera.getViewMatrix();
 
@@ -104,9 +104,11 @@ void SimulationGame::drawWorld() {
   glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
 
 	tc.draw();
+    camera.incPos();
 	this->program.unuseProg();
 
 	SDL_GL_SwapWindow(this->window);
+
 }
 
 void SimulationGame::initializeShaders() {
