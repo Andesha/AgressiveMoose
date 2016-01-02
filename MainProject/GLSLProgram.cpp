@@ -1,7 +1,8 @@
 #include "stdafx.h"
 #include "GLSLProgram.h"
 
-GLSLProgram::GLSLProgram() :  progID(0), vertexID(0), fragID(0), attributeCount(0) {
+GLSLProgram::GLSLProgram() :  
+progID(0), vertexID(0), fragID(0), attributeCount(0) {
 	
 }
 
@@ -9,7 +10,8 @@ GLSLProgram::~GLSLProgram() {
 
 }
 
-void GLSLProgram::compileShaders(const std::string& vertexPath, const std::string& fragPath) {
+void GLSLProgram::compileShaders(const std::string& vertexPath, 
+                                 const std::string& fragPath) {
 	//Vertex and fragment shaders are successfully compiled.
 	//Now time to link them together into a program.
 	//Get a program object.
@@ -69,7 +71,7 @@ void GLSLProgram::linkShaders() {
 }
 
 void GLSLProgram::compileShader(const std::string& shaderPath, GLuint id) {
-
+	
 	std::ifstream vertexFile(shaderPath);
 	if (vertexFile.fail()) outputError("Failed to open " + shaderPath);
 
@@ -109,7 +111,8 @@ void GLSLProgram::compileShader(const std::string& shaderPath, GLuint id) {
 }
 
 void GLSLProgram::addAttribute(const std::string& attributeName) {
-	glBindAttribLocation(this->progID, this->attributeCount++, attributeName.c_str());
+	glBindAttribLocation(this->progID, this->attributeCount++, 
+                       attributeName.c_str());
 }
 
 void GLSLProgram::useProg() {
@@ -126,8 +129,8 @@ void GLSLProgram::unuseProg() {
 	}
 }
 
-GLint GLSLProgram::getUniformLocation(const std::string& uniformName) {
-	GLint location = glGetUniformLocation(progID, uniformName.c_str());
-	if (location == GL_INVALID_INDEX) outputError("Uniform name not found: " + uniformName);
+GLint GLSLProgram::getUniformLocation(const std::string& uniName) {
+	GLint location = glGetUniformLocation(progID, uniName.c_str());
+	if (location == GL_INVALID_INDEX) outputError("Uniform name not found: " + uniName);
 	return location;
 }
