@@ -2,9 +2,12 @@
 #include "TerrainChunk.h"
 
 // Default constructor.
-TerrainChunk::TerrainChunk() : vaoID(0), vboID(0), eboID(0), drawing(false) {
+TerrainChunk::TerrainChunk() : vaoID(0), vboID(0), eboID(0), drawing(false), perlin(NULL) {
 }
 
+void TerrainChunk::sendPerlin(Perlin& p) {
+	this->perlin = p;
+}
 
 TerrainChunk::~TerrainChunk() {
 	if (this->vboID != 0) {
@@ -13,6 +16,18 @@ TerrainChunk::~TerrainChunk() {
 	if (this->eboID != 0) {
 		glDeleteBuffers(1, &this->eboID);
 	}
+}
+
+bool TerrainChunk::isDrawing() {
+	return this->drawing;
+}
+
+float TerrainChunk::getCenterX() {
+	return this->centerX;
+}
+
+float TerrainChunk::getCenterY() {
+	return this->centerY;
 }
 
 // Private method to be called when first building, AND rebuilding chunks.
@@ -29,24 +44,26 @@ void TerrainChunk::initialize(float cX, float cY) {
 		glGenBuffers(1,&this->eboID);
 	}
 	if (this->vaoID == 0) {
-		glGenVertexArrays(1,&vaoID);
+		glGenVertexArrays(1,&this->vaoID);
+		//std::cout << vaoID << std::endl;
+		//std::cout << GL_MAX_VERTEX_ATTRIBS << std::endl;
 	}
 	
 	glBindVertexArray(this->vaoID);
 
 	Vertex vertices[9]; // Size of grid.
 	int vertStart = 1;
+	
 	int count = 0;
-
 	for (int i = vertStart; i >= -vertStart; i--) {
-		for (int j = -1*vertStart; j <= vertStart; j++) {
-			std::cout << "(" << j << "," << i << ")";
-			vertices[count].position.x = (float)j / 2;
-			vertices[count].position.y = (float)i / 2;
-			vertices[count].position.z = examinePerlin((int)this->centerX + j, (int)this->centerY + i);
+		for (int j = -vertStart; j <= vertStart; j++) {
+			//std::cout << "(" << j << "," << i << ")";
+			vertices[count].position.x = (float)j;
+			vertices[count].position.z = (float)i;
+			vertices[count].position.y = examinePerlin(this->centerX + j, this->centerY + i);
 			++count; // I don't know?
 		}
-		std::cout << std::endl;
+		//std::cout << std::endl;
 	}
 
 	GLuint indices[] = {
@@ -61,15 +78,12 @@ void TerrainChunk::initialize(float cX, float cY) {
 	};
 
 	for (int i = 0; i < 9; i++) { // Set all to the same color.
-		vertices[i].color.r = 255;
-		vertices[i].color.g = 255;
-		vertices[i].color.b = 0;
+		int modifier = rand() % 100;
+		vertices[i].color.r = 255 - modifier;
+		vertices[i].color.g = 255 - modifier;
+		vertices[i].color.b = 255 - modifier;
 		vertices[i].color.a = 255;
 	}
-
-	vertices[4].color.r = 0;
-	vertices[4].color.g = 0;
-	vertices[4].color.b = 0;
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
@@ -96,8 +110,9 @@ void TerrainChunk::rebase(float cX, float cY) {
 	this->eboID = 0;
 }
 
-float TerrainChunk::examinePerlin(int x, int y) {
-	return 1.0f;
+float TerrainChunk::examinePerlin(float x, float y) {
+	double temp = perlin.at(x, y, 0.5);
+	return (float)temp;
 }
 
 void TerrainChunk::draw() {

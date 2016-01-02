@@ -91,10 +91,12 @@ if not exist "$(TargetDir)glew32.dll" copy "$(SolutionDir)\ThirdParty\glew\glew3
     <ClInclude Include="ErrorHandling.h" />
     <ClInclude Include="GameState.h" />
     <ClInclude Include="GLSLProgram.h" />
+    <ClInclude Include="Perlin.h" />
     <ClInclude Include="SimulationGame.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="targetver.h" />
     <ClInclude Include="TerrainChunk.h" />
+    <ClInclude Include="TerrainList.h" />
     <ClInclude Include="Vertex.h" />
   </ItemGroup>
   <ItemGroup>
@@ -102,12 +104,14 @@ if not exist "$(TargetDir)glew32.dll" copy "$(SolutionDir)\ThirdParty\glew\glew3
     <ClCompile Include="ErrorHandling.cpp" />
     <ClCompile Include="GLSLProgram.cpp" />
     <ClCompile Include="MainProject.cpp" />
+    <ClCompile Include="Perlin.cpp" />
     <ClCompile Include="SimulationGame.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="TerrainChunk.cpp" />
+    <ClCompile Include="TerrainList.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
