@@ -62,7 +62,7 @@ void TerrainChunk::initialize(float cX, float cY) {
 
 	for (int i = 0; i < 9; i++) { // Set all to the same color.
 		vertices[i].color.r = 255;
-		vertices[i].color.g = 234;
+		vertices[i].color.g = 255;
 		vertices[i].color.b = 0;
 		vertices[i].color.a = 255;
 	}
