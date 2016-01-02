@@ -1,12 +1,8 @@
 #include "stdafx.h"
 
 // Initialize game object to default values.
-SimulationGame::SimulationGame() : 
-    window(NULL),
-    windowWidth(1024), 
-    windowHeight(720), 
-    gameState(GameState::PLAYING){
-
+SimulationGame::SimulationGame() : window(NULL), windowWidth(1024), windowHeight(720), gameState(GameState::PLAYING), perlin(1234){
+	terrainList = TerrainList(perlin);
 }
 
 // Currently no destructor.
@@ -18,7 +14,10 @@ SimulationGame::~SimulationGame() {
 void SimulationGame::start() {
 	this->initialize(); // Build.
     this->camera = Camera3D();
-	tc.initialize(0.0f,0.0f);
+	
+	terrainList.buildPool(9); // Nine total chunks for the pool.
+	terrainList.firstInit(); // Build the start of the grid.
+
 	initializeShaders();
 
 	this->gameLoop(); // Run.
@@ -93,18 +92,32 @@ void SimulationGame::drawWorld() {
 	model = glm::rotate(model, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 
 	this->program.useProg();
-
-	GLint modelLoc = this->program.getUniformLocation("model");
-	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
  
 	GLint viewLoc = this->program.getUniformLocation("view");
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
-  
 	GLint projLoc = this->program.getUniformLocation("proj");
+	GLint modelLoc = this->program.getUniformLocation("model");
+
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
 
-	tc.draw();
-    camera.incPos();
+	for (TerrainChunk tc : terrainList.getList()) {
+		glm::mat4 model;
+
+		glm::vec3 pos;
+		pos.x = tc.getCenterX();
+		pos.z = tc.getCenterY(); // Confusing but oh well.
+
+		model = glm::translate(model, pos);
+
+		//no rotate
+
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+		tc.draw();
+	}
+
+    //camera.incPos();
+
 	this->program.unuseProg();
 
 	SDL_GL_SwapWindow(this->window);

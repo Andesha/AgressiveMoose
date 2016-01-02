@@ -4,7 +4,7 @@
 
 Camera3D::Camera3D(){
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    pos = glm::vec3(0.0f, 0.0f, 5.0f);
+    pos = glm::vec3(0.0f, 2.0f, 5.0f);
     target = glm::vec3(0.0f, 0.0f, 0.0f);
     dir = glm::normalize(pos - target);
     camRight = glm::normalize(glm::cross(up, dir));

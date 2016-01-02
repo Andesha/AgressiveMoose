@@ -1,9 +1,10 @@
 #pragma once
 #include "stdafx.h"
+
 #include "GameState.h"
 #include "GLSLProgram.h"
-#include "TerrainChunk.h"
 #include "Camera3D.h"
+#include "TerrainList.h"
 
 // Main class which specifies all behaviour of our game engine.
 class SimulationGame {
@@ -12,13 +13,15 @@ private:
 	int windowWidth;
 	int windowHeight;
 
-	TerrainChunk tc;
+	TerrainList terrainList;
 
 	GLSLProgram program;
 
 	GameState gameState; // See GameState.h
 
     Camera3D camera;
+
+	Perlin perlin;
 
 	void initialize(); // Builds all objects like OpenGL contexts and our window.
 

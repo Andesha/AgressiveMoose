@@ -1,6 +1,8 @@
 #pragma once
 #include "stdafx.h"
 
+#include "Perlin.h"
+
 // Chunk class that will only ever be called with new as few times as possible.
 // The idea is to avoid new's and just rebase chunks.
 class TerrainChunk {
@@ -9,13 +11,18 @@ private:
 	float centerX, centerY;
 	GLuint vboID;
 	GLuint eboID;
-	GLuint vaoID;
+	//GLuint vaoID;
+	Perlin perlin;
 
-	float examinePerlin(int x, int y); // Examine the perlin system to find out height.
+	float examinePerlin(float x, float y); // Examine the perlin system to find out height.
 
 public:
 	TerrainChunk();
 	~TerrainChunk();
+
+	GLuint vaoID; // make private again
+
+	void sendPerlin(Perlin& p);
 
 	bool isDrawing();
 	float getCenterX();
