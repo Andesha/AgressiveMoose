@@ -42,8 +42,8 @@ void TerrainChunk::initialize(float cX, float cY) {
 		for (int j = -1*vertStart; j <= vertStart; j++) {
 			std::cout << "(" << j << "," << i << ")";
 			vertices[count].position.x = (float)j / 2;
-			vertices[count].position.y = (float)i / 2;
-			vertices[count].position.z = examinePerlin((int)this->centerX + j, (int)this->centerY + i);
+			vertices[count].position.z = (float)i / 2;
+			vertices[count].position.y = examinePerlin((int)this->centerX + j, (int)this->centerY + i);
 			++count; // I don't know?
 		}
 		std::cout << std::endl;
@@ -62,7 +62,7 @@ void TerrainChunk::initialize(float cX, float cY) {
 
 	for (int i = 0; i < 9; i++) { // Set all to the same color.
 		vertices[i].color.r = 255;
-		vertices[i].color.g = 234;
+		vertices[i].color.g = 255;
 		vertices[i].color.b = 0;
 		vertices[i].color.a = 255;
 	}
@@ -97,7 +97,7 @@ void TerrainChunk::rebase(float cX, float cY) {
 }
 
 float TerrainChunk::examinePerlin(int x, int y) {
-	return 1.0f;
+	return 0.0f;
 }
 
 void TerrainChunk::draw() {
