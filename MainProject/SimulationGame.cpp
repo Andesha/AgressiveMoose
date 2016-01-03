@@ -54,12 +54,10 @@ void SimulationGame::examineInput() {
 			this->gameState = GameState::QUITTING;
 			break;
 		case SDL_MOUSEMOTION: // Mouse event.
-            camera.getFront();
             camera.mouseUpdatePos(input.motion.x, input.motion.y);
 			break;
 		case SDL_KEYDOWN: // Key presses.
 			if (input.key.keysym.sym == 27)this->gameState = GameState::QUITTING;
-			std::cout << input.key.keysym.sym << std::endl;
             camera.moveKeys(input.key.keysym.sym);
 			break;
 		}

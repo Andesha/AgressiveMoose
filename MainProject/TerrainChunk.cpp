@@ -51,28 +51,50 @@ void TerrainChunk::initialize(float cX, float cY) {
 
 	Vertex vertices[TOTAL_VERTICIES]; // Size of grid.
 	
-	int count = 0;
+	int countBuild = 0;
 	for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; i--) {
 		for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; j++) {
 			//std::cout << "(" << j << "," << i << ")";
-			vertices[count].position.x = (float)j;
-			vertices[count].position.z = (float)i;
-			vertices[count].position.y = examinePerlin(this->centerX + j, this->centerY + i);
-			++count; // I don't know?
+			vertices[countBuild].position.x = (float)j;
+			vertices[countBuild].position.z = (float)i;
+			vertices[countBuild].position.y = examinePerlin(this->centerX + j, this->centerY + i);
+			++countBuild; // I don't know?
 		}
 		//std::cout << std::endl;
 	}
 
-	GLuint indices[] = {
-		1, 4, 0,
-		4, 3, 0,
-		2, 5, 1,
-		5, 4, 1,
-		4, 7, 3,
-		7, 6, 3,
-		5, 8, 4,
-		8, 7, 4
-	};
+	GLuint indices[INDICES_WORKAROUND];
+
+	int countIndex = 0;
+	for (int j = 0; j < GRID_WIDTH - 1; j++) {
+		for (int i = 0; i < GRID_WIDTH - 1; i++) {
+			int root = i + (j*GRID_WIDTH);
+			indices[countIndex++] = root + 1; // Triangle one.
+			indices[countIndex++] = root + GRID_WIDTH + 1;
+			indices[countIndex++] = root;
+
+			indices[countIndex++] = root + GRID_WIDTH + 1; // Triangle two.
+			indices[countIndex++] = root + GRID_WIDTH;
+			indices[countIndex++] = root;
+		}
+	}
+
+	//GLuint indices[] = {
+	//	1, 4, 0,
+	//	4, 3, 0,
+	//	2, 5, 1,
+	//	5, 4, 1,
+	//	4, 7, 3,
+	//	7, 6, 3,
+	//	5, 8, 4,
+	//	8, 7, 4
+	//};
+
+	for (int i = 1; i <= INDICES_SIZE; i++) {
+		std::cout << indices[i-1] << ",";
+		if (i % 3 == 0)std::cout << std::endl;
+	}
+	std::cout << "---" << std::endl;
 
 	for (int i = 0; i < 9; i++) { // Set all to the same color.
 		int modifier = rand() % 127;
@@ -124,7 +146,7 @@ void TerrainChunk::draw() {
 
 	glBindVertexArray(this->vaoID);
 
-	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, (void*)0);
+	glDrawElements(GL_TRIANGLES, INDICES_SIZE, GL_UNSIGNED_INT, (void*)0);
 
 	glBindVertexArray(0);
 
