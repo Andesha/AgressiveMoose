@@ -26,16 +26,16 @@ void TerrainList::buildPool(int chunkCount) {
 }
 
 void TerrainList::firstInit() {
-	float gridWidth = 3-1;
+	float gridIncrement = GRID_WIDTH - 1;
 
 	float countX = 0;
 	float countY = 0;
 	
 	for (TerrainChunk& tc : terrainList) {
-		tc.initialize(-gridWidth + (countX * gridWidth), gridWidth + (countY * gridWidth));
+		tc.initialize(-gridIncrement + (countX * gridIncrement), gridIncrement + (countY * gridIncrement));
 
 		countX++;
-		if (countX > gridWidth) {
+		if (countX > gridIncrement) {
 			countX = 0;
 			countY++;
 		}

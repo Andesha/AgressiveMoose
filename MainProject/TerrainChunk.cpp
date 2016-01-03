@@ -45,18 +45,15 @@ void TerrainChunk::initialize(float cX, float cY) {
 	}
 	if (this->vaoID == 0) {
 		glGenVertexArrays(1,&this->vaoID);
-		//std::cout << vaoID << std::endl;
-		//std::cout << GL_MAX_VERTEX_ATTRIBS << std::endl;
 	}
 	
 	glBindVertexArray(this->vaoID);
 
-	Vertex vertices[9]; // Size of grid.
-	int vertStart = 1;
+	Vertex vertices[TOTAL_VERTICIES]; // Size of grid.
 	
 	int count = 0;
-	for (int i = vertStart; i >= -vertStart; i--) {
-		for (int j = -vertStart; j <= vertStart; j++) {
+	for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; i--) {
+		for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; j++) {
 			//std::cout << "(" << j << "," << i << ")";
 			vertices[count].position.x = (float)j;
 			vertices[count].position.z = (float)i;
@@ -78,12 +75,17 @@ void TerrainChunk::initialize(float cX, float cY) {
 	};
 
 	for (int i = 0; i < 9; i++) { // Set all to the same color.
-		int modifier = rand() % 100;
+		int modifier = rand() % 127;
 		vertices[i].color.r = 255 - modifier;
 		vertices[i].color.g = 255 - modifier;
 		vertices[i].color.b = 255 - modifier;
 		vertices[i].color.a = 255;
 	}
+
+	vertices[4].color.r = 255;
+	vertices[4].color.g = 0;
+	vertices[4].color.b = 255;
+	vertices[4].color.a = 255;
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
