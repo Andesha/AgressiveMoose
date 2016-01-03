@@ -3,7 +3,7 @@
 
 
 // roll is applied by changing camUp based on roll
-Camera3D::Camera3D(): yaw(90.0f), pitch(0.0f), roll(0.0f), sensitivity(0.5f), speed(0.01f){
+Camera3D::Camera3D(): yaw(90.0f), pitch(0.0f), roll(0.0f), sensitivity(0.5f), speed(0.1f){
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
     pos = glm::vec3(0.0f, 2.0f, 0.0f);
     target = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -82,7 +82,7 @@ glm::mat4 Camera3D::getViewMatrix(){
 
 
 void Camera3D::moveKeys(int keyIn){
-    GLfloat speed = 0.01;
+    GLfloat speed = 0.1;
     switch (keyIn){
  
     case SDLK_w:

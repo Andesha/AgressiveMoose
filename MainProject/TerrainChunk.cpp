@@ -79,17 +79,6 @@ void TerrainChunk::initialize(float cX, float cY) {
 		}
 	}
 
-	//GLuint indices[] = {
-	//	1, 4, 0,
-	//	4, 3, 0,
-	//	2, 5, 1,
-	//	5, 4, 1,
-	//	4, 7, 3,
-	//	7, 6, 3,
-	//	5, 8, 4,
-	//	8, 7, 4
-	//};
-
 	for (int i = 1; i <= INDICES_SIZE; i++) {
 		std::cout << indices[i-1] << ",";
 		if (i % 3 == 0)std::cout << std::endl;
@@ -104,10 +93,10 @@ void TerrainChunk::initialize(float cX, float cY) {
 		vertices[i].color.a = 255;
 	}
 
-	vertices[4].color.r = 255;
-	vertices[4].color.g = 0;
-	vertices[4].color.b = 255;
-	vertices[4].color.a = 255;
+	vertices[24].color.r = 255;
+	vertices[24].color.g = 0;
+	vertices[24].color.b = 255;
+	vertices[24].color.a = 255;
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);

@@ -109,7 +109,7 @@ void SimulationGame::drawWorld() {
 
 		//no rotate
 
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); // Send model matrix.
 
 		tc.draw();
 	}
