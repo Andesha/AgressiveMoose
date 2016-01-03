@@ -96,7 +96,7 @@ void TerrainChunk::initialize(float cX, float cY) {
 	}
 	std::cout << "---" << std::endl;
 
-	for (int i = 0; i < 9; i++) { // Set all to the same color.
+	for (int i = 0; i < TOTAL_VERTICIES; i++) { // Set all to the same color.
 		int modifier = rand() % 127;
 		vertices[i].color.r = 255 - modifier;
 		vertices[i].color.g = 255 - modifier;
