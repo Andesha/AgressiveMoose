@@ -5,7 +5,7 @@
 // roll is applied by changing camUp based on roll
 Camera3D::Camera3D(): yaw(90.0f), pitch(0.0f), roll(0.0f), sensitivity(0.5f), speed(0.01f){
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-    pos = glm::vec3(0.0f, 0.2f, 0.0f);
+    pos = glm::vec3(0.0f, 2.0f, 0.0f);
     target = glm::vec3(0.0f, 0.0f, 0.0f);
     dir = glm::normalize(pos - target);
     camRight = glm::normalize(glm::cross(up, dir));
