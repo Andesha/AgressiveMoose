@@ -1,4 +1,7 @@
 ThirdParty/
+ipch/*
 *.opensdf
 *.sdf
 *.ipch
+*.tlog
+*.idb

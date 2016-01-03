@@ -111,8 +111,7 @@ void GLSLProgram::compileShader(const std::string& shaderPath, GLuint id) {
 }
 
 void GLSLProgram::addAttribute(const std::string& attributeName) {
-	glBindAttribLocation(this->progID, this->attributeCount++, 
-                       attributeName.c_str());
+	glBindAttribLocation(this->progID, this->attributeCount++, attributeName.c_str());
 }
 
 void GLSLProgram::useProg() {
