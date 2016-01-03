@@ -42,6 +42,10 @@ void SimulationGame::initialize() {
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); // Enable double buffering.   
 
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+
+	glEnable(GL_CULL_FACE);
+
+	glFrontFace(GL_CCW);
 }
 
 // Input polling.
