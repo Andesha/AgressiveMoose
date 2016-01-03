@@ -37,11 +37,27 @@ public:
     /// <returns> returns the view matrix of the camera </return>
     glm::mat4 getViewMatrix();
 
+    glm::vec3 getFront();
+
     void setFront(glm::vec3 &front);
 
-    void Camera3D::incPos();
 
+    /// <summary>
+    /// function for controlling 
+    /// </summary>
+    /// <returns> returns the view matrix of the camera </return>
+    void mouseUpdatePos(int mouseX, int mouseY);
+
+    void moveKeys(int keyIn);
 private:
+    
+    bool hasMoved = false;
+    int prevX, prevY;
+
+    GLfloat yaw, pitch, roll;
+    GLfloat sensitivity;
+    GLfloat speed;
+
     glm::vec3 pos;
     glm::vec3 dir;
     glm::vec3 target;

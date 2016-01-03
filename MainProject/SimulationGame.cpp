@@ -26,7 +26,7 @@ void SimulationGame::start() {
 // Builds the window and creates all of the OpenGL context information we need.
 void SimulationGame::initialize() {
 	SDL_Init(SDL_INIT_EVERYTHING); // SDL initial call.
-
+    /*SDL_SetRelativeMouseMode(SDL_TRUE);*/
 	// SDL Window building.
 	this->window = SDL_CreateWindow("Flight Simulation", SDL_WINDOWPOS_CENTERED,                      
 									SDL_WINDOWPOS_CENTERED, this->windowWidth, 
@@ -54,11 +54,13 @@ void SimulationGame::examineInput() {
 			this->gameState = GameState::QUITTING;
 			break;
 		case SDL_MOUSEMOTION: // Mouse event.
-			std::cout << input.motion.x << "," << input.motion.y << std::endl;
+            camera.getFront();
+            camera.mouseUpdatePos(input.motion.x, input.motion.y);
 			break;
 		case SDL_KEYDOWN: // Key presses.
 			if (input.key.keysym.sym == 27)this->gameState = GameState::QUITTING;
 			std::cout << input.key.keysym.sym << std::endl;
+            camera.moveKeys(input.key.keysym.sym);
 			break;
 		}
 	}
@@ -79,9 +81,7 @@ void SimulationGame::drawWorld() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
 	glm::mat4 proj;
-	proj = glm::perspective(
-		45.0f, (float)this->windowWidth / (float)this->windowHeight, 
-		0.1f, 100.0f);
+	proj = glm::perspective(45.0f, (float)this->windowWidth / (float)this->windowHeight, 0.1f, 1000.0f);
  
 	glm::mat4 view;
 	// Note :translating the scene in the reverse direction of where we want to move
@@ -115,8 +115,6 @@ void SimulationGame::drawWorld() {
 
 		tc.draw();
 	}
-
-    //camera.incPos();
 
 	this->program.unuseProg();
 
