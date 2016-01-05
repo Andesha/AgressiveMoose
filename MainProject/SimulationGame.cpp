@@ -59,6 +59,8 @@ void SimulationGame::examineInput() {
 			break;
 		case SDL_MOUSEMOTION: // Mouse event.
             camera.mouseUpdatePos(input.motion.x, input.motion.y);
+            camera.checkWarp(this->window, input.motion.x, input.motion.y, 
+                             this->windowWidth, this->windowHeight);
 			break;
 		case SDL_KEYDOWN: // Key presses.
 			if (input.key.keysym.sym == 27)this->gameState = GameState::QUITTING;

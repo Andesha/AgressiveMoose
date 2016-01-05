@@ -82,24 +82,42 @@ glm::mat4 Camera3D::getViewMatrix(){
 
 
 void Camera3D::moveKeys(int keyIn){
-    GLfloat speed = 0.1;
-    switch (keyIn){
- 
-    case SDLK_w:
+    GLfloat speed = 0.05;
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    if (state[SDL_SCANCODE_RETURN]) {
+        printf("<RETURN> is pressed.\n");
+    }
+    if (state[SDL_SCANCODE_W]) {
         this->pos += speed * this->cameraFront;
-        break;
-    case SDLK_a:
+    }
+    if (state[SDL_SCANCODE_A]) {
         this->pos -= speed * this->camRight;
-        break;
-    case SDLK_s:
+    }
+    if (state[SDL_SCANCODE_S]) {
         this->pos -= speed * this->cameraFront;
-        break;
-    case SDLK_d:
+    }
+    if (state[SDL_SCANCODE_D]) {
         this->pos += speed * this->camRight;
-
-        break;
-    default:
-        break;
     }
 
+
+}
+
+void Camera3D::setPrevXY(int x, int y){
+    this->prevX = x;
+    this->prevY = y;
+}
+
+void Camera3D::checkWarp(SDL_Window* window, int x, int y, int windowWidth,
+    int windowHeight){
+
+    // if you're 25% of the way from the border
+    int win_top_lim = windowHeight / 4;
+    int win_bot_lim = 3 * win_top_lim;
+    int win_l_lim = windowWidth / 4;
+    int win_r_lim = 3 * win_l_lim;
+    if (y < win_top_lim || y > win_bot_lim || x < win_l_lim || x > win_r_lim){
+        SDL_WarpMouseInWindow(window, windowWidth / 2, windowHeight / 2);
+        this->setPrevXY(windowWidth / 2, windowHeight / 2);
+    }
 }

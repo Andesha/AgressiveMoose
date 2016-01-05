@@ -6,7 +6,7 @@
 /// </summary>
 class Camera3D {
 public:
-	Camera3D();
+    Camera3D();
 
     /// <summary>
     ///
@@ -49,8 +49,14 @@ public:
     void mouseUpdatePos(int mouseX, int mouseY);
 
     void moveKeys(int keyIn);
+
+    void Camera3D::setPrevXY(int x, int y);
+
+    void Camera3D::checkWarp(SDL_Window* window, int x, int y, int windowWidth,
+        int windowHeight);
+
 private:
-    
+
     bool hasMoved = false;
     int prevX, prevY;
 
@@ -65,4 +71,3 @@ private:
     glm::vec3 camUp;
     glm::vec3 cameraFront;
 };
-
