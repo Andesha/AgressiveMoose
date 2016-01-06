@@ -18,6 +18,7 @@
 #include <numeric>
 #include <random>
 #include <algorithm>
+#include <cmath>
 
 #include <SDL\SDL.h> // SDL/Glew for OpenGL behaviours.
 #include <GL\glew.h>
@@ -34,3 +35,4 @@
 #include "ErrorHandling.h"
 #include "GLSLProgram.h"
 #include "Perlin.h"
+#include "Constants.h"

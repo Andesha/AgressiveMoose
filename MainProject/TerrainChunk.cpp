@@ -45,44 +45,42 @@ void TerrainChunk::initialize(float cX, float cY) {
 	}
 	if (this->vaoID == 0) {
 		glGenVertexArrays(1,&this->vaoID);
-		//std::cout << vaoID << std::endl;
-		//std::cout << GL_MAX_VERTEX_ATTRIBS << std::endl;
 	}
 	
 	glBindVertexArray(this->vaoID);
 
-	Vertex vertices[9]; // Size of grid.
-	int vertStart = 1;
+	Vertex vertices[TOTAL_VERTICIES]; // Size of grid.
 	
-	int count = 0;
-	for (int i = vertStart; i >= -vertStart; i--) {
-		for (int j = -vertStart; j <= vertStart; j++) {
+	int countBuild = 0;
+	for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; i--) {
+		for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; j++) {
 			//std::cout << "(" << j << "," << i << ")";
-			vertices[count].position.x = (float)j;
-			vertices[count].position.z = (float)i;
-			vertices[count].position.y = examinePerlin(this->centerX + j, this->centerY + i);
-			++count; // I don't know?
+			vertices[countBuild].position.x = (float)j;
+			vertices[countBuild].position.z = (float)i;
+			vertices[countBuild].position.y = examinePerlin(this->centerX + j, this->centerY + i);
+			++countBuild; // I don't know?
 		}
 		//std::cout << std::endl;
 	}
 
-	GLuint indices[] = {
-		1, 4, 0,
-		4, 3, 0,
-		2, 5, 1,
-		5, 4, 1,
-		4, 7, 3,
-		7, 6, 3,
-		5, 8, 4,
-		8, 7, 4
-	};
+	GLuint indices[INDICES_WORKAROUND];
 
-	for (int i = 0; i < 9; i++) { // Set all to the same color.
-		int modifier = rand() % 100;
-		vertices[i].color.r = 255 - modifier;
-		vertices[i].color.g = 255 - modifier;
-		vertices[i].color.b = 255 - modifier;
-		vertices[i].color.a = 255;
+	int countIndex = 0;
+	for (int j = 0; j < GRID_WIDTH - 1; j++) {
+		for (int i = 0; i < GRID_WIDTH - 1; i++) {
+			int root = i + (j*GRID_WIDTH);
+			indices[countIndex++] = root + 1; // Triangle one.
+			indices[countIndex++] = root + GRID_WIDTH + 1;
+			indices[countIndex++] = root;
+
+			indices[countIndex++] = root + GRID_WIDTH + 1; // Triangle two.
+			indices[countIndex++] = root + GRID_WIDTH;
+			indices[countIndex++] = root;
+		}
+	}
+
+	for (int i = 1; i <= INDICES_SIZE; i++) {
+		if (i % 3 == 0)std::cout << std::endl;
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
@@ -122,7 +120,7 @@ void TerrainChunk::draw() {
 
 	glBindVertexArray(this->vaoID);
 
-	glDrawElements(GL_TRIANGLES, 24, GL_UNSIGNED_INT, (void*)0);
+	glDrawElements(GL_TRIANGLES, INDICES_SIZE, GL_UNSIGNED_INT, (void*)0);
 
 	glBindVertexArray(0);
 

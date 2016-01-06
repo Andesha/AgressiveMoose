@@ -1,12 +1,18 @@
 #pragma once
 #include "stdafx.h"
 
+enum MoveType {UP, DOWN, LEFT, RIGHT};
+
+
 /// <summary>
 ///	Main class for 3d camera object
 /// </summary>
 class Camera3D {
 public:
-	Camera3D();
+    
+    int moveType;
+
+    Camera3D();
 
     /// <summary>
     ///
@@ -41,22 +47,40 @@ public:
 
     void setFront(glm::vec3 &front);
 
-
+    
     /// <summary>
     /// function for controlling 
     /// </summary>
     /// <returns> returns the view matrix of the camera </return>
     void mouseUpdatePos(int mouseX, int mouseY);
 
-    void moveKeys(int keyIn);
+
+    /// <summary>
+    /// examine status of keys on press
+    /// </summary>
+    void handleKeyDown();
+
+
+    /// <summary>
+    /// examine status of keys on release
+    /// </summary>
+    void handleKeyUp();
+
+    void Camera3D::setPrevXY(int x, int y);
+
+    void Camera3D::checkWarp(SDL_Window* window, int x, int y, int windowWidth,
+        int windowHeight);
+
+    void Camera3D::computePos();
 private:
-    
+
     bool hasMoved = false;
     int prevX, prevY;
 
     GLfloat yaw, pitch, roll;
     GLfloat sensitivity;
-    GLfloat speed;
+    GLfloat speedFace;
+    GLfloat speedLat;
 
     glm::vec3 pos;
     glm::vec3 dir;
@@ -65,4 +89,3 @@ private:
     glm::vec3 camUp;
     glm::vec3 cameraFront;
 };
-

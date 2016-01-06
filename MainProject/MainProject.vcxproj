@@ -87,6 +87,7 @@ if not exist "$(TargetDir)glew32.dll" copy "$(SolutionDir)\ThirdParty\glew\glew3
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Camera3D.h" />
+    <ClInclude Include="Constants.h" />
     <ClInclude Include="Cube.h" />
     <ClInclude Include="ErrorHandling.h" />
     <ClInclude Include="GameState.h" />

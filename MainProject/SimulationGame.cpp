@@ -1,7 +1,8 @@
 #include "stdafx.h"
 
 // Initialize game object to default values.
-SimulationGame::SimulationGame() : window(NULL), windowWidth(1024), windowHeight(720), gameState(GameState::PLAYING), perlin(1234){
+SimulationGame::SimulationGame() : window(NULL), windowWidth(1024),
+windowHeight(720), gameState(GameState::PLAYING), perlin(1234){
 	terrainList = TerrainList(perlin);
 }
 
@@ -42,6 +43,10 @@ void SimulationGame::initialize() {
 	SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1); // Enable double buffering.   
 
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
+
+	glEnable(GL_CULL_FACE);
+
+	glFrontFace(GL_CCW);
 }
 
 // Input polling.
@@ -54,14 +59,17 @@ void SimulationGame::examineInput() {
 			this->gameState = GameState::QUITTING;
 			break;
 		case SDL_MOUSEMOTION: // Mouse event.
-            camera.getFront();
             camera.mouseUpdatePos(input.motion.x, input.motion.y);
+            camera.checkWarp(this->window, input.motion.x, input.motion.y, 
+                             this->windowWidth, this->windowHeight);
 			break;
 		case SDL_KEYDOWN: // Key presses.
 			if (input.key.keysym.sym == 27)this->gameState = GameState::QUITTING;
-			std::cout << input.key.keysym.sym << std::endl;
-            camera.moveKeys(input.key.keysym.sym);
+            camera.handleKeyDown();
 			break;
+    case SDL_KEYUP:
+        camera.handleKeyUp();
+        break;
 		}
 	}
 
@@ -77,6 +85,7 @@ void SimulationGame::gameLoop() {
 
 // Method call for drawing all objects we need.
 void SimulationGame::drawWorld() {
+  camera.computePos();
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
@@ -111,7 +120,7 @@ void SimulationGame::drawWorld() {
 
 		//no rotate
 
-		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); // Send model matrix.
 
 		tc.draw();
 	}
