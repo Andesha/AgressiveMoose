@@ -80,14 +80,8 @@ void TerrainChunk::initialize(float cX, float cY) {
 	}
 
 	for (int i = 1; i <= INDICES_SIZE; i++) {
-		std::cout << indices[i-1] << ",";
 		if (i % 3 == 0)std::cout << std::endl;
 	}
-	std::cout << "---" << std::endl;
-
-
-
-
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);

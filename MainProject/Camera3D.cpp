@@ -3,7 +3,7 @@
 
 
 // roll is applied by changing camUp based on roll
-Camera3D::Camera3D(): yaw(90.0f), pitch(0.0f), roll(0.0f), sensitivity(0.5f){
+Camera3D::Camera3D(): yaw(90.0f), pitch(0.0f), roll(0.0f), sensitivity(0.5f), speedFace(0.0f), speedLat(0.0f){
     glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
     pos = glm::vec3(0.0f, 2.0f, 0.0f);
     target = glm::vec3(0.0f, 0.0f, 0.0f);
@@ -89,14 +89,15 @@ void Camera3D::handleKeyDown(){
         printf("<RETURN> is pressed.\n");
     }
     if (state[SDL_SCANCODE_W]) {
-        speedFace = 0.1f;
+        speedFace += 0.01f;
+        
     }
     if (state[SDL_SCANCODE_A]) {
         speedLat = -1 * 0.1f;
 
     }
     if (state[SDL_SCANCODE_S]) {
-        speedLat = -1 * 0.1f;
+        speedFace = -1 * 0.1f;
 
     }
     if (state[SDL_SCANCODE_D]) {
@@ -149,5 +150,6 @@ void Camera3D::checkWarp(SDL_Window* window, int x, int y, int windowWidth,
 
 void Camera3D::computePos(){
 
-    this->pos += this->cameraFront * 0.01f; 
+    this->pos += this->cameraFront * speedFace;
+    //this->pos += this->camRight * 0.0f; 
 }
