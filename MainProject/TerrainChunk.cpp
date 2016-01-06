@@ -85,18 +85,9 @@ void TerrainChunk::initialize(float cX, float cY) {
 	}
 	std::cout << "---" << std::endl;
 
-	for (int i = 0; i < TOTAL_VERTICIES; i++) { // Set all to the same color.
-		int modifier = rand() % 127;
-		vertices[i].color.r = 255 - modifier;
-		vertices[i].color.g = 255 - modifier;
-		vertices[i].color.b = 255 - modifier;
-		vertices[i].color.a = 255;
-	}
 
-	vertices[24].color.r = 255;
-	vertices[24].color.g = 0;
-	vertices[24].color.b = 255;
-	vertices[24].color.a = 255;
+
+
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);

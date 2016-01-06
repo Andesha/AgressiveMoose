@@ -1,7 +1,8 @@
 #include "stdafx.h"
 
 // Initialize game object to default values.
-SimulationGame::SimulationGame() : window(NULL), windowWidth(1024), windowHeight(720), gameState(GameState::PLAYING), perlin(1234){
+SimulationGame::SimulationGame() : window(NULL), windowWidth(1024),
+windowHeight(720), gameState(GameState::PLAYING), perlin(1234){
 	terrainList = TerrainList(perlin);
 }
 
@@ -64,8 +65,11 @@ void SimulationGame::examineInput() {
 			break;
 		case SDL_KEYDOWN: // Key presses.
 			if (input.key.keysym.sym == 27)this->gameState = GameState::QUITTING;
-            camera.moveKeys(input.key.keysym.sym);
+            camera.handleKeyDown();
 			break;
+    case SDL_KEYUP:
+        camera.handleKeyUp();
+        break;
 		}
 	}
 
@@ -81,6 +85,7 @@ void SimulationGame::gameLoop() {
 
 // Method call for drawing all objects we need.
 void SimulationGame::drawWorld() {
+  camera.computePos();
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
