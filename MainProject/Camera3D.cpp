@@ -97,7 +97,7 @@ void Camera3D::handleKeyDown(){
 
     }
     if (state[SDL_SCANCODE_S]) {
-        speedFace = -1 * 0.1f;
+		speedFace -= 0.01f;
 
     }
     if (state[SDL_SCANCODE_D]) {
