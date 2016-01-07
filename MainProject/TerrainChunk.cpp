@@ -2,7 +2,7 @@
 #include "TerrainChunk.h"
 
 // Default constructor.
-TerrainChunk::TerrainChunk() : vaoID(0), vboID(0), eboID(0), drawing(false), perlin(NULL) {
+TerrainChunk::TerrainChunk() : vaoID(0), vboID(0), eboID(0), drawing(false), perlin(NULL){
 }
 
 void TerrainChunk::sendPerlin(Perlin& p) {
@@ -52,17 +52,27 @@ void TerrainChunk::initialize(float cX, float cY) {
 	Vertex vertices[TOTAL_VERTICIES]; // Size of grid.
 	
 	int countBuild = 0;
-	for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; --i) {
+  float rowCount = 0.0f;
+  float colCount = 0.0f;
+  std::ofstream myfile;
+  myfile.open("texCoords.txt");
+  myfile << "Writing this to a file.\n";
+  for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; --i) {
 		for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; ++j) {
 			//std::cout << "(" << j << "," << i << ")";
 			vertices[countBuild].position.x = (float)j;
 			vertices[countBuild].position.z = (float)i;
 			vertices[countBuild].position.y = examinePerlin(this->centerX + j, this->centerY + i);
-			++countBuild; // I don't know?
-		}
-		//std::cout << std::endl;
-	}
-
+      vertices[countBuild].textureCoord.x = colCount * (1.0f / ((float)GRID_WIDTH-1));
+      vertices[countBuild].textureCoord.y = rowCount * (1.0f / ((float)GRID_WIDTH-1));
+      myfile << colCount << "\t" << rowCount << "\t" << vertices[countBuild].textureCoord.x << "\t" << vertices[countBuild].textureCoord.y << "\n";
+      ++countBuild; // I don't know?
+      ++colCount;
+    }
+    ++rowCount;
+    colCount = 0;
+  }
+  myfile.close();
 	for (int i = 0; i < TOTAL_VERTICIES; ++i) { // Set all to the same color.
 		int modifier = rand() % 127;
 		vertices[i].color.r = 255 - modifier;
@@ -92,24 +102,6 @@ void TerrainChunk::initialize(float cX, float cY) {
 		}
 	}
 
-	//SOME SORT OF FLOW CONTROL STRUCTURE OF SOME SORT OF FOR LOOP - GIVING OUT TEXTURE COORDINATES.
-	// BLAH BLAH
-  int countBuild = 0;
-  int rowCount = 0;
-  int colCount = 0;
-  for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; --i) {
-      for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; ++j) {
-          //std::cout << "(" << j << "," << i << ")";
-          vertices[countBuild].position.x = (float)j;
-          vertices[countBuild].position.z = (float)i;
-          vertices[countBuild].position.y = examinePerlin(this->centerX + j, this->centerY + i);
-          ++countBuild; // I don't know?
-          ++colCount;
-      }
-      ++rowCount;
-      colCount = 0;
-  }
-
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
@@ -124,8 +116,8 @@ void TerrainChunk::initialize(float cX, float cY) {
 	glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, color)); // Color.
 	glEnableVertexAttribArray(1);
 
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureCoord)); // TextureCoord.
-	//glEnableVertexAttribArray(2);
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureCoord)); // TextureCoord.
+	glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
@@ -144,13 +136,8 @@ float TerrainChunk::examinePerlin(float x, float y) {
 	return (float)temp*HEIGHT_LIMIT;
 }
 
-void TerrainChunk::draw() {
-	
-	// INSERT ALL OF YOUR TEXTURE BINDING STUFF HERE:
-	//ACTIVATE
-	//BIND
-	//UNIFORM
-
+void TerrainChunk::draw(GLuint &tID) {
+  glBindTexture(GL_TEXTURE_2D, tID);
 	glBindVertexArray(this->vaoID);
 
 	glDrawElements(GL_TRIANGLES, INDICES_SIZE, GL_UNSIGNED_INT, (void*)0);

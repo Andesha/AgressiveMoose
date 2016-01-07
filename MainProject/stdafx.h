@@ -36,3 +36,5 @@
 #include "GLSLProgram.h"
 #include "Perlin.h"
 #include "Constants.h"
+#include "TextureFactory.h"
+#include "Camera3D.h"

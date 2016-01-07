@@ -1,6 +1,6 @@
 #pragma once
 #include "stdafx.h"
-
+#include "TextureFactory.h"
 #include "Perlin.h"
 
 // Chunk class that will only ever be called with new as few times as possible.
@@ -11,9 +11,7 @@ private:
 	float centerX, centerY;
 	GLuint vboID;
 	GLuint eboID;
-	//GLuint vaoID;
 	Perlin perlin;
-
 	float examinePerlin(float x, float y); // Examine the perlin system to find out height.
 
 public:
@@ -32,6 +30,6 @@ public:
 
 	void rebase(float cX, float cY); // Takes the chunk and recomputes all values.
 
-	void draw();
+	void draw(GLuint &tID);
 };
 

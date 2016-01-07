@@ -12,7 +12,6 @@ private:
 	SDL_Window* window; // Window information. Possibly auto-detect later.
 	int windowWidth;
 	int windowHeight;
-
 	float fps;
 	float frameTime;
 
@@ -41,7 +40,7 @@ private:
 public:
 	SimulationGame();
 	~SimulationGame();
-
+  GLuint tid;
 	void start(); // To be called to start the whole game.
 };
 

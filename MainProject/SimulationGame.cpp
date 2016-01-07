@@ -4,6 +4,19 @@
 SimulationGame::SimulationGame() : window(NULL), windowWidth(1024),
 windowHeight(720), gameState(GameState::PLAYING), perlin(1234){
 	terrainList = TerrainList(perlin);
+  glGenTextures(1, &this->tid);
+  glBindTexture(GL_TEXTURE_2D, this->tid);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  // Set texture filtering parameters
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+  int width, height;
+  unsigned char* image = SOIL_load_image("wall.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+  SOIL_free_image_data(image);
+  glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 // Currently no destructor.
@@ -144,7 +157,7 @@ void SimulationGame::drawWorld() {
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); // Send model matrix.
 
-		tc.draw();
+    tc.draw(this->tid);
 	}
 
 	this->program.unuseProg();
