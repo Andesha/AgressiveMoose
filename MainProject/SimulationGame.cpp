@@ -27,7 +27,9 @@ void SimulationGame::start() {
 // Builds the window and creates all of the OpenGL context information we need.
 void SimulationGame::initialize() {
 	SDL_Init(SDL_INIT_EVERYTHING); // SDL initial call.
-    /*SDL_SetRelativeMouseMode(SDL_TRUE);*/
+    
+	SDL_SetRelativeMouseMode(SDL_TRUE);
+
 	// SDL Window building.
 	this->window = SDL_CreateWindow("Flight Simulation", SDL_WINDOWPOS_CENTERED,                      
 									SDL_WINDOWPOS_CENTERED, this->windowWidth, 
@@ -60,9 +62,11 @@ void SimulationGame::examineInput() {
 			this->gameState = GameState::QUITTING;
 			break;
 		case SDL_MOUSEMOTION: // Mouse event.
-            camera.mouseUpdatePos(input.motion.x, input.motion.y);
-            camera.checkWarp(this->window, input.motion.x, input.motion.y, 
-                             this->windowWidth, this->windowHeight);
+			std::cout << input.motion.xrel << "\t" << input.motion.yrel << std::endl;
+			camera.mouseUpdatePos(input.motion.xrel, input.motion.yrel);
+            //camera.checkWarp(this->window, input.motion.x, input.motion.y, 
+            //                 this->windowWidth, this->windowHeight);
+
 			break;
 		case SDL_KEYDOWN: // Key presses.
 			if (input.key.keysym.sym == 27)this->gameState = GameState::QUITTING;
