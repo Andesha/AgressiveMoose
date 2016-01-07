@@ -38,8 +38,8 @@ void Camera3D::mouseUpdatePos(int mouseX, int mouseY){
         return;
     }
 
-    GLfloat xoffset = mouseX - prevX;
-    GLfloat yoffset = mouseY - prevY;
+    GLfloat xoffset = mouseX;
+    GLfloat yoffset = mouseY;
     prevX = mouseX;
     prevY = mouseY;
 
