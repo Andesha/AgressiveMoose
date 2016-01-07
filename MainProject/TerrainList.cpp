@@ -26,8 +26,8 @@ void TerrainList::buildPool(int chunkCount) {
 }
 
 void TerrainList::firstInit() {
-	float gridIncrement = GRID_WIDTH - 1; // Yay for scaling things.
-	float rowCounter = CHUNK_PER_ROW - 1;
+	float gridIncrement = GRID_WIDTH-1; // Yay for scaling things.
+	float rowCounter = CHUNK_PER_ROW-1;
 
 	float countX = 0;
 	float countY = 0;
