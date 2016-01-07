@@ -63,6 +63,19 @@ void TerrainChunk::initialize(float cX, float cY) {
 		//std::cout << std::endl;
 	}
 
+	for (int i = 0; i < TOTAL_VERTICIES; i++) { // Set all to the same color.
+		int modifier = rand() % 127;
+		vertices[i].color.r = 255 - modifier;
+		vertices[i].color.g = 255 - modifier;
+		vertices[i].color.b = 255 - modifier;
+		vertices[i].color.a = 255;
+	}
+
+	vertices[24].color.r = 255;
+	vertices[24].color.g = 0;
+	vertices[24].color.b = 255;
+	vertices[24].color.a = 255;
+
 	GLuint indices[INDICES_WORKAROUND];
 
 	int countIndex = 0;
@@ -77,10 +90,6 @@ void TerrainChunk::initialize(float cX, float cY) {
 			indices[countIndex++] = root + GRID_WIDTH;
 			indices[countIndex++] = root;
 		}
-	}
-
-	for (int i = 1; i <= INDICES_SIZE; i++) {
-		if (i % 3 == 0)std::cout << std::endl;
 	}
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
@@ -109,8 +118,8 @@ void TerrainChunk::rebase(float cX, float cY) {
 }
 
 float TerrainChunk::examinePerlin(float x, float y) {
-	double temp = perlin.at(x, y, 0.5);
-	return (float)temp;
+	double temp = perlin.at(x / TOTAL_VERTICIES_ON_SIDE, y / TOTAL_VERTICIES_ON_SIDE, 0.5);
+	return (float)temp*HEIGHT_LIMIT;
 }
 
 void TerrainChunk::draw() {

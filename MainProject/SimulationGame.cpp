@@ -16,7 +16,7 @@ void SimulationGame::start() {
 	this->initialize(); // Build.
     this->camera = Camera3D();
 	
-	terrainList.buildPool(9); // Nine total chunks for the pool.
+	terrainList.buildPool(TERRAIN_LIST_SIZE); // Nine total chunks for the pool.
 	terrainList.firstInit(); // Build the start of the grid.
 
 	initializeShaders();
@@ -44,9 +44,10 @@ void SimulationGame::initialize() {
 
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
-	glEnable(GL_CULL_FACE);
-
-	glFrontFace(GL_CCW);
+	if (ENABLE_BFC) { // Toggle for BFC.
+		glEnable(GL_CULL_FACE);
+		glFrontFace(GL_CCW);
+	}
 }
 
 // Input polling.
