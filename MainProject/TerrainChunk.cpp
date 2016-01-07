@@ -108,7 +108,7 @@ void TerrainChunk::initialize(float cX, float cY) {
 	glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, color)); // Color.
 	glEnableVertexAttribArray(1);
 
-	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureCoord)); // Color.
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureCoord)); // TextureCoord.
 	//glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER,0);
