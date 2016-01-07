@@ -71,10 +71,15 @@ void TerrainChunk::initialize(float cX, float cY) {
 		vertices[i].color.a = 255;
 	}
 
-	vertices[49].color.r = 255;
-	vertices[49].color.g = 0;
-	vertices[49].color.b = 255;
-	vertices[49].color.a = 255;
+	vertices[24].color.r = 255;
+	vertices[24].color.g = 0;
+	vertices[24].color.b = 255;
+	vertices[24].color.a = 255;
+
+	//vertices[49].color.r = 255;
+	//vertices[49].color.g = 0;
+	//vertices[49].color.b = 255;
+	//vertices[49].color.a = 255;
 
 	GLuint indices[INDICES_WORKAROUND];
 
@@ -92,7 +97,7 @@ void TerrainChunk::initialize(float cX, float cY) {
 		}
 	}
 
-	//SOME SORT OF FLOW CONTROL STRUCTURE OF SOME SORT OF FOR LOOP - GIVING OUT TEXTURE COORDINATES.
+	// SOME SORT OF FLOW CONTROL STRUCTURE OF SOME SORT OF FOR LOOP - GIVING OUT TEXTURE COORDINATES.
 	// BLAH BLAH
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
@@ -125,7 +130,7 @@ void TerrainChunk::rebase(float cX, float cY) {
 
 float TerrainChunk::examinePerlin(float x, float y) {
 	double temp = perlin.at(x / TOTAL_VERTICIES_ON_SIDE, y / TOTAL_VERTICIES_ON_SIDE, 0.5);
-	return (float)temp*HEIGHT_LIMIT;
+	return (float)temp*HEIGHT_LIMIT - HEIGHT_OFFSET;
 }
 
 void TerrainChunk::draw() {
