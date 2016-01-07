@@ -15,6 +15,8 @@ public:
 	GLSLProgram();
 	~GLSLProgram();
 
+	int getProgID();
+
 	void addAttribute(const std::string& attributeName);
 
 	void compileShaders(const std::string& vertexPath, const std::string& fragPath);

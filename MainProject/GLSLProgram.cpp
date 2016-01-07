@@ -10,6 +10,10 @@ GLSLProgram::~GLSLProgram() {
 
 }
 
+int GLSLProgram::getProgID() {
+	return this->progID;
+}
+
 void GLSLProgram::compileShaders(const std::string& vertexPath, 
                                  const std::string& fragPath) {
 	//Vertex and fragment shaders are successfully compiled.

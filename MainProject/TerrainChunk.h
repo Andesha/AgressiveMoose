@@ -30,6 +30,6 @@ public:
 
 	void rebase(float cX, float cY); // Takes the chunk and recomputes all values.
 
-	void draw(GLuint &tID);
+	void draw();
 };
 

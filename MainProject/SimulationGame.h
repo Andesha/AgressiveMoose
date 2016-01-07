@@ -37,6 +37,8 @@ private:
 
 	void calculateFPS(); // Examine the frame ticks via SDL. Eventually needed for delta time.
 
+	void makeTestTexture();
+
 public:
 	SimulationGame();
 	~SimulationGame();

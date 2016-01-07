@@ -73,6 +73,7 @@ void TerrainChunk::initialize(float cX, float cY) {
     colCount = 0;
   }
   myfile.close();
+
 	for (int i = 0; i < TOTAL_VERTICIES; ++i) { // Set all to the same color.
 		int modifier = rand() % 127;
 		vertices[i].color.r = 255 - modifier;
@@ -101,7 +102,6 @@ void TerrainChunk::initialize(float cX, float cY) {
 			indices[countIndex++] = root;
 		}
 	}
-
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
@@ -136,16 +136,15 @@ float TerrainChunk::examinePerlin(float x, float y) {
 	return (float)temp*HEIGHT_LIMIT;
 }
 
-void TerrainChunk::draw(GLuint &tID) {
-  glBindTexture(GL_TEXTURE_2D, tID);
+void TerrainChunk::draw() {
+
 	glBindVertexArray(this->vaoID);
-
 	glDrawElements(GL_TRIANGLES, INDICES_SIZE, GL_UNSIGNED_INT, (void*)0);
-
 	glBindVertexArray(0);
 
 	glDisableVertexAttribArray(0); // Delete and unbind.
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
 }
 
 /*

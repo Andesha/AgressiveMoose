@@ -45,7 +45,7 @@ void Camera3D::mouseUpdatePos(int mouseX, int mouseY){
 
     GLfloat sensitivity = 0.1;
     xoffset *= sensitivity;
-    yoffset *= sensitivity;
+    yoffset *= -sensitivity;
 
     yaw += xoffset;
     pitch += yoffset;
