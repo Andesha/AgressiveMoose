@@ -19,3 +19,5 @@ const float TOTAL_VERTICIES_ON_SIDE = GRID_WIDTH*CHUNK_PER_ROW; // Leave this va
 // Since we will be keeping a solid count of vertices on the screen at all time - I think this is safe.
 
 const float HEIGHT_LIMIT = 50.0f; // Maximum value of the height and as such will scale the open interval for the perlin noise.
+
+const float MAX_FPS = 60.0f;
