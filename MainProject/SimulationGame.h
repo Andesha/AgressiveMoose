@@ -13,6 +13,9 @@ private:
 	int windowWidth;
 	int windowHeight;
 
+	float fps;
+	float frameTime;
+
 	TerrainList terrainList;
 
 	GLSLProgram program;
@@ -32,6 +35,8 @@ private:
 	void gameLoop(); // Method to be called after initialize has finished.
 
 	void drawWorld(); // Method call for drawing all objects we need.
+
+	void calculateFPS(); // Examine the frame ticks via SDL. Eventually needed for delta time.
 
 public:
 	SimulationGame();
