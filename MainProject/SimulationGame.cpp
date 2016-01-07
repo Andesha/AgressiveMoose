@@ -75,7 +75,7 @@ void SimulationGame::examineInput() {
 			this->gameState = GameState::QUITTING;
 			break;
 		case SDL_MOUSEMOTION: // Mouse event.
-			std::cout << input.motion.xrel << "\t" << input.motion.yrel << std::endl;
+			//std::cout << input.motion.xrel << "\t" << input.motion.yrel << std::endl;
 			camera.mouseUpdatePos(input.motion.xrel, input.motion.yrel);
             //camera.checkWarp(this->window, input.motion.x, input.motion.y, 
             //                 this->windowWidth, this->windowHeight);
