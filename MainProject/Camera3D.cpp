@@ -89,16 +89,14 @@ void Camera3D::handleKeyDown(){
         printf("<RETURN> is pressed.\n");
     }
     if (state[SDL_SCANCODE_W]) {
-        speedFace += 0.01f;
+        speedFace = 0.2f;
         
     }
     if (state[SDL_SCANCODE_A]) {
         speedLat = -1 * 0.1f;
-
     }
     if (state[SDL_SCANCODE_S]) {
-		speedFace -= 0.01f;
-
+		speedFace = -0.2f;
     }
     if (state[SDL_SCANCODE_D]) {
         speedLat = 0.1f;
@@ -111,19 +109,12 @@ void Camera3D::handleKeyUp(){
     if (state[SDL_SCANCODE_RETURN]) {
         printf("<RETURN> is pressed.\n");
     }
-    if (state[SDL_SCANCODE_W]) {
+	if (state[SDL_SCANCODE_W] == 0 && state[SDL_SCANCODE_S] == 0) {
         speedFace = 0.0f;
     }
-    if (state[SDL_SCANCODE_A]) {
+    if (state[SDL_SCANCODE_A] == 0 && state[SDL_SCANCODE_D] == 0) {
         speedLat = 0.0f;
 
-    }
-    if (state[SDL_SCANCODE_S]) {
-        speedLat = 0.0f;
-
-    }
-    if (state[SDL_SCANCODE_D]) {
-        speedFace = 0.0f;
     }
 }
 

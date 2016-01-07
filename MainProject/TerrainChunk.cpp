@@ -71,10 +71,10 @@ void TerrainChunk::initialize(float cX, float cY) {
 		vertices[i].color.a = 255;
 	}
 
-	vertices[24].color.r = 255;
-	vertices[24].color.g = 0;
-	vertices[24].color.b = 255;
-	vertices[24].color.a = 255;
+	vertices[49].color.r = 255;
+	vertices[49].color.g = 0;
+	vertices[49].color.b = 255;
+	vertices[49].color.a = 255;
 
 	GLuint indices[INDICES_WORKAROUND];
 
