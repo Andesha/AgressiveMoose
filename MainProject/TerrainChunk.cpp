@@ -52,8 +52,8 @@ void TerrainChunk::initialize(float cX, float cY) {
 	Vertex vertices[TOTAL_VERTICIES]; // Size of grid.
 	
 	int countBuild = 0;
-	for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; i--) {
-		for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; j++) {
+	for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; --i) {
+		for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; ++j) {
 			//std::cout << "(" << j << "," << i << ")";
 			vertices[countBuild].position.x = (float)j;
 			vertices[countBuild].position.z = (float)i;
@@ -63,7 +63,7 @@ void TerrainChunk::initialize(float cX, float cY) {
 		//std::cout << std::endl;
 	}
 
-	for (int i = 0; i < TOTAL_VERTICIES; i++) { // Set all to the same color.
+	for (int i = 0; i < TOTAL_VERTICIES; ++i) { // Set all to the same color.
 		int modifier = rand() % 127;
 		vertices[i].color.r = 255 - modifier;
 		vertices[i].color.g = 255 - modifier;
@@ -79,8 +79,8 @@ void TerrainChunk::initialize(float cX, float cY) {
 	GLuint indices[INDICES_WORKAROUND];
 
 	int countIndex = 0;
-	for (int j = 0; j < GRID_WIDTH - 1; j++) {
-		for (int i = 0; i < GRID_WIDTH - 1; i++) {
+	for (int j = 0; j < GRID_WIDTH - 1; ++j) {
+		for (int i = 0; i < GRID_WIDTH - 1; ++i) {
 			int root = i + (j*GRID_WIDTH);
 			indices[countIndex++] = root + 1; // Triangle one.
 			indices[countIndex++] = root + GRID_WIDTH + 1;
@@ -94,6 +94,22 @@ void TerrainChunk::initialize(float cX, float cY) {
 
 	//SOME SORT OF FLOW CONTROL STRUCTURE OF SOME SORT OF FOR LOOP - GIVING OUT TEXTURE COORDINATES.
 	// BLAH BLAH
+  int countBuild = 0;
+  int rowCount = 0;
+  int colCount = 0;
+  for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; --i) {
+      for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; ++j) {
+          //std::cout << "(" << j << "," << i << ")";
+          vertices[countBuild].position.x = (float)j;
+          vertices[countBuild].position.z = (float)i;
+          vertices[countBuild].position.y = examinePerlin(this->centerX + j, this->centerY + i);
+          ++countBuild; // I don't know?
+          ++colCount;
+      }
+      ++rowCount;
+      colCount = 0;
+  }
+
 
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
