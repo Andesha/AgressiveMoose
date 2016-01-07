@@ -92,6 +92,9 @@ void TerrainChunk::initialize(float cX, float cY) {
 		}
 	}
 
+	//SOME SORT OF FLOW CONTROL STRUCTURE OF SOME SORT OF FOR LOOP - GIVING OUT TEXTURE COORDINATES.
+	// BLAH BLAH
+
 	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
 	glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
 
@@ -104,6 +107,9 @@ void TerrainChunk::initialize(float cX, float cY) {
 
 	glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, color)); // Color.
 	glEnableVertexAttribArray(1);
+
+	//glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureCoord)); // Color.
+	//glEnableVertexAttribArray(2);
 
 	glBindBuffer(GL_ARRAY_BUFFER,0);
 	glBindVertexArray(0);
@@ -123,9 +129,11 @@ float TerrainChunk::examinePerlin(float x, float y) {
 }
 
 void TerrainChunk::draw() {
-	//glBindBuffer(GL_ARRAY_BUFFER,this->eboID);
-
-	//glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, color)); // Color.
+	
+	// INSERT ALL OF YOUR TEXTURE BINDING STUFF HERE:
+	//ACTIVATE
+	//BIND
+	//UNIFORM
 
 	glBindVertexArray(this->vaoID);
 
@@ -136,3 +144,15 @@ void TerrainChunk::draw() {
 	glDisableVertexAttribArray(0); // Delete and unbind.
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
+
+/*
+
+// Bind Textures using texture units
+glActiveTexture(GL_TEXTURE0);
+glBindTexture(GL_TEXTURE_2D, texture1);
+glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture1"), 0);
+glActiveTexture(GL_TEXTURE1);
+glBindTexture(GL_TEXTURE_2D, texture2);
+glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture2"), 1);
+
+*/

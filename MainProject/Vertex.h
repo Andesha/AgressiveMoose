@@ -8,6 +8,11 @@ struct Position {
 	float z;
 };
 
+struct TextureCoord {
+	GLfloat x;
+	GLfloat y;
+};
+
 // Reusable struct for displaying colour.
 struct Color {
 	GLubyte r;
@@ -20,4 +25,5 @@ struct Color {
 struct Vertex {
 	Position position;
 	Color color;
+	TextureCoord textureCoord;
 };
