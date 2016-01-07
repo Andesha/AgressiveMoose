@@ -83,8 +83,25 @@ void SimulationGame::examineInput() {
 // Main gameloop where all behaviour will exist.
 void SimulationGame::gameLoop() {
 	while (this->gameState != GameState::QUITTING) {
+		float startMarker = SDL_GetTicks(); // Frame time.
+		
 		this->examineInput();
 		this->drawWorld();
+		calculateFPS();
+
+		static int frameCount = 0; // Fun cheesey way of making sure we don't print too much.
+		frameCount++;
+		if (frameCount == 10) {
+			std::cout << this->fps << std::endl;
+			frameCount = 0;
+		}
+
+		float totalTicks = SDL_GetTicks() - startMarker;
+
+		//FPS limiting.
+		if (1000.0f / MAX_FPS > totalTicks) {
+			SDL_Delay(1000.0f / MAX_FPS - totalTicks);
+		}
 	}
 }
 
@@ -141,4 +158,34 @@ void SimulationGame::initializeShaders() {
 	program.addAttribute("vertexPosition");
 	program.addAttribute("vertexColor");
 	program.linkShaders();
+}
+
+void SimulationGame::calculateFPS() {
+	static const int samples = 10; // Need the next three variables to be accessed again as the same values. 
+	static float frameTimes[samples]; // Thus we make them static variables.
+	static int framePointer = 0;
+	static float previousTicks = SDL_GetTicks(); // Idea of the implementation is a circular buffer.
+	
+	float currentTicks = SDL_GetTicks();
+
+	this->frameTime = currentTicks - previousTicks;
+
+	frameTimes[framePointer % samples] = this->frameTime;
+
+	previousTicks = currentTicks;
+
+	framePointer++; // Increment to next frame.
+
+	int count; // Keep track of how many numbers we're averaging even in the start cases.
+	if (framePointer < samples) count = framePointer;
+	else count = samples;
+
+	float frameAvg = 0; // Calculating the average.
+	for (int i = 0; i < count; i++) {
+		frameAvg += frameTimes[i];
+	}
+	frameAvg /= count;
+
+	if (frameAvg > 0)this->fps = 1000.0f / frameAvg; // Avoid nasty dividing by zero problems.
+	else this->fps = 60.0f; // Hard coded for those beginning iterations.
 }
