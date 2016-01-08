@@ -43,7 +43,17 @@ public:
     /// <summary>
     ///
     /// </summary>
-    void setSpeed();
+    void setSpeed(GLfloat spd);
+
+    /// <summary>
+    ///
+    /// </summary>
+    void setLatSpeed(GLfloat spd);
+
+    /// <summary>
+    ///
+    /// </summary>
+    void applyMouseInput(int x, int y);
 
 private:
     

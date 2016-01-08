@@ -4,6 +4,7 @@
 SimulationGame::SimulationGame() : window(NULL), windowWidth(1024),
 windowHeight(720), gameState(GameState::PLAYING), perlin(PERLIN_SEED) {
 	terrainList = TerrainList(perlin);
+    character = new Character(glm::vec3(0.0f,0.0f,0.0f));
 }
 
 // Currently no destructor.
@@ -85,12 +86,15 @@ void SimulationGame::examineInput() {
 			break;
 		case SDL_MOUSEMOTION: // Mouse event.
             //TODO add input function on character
+            this->mouseUpdatePos(input.motion.xrel, input.motion.yrel);
 			break;
 		case SDL_KEYDOWN: // Key presses.
 			if (input.key.keysym.sym == 27)this->gameState = GameState::QUITTING;
             //TODO add input function on character
+            handleKeyDown();
 			break;
         case SDL_KEYUP:
+            handleKeyUp();
             //TODO add input function on character
             break;
 		}
@@ -122,19 +126,20 @@ void SimulationGame::handleKeyDown(){
         printf("<RETURN> is pressed.\n");
     }
     if (state[SDL_SCANCODE_W]) {
-         = 0.75f;
+        character->setSpeed(0.75f);
+        std::cout << character->getSpeed();
     }
     if (state[SDL_SCANCODE_A]) {
-        speedLat = -0.5f;
+        character->setLatSpeed(-0.75f);
     }
     if (state[SDL_SCANCODE_S]) {
-        speedFace = -0.75f;
+        character->setSpeed(-0.75f);
     }
     if (state[SDL_SCANCODE_D]) {
-        speedLat = 0.5f;
+        character->setLatSpeed(0.75f);
     }
     if (state[SDL_SCANCODE_LSHIFT]) {
-        speedFace = 1.75f;
+        character->setSpeed(1.75f);
     }
 }
 
@@ -142,39 +147,15 @@ void SimulationGame::handleKeyDown(){
 void SimulationGame::handleKeyUp(){
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_W] == 0 && state[SDL_SCANCODE_S] == 0) {
-        speedFace = 0.0f;
+        character->setSpeed(0.0f);
     }
     if (state[SDL_SCANCODE_S] == 0 && state[SDL_SCANCODE_D] == 0) {
-        speedLat = 0.0f;
+        character->setLatSpeed(0.0f);
     }
 }
 
 void SimulationGame::mouseUpdatePos(int mouseX, int mouseY){
-    GLfloat sensitivity = 0.1;
-    mouseX *= sensitivity;
-    mouseY *= -sensitivity;
-
-    yaw += mouseX;
-    pitch += mouseY;
-
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
-
-    camUp = glm::vec3(0.0f, 1.0f, 0.0f); // Defining up relative to world space.
-    cameraFront = glm::vec3(1.0f, 0.0f, 0.0f); // Define front relative to world space.
-
-    glm::mat4 rotationMat(1); // Fun way to get the front vector to rotate around up by yaw.
-    rotationMat = glm::rotate(rotationMat, glm::radians(-yaw), camUp);
-    cameraFront = glm::vec3(rotationMat * glm::vec4(cameraFront, 1.0));
-
-    camRight = glm::cross(cameraFront, camUp); // Cross of front and up.
-
-    rotationMat = glm::mat4(1);
-    rotationMat = glm::rotate(rotationMat, glm::radians(pitch), camRight);
-    cameraFront = glm::vec3(rotationMat * glm::vec4(cameraFront, 1.0));
-    camUp = glm::vec3(rotationMat * glm::vec4(camUp, 1.0));
+    character->applyMouseInput(mouseX, mouseY);
 }
 
 
@@ -192,7 +173,9 @@ void SimulationGame::gameLoop() {
 
 // Method call for drawing all objects we need.
 void SimulationGame::drawWorld() {
-	camera.computePos();
+    //compute character pos
+    character->updateCharacter();
+
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
@@ -200,8 +183,9 @@ void SimulationGame::drawWorld() {
 	proj = glm::perspective(45.0f, (float)this->windowWidth / (float)this->windowHeight, 0.1f, 1000.0f);
  
 	glm::mat4 view;
-	view = camera.getViewMatrix();
-
+    //get character view matrix
+	//view = camera.getViewMatrix();
+    view = character->getViewMatrix();
 	this->program.useProg();
 	
 	int id = program.getProgID(); // Program ID for shaders needing them for uniform things.

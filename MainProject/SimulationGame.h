@@ -22,7 +22,7 @@ private:
 
 	GameState gameState; // See GameState.h
 
-    Character character;
+    Character* character;
 
 	Perlin perlin;
 
