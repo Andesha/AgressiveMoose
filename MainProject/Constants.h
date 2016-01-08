@@ -2,6 +2,8 @@
 
 #include "stdafx.h"
 
+#define PERLIN_SEED 1234
+
 const bool ENABLE_BFC = true; // Debugging flag for enabling Back Face Culling.
 
 const int GRID_WIDTH = 9;      // Width of the grid. So if it's a 3x3, thats just 3.

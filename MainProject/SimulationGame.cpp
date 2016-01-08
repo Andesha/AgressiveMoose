@@ -2,7 +2,7 @@
 
 // Initialize game object to default values.
 SimulationGame::SimulationGame() : window(NULL), windowWidth(1024),
-windowHeight(720), gameState(GameState::PLAYING), perlin(1234){
+windowHeight(720), gameState(GameState::PLAYING), perlin(PERLIN_SEED) {
 	terrainList = TerrainList(perlin);
 }
 
@@ -14,7 +14,7 @@ SimulationGame::~SimulationGame() {
 // into the game loop.
 void SimulationGame::start() {
 	this->initialize(); // Build.
-    this->camera = Camera3D();
+    //this->camera = Camera3D();
 	
 	terrainList.buildPool(TERRAIN_LIST_SIZE); // Nine total chunks for the pool.
 	terrainList.firstInit(); // Build the start of the grid.
