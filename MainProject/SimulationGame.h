@@ -5,6 +5,7 @@
 #include "GLSLProgram.h"
 #include "Camera3D.h"
 #include "TerrainList.h"
+#include "Character.h"
 
 // Main class which specifies all behaviour of our game engine.
 class SimulationGame {
@@ -21,7 +22,7 @@ private:
 
 	GameState gameState; // See GameState.h
 
-    Camera3D camera;
+    Character* character;
 
 	Perlin perlin;
 
@@ -40,6 +41,12 @@ private:
 	void makeTestTexture();
 
 	void fpsCaretaker(float startMarker);
+
+    void handleKeyDown();
+
+    void handleKeyUp();
+
+    void mouseUpdatePos(int mouseX, int mouseY);
 
 public:
 	SimulationGame();

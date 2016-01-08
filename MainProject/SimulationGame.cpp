@@ -4,6 +4,7 @@
 SimulationGame::SimulationGame() : window(NULL), windowWidth(1024),
 windowHeight(720), gameState(GameState::PLAYING), perlin(PERLIN_SEED) {
 	terrainList = TerrainList(perlin);
+    character = new Character(glm::vec3(0.0f,0.0f,0.0f));
 }
 
 // Currently no destructor.
@@ -84,15 +85,18 @@ void SimulationGame::examineInput() {
 			this->gameState = GameState::QUITTING;
 			break;
 		case SDL_MOUSEMOTION: // Mouse event.
-			camera.mouseUpdatePos(input.motion.xrel, input.motion.yrel);
+            //TODO add input function on character
+            this->mouseUpdatePos(input.motion.xrel, input.motion.yrel);
 			break;
 		case SDL_KEYDOWN: // Key presses.
 			if (input.key.keysym.sym == 27)this->gameState = GameState::QUITTING;
-            camera.handleKeyDown();
+            //TODO add input function on character
+            handleKeyDown();
 			break;
-    case SDL_KEYUP:
-        camera.handleKeyUp();
-        break;
+        case SDL_KEYUP:
+            handleKeyUp();
+            //TODO add input function on character
+            break;
 		}
 	}
 
@@ -116,6 +120,45 @@ void SimulationGame::fpsCaretaker(float startMarker) {
 	}
 }
 
+void SimulationGame::handleKeyDown(){
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    if (state[SDL_SCANCODE_RETURN]) {
+        printf("<RETURN> is pressed.\n");
+    }
+    if (state[SDL_SCANCODE_W]) {
+        character->setSpeed(0.75f);
+        std::cout << character->getSpeed();
+    }
+    if (state[SDL_SCANCODE_A]) {
+        character->setLatSpeed(-0.75f);
+    }
+    if (state[SDL_SCANCODE_S]) {
+        character->setSpeed(-0.75f);
+    }
+    if (state[SDL_SCANCODE_D]) {
+        character->setLatSpeed(0.75f);
+    }
+    if (state[SDL_SCANCODE_LSHIFT]) {
+        character->setSpeed(1.75f);
+    }
+}
+
+
+void SimulationGame::handleKeyUp(){
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    if (state[SDL_SCANCODE_W] == 0 && state[SDL_SCANCODE_S] == 0) {
+        character->setSpeed(0.0f);
+    }
+    if (state[SDL_SCANCODE_S] == 0 && state[SDL_SCANCODE_D] == 0) {
+        character->setLatSpeed(0.0f);
+    }
+}
+
+void SimulationGame::mouseUpdatePos(int mouseX, int mouseY){
+    character->applyMouseInput(mouseX, mouseY);
+}
+
+
 // Main gameloop where all behaviour will exist.
 void SimulationGame::gameLoop() {
 	while (this->gameState != GameState::QUITTING) {
@@ -130,7 +173,9 @@ void SimulationGame::gameLoop() {
 
 // Method call for drawing all objects we need.
 void SimulationGame::drawWorld() {
-	camera.computePos();
+    //compute character pos
+    character->updateCharacter();
+
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
@@ -138,8 +183,9 @@ void SimulationGame::drawWorld() {
 	proj = glm::perspective(45.0f, (float)this->windowWidth / (float)this->windowHeight, 0.1f, 1000.0f);
  
 	glm::mat4 view;
-	view = camera.getViewMatrix();
-
+    //get character view matrix
+	//view = camera.getViewMatrix();
+    view = character->getViewMatrix();
 	this->program.useProg();
 	
 	int id = program.getProgID(); // Program ID for shaders needing them for uniform things.

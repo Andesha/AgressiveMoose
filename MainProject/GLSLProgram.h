@@ -3,29 +3,29 @@
 
 class GLSLProgram {
 private:
-	GLuint progID;
-	GLuint vertexID;
-	GLuint fragID;
+    GLuint progID;
+    GLuint vertexID;
+    GLuint fragID;
 
-	int attributeCount;
+    int attributeCount;
 
-	void compileShader(const std::string& shaderPath, GLuint id);
+    void compileShader(const std::string& shaderPath, GLuint id);
 
 public:
-	GLSLProgram();
-	~GLSLProgram();
+    GLSLProgram();
+    ~GLSLProgram();
 
-	int getProgID();
+    int getProgID();
 
-	void addAttribute(const std::string& attributeName);
+    void addAttribute(const std::string& attributeName);
 
-	void compileShaders(const std::string& vertexPath, const std::string& fragPath);
+    void compileShaders(const std::string& vertexPath, const std::string& fragPath);
 
-	void linkShaders();
+    void linkShaders();
 
-	GLint getUniformLocation(const std::string& uniformName);
+    GLint getUniformLocation(const std::string& uniformName);
 
-	void useProg();
-	void unuseProg();
+    void useProg();
+    void unuseProg();
 };
 

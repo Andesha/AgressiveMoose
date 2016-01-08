@@ -6,135 +6,135 @@ TerrainChunk::TerrainChunk() : vaoID(0), vboID(0), eboID(0), drawing(false), per
 }
 
 void TerrainChunk::sendPerlin(Perlin& p) {
-	this->perlin = p;
+    this->perlin = p;
 }
 
 TerrainChunk::~TerrainChunk() {
-	if (this->vboID != 0) {
-		glDeleteBuffers(1,&this->vboID);
-	}
-	if (this->eboID != 0) {
-		glDeleteBuffers(1, &this->eboID);
-	}
+    if (this->vboID != 0) {
+        glDeleteBuffers(1, &this->vboID);
+    }
+    if (this->eboID != 0) {
+        glDeleteBuffers(1, &this->eboID);
+    }
 }
 
 bool TerrainChunk::isDrawing() {
-	return this->drawing;
+    return this->drawing;
 }
 
 float TerrainChunk::getCenterX() {
-	return this->centerX;
+    return this->centerX;
 }
 
 float TerrainChunk::getCenterY() {
-	return this->centerY;
+    return this->centerY;
 }
 
 // Private method to be called when first building, AND rebuilding chunks.
 void TerrainChunk::initialize(float cX, float cY) {
-	this->drawing = true;
-	
-	this->centerX = cX;
-	this->centerY = cY;
+    this->drawing = true;
 
-	if (this->vboID == 0) { // If true, we have to rebuild the VBO.
-		glGenBuffers(1,&this->vboID); // Pass in a reference to "THIS" vboID. Only generating one.
-	}
-	if (this->eboID == 0) {
-		glGenBuffers(1,&this->eboID);
-	}
-	if (this->vaoID == 0) {
-		glGenVertexArrays(1,&this->vaoID);
-	}
-	
-	glBindVertexArray(this->vaoID);
+    this->centerX = cX;
+    this->centerY = cY;
 
-	Vertex vertices[TOTAL_VERTICIES]; // Size of grid.
-	
-	int countBuild = 0;
-	float rowCount = 0.0f;
-	float colCount = 0.0f;
-	for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; --i) {
-		for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; ++j) {
-			vertices[countBuild].position.x = (float)j;
-			vertices[countBuild].position.z = (float)i;
-			vertices[countBuild].position.y = examinePerlin(this->centerX + j, this->centerY + i);
+    if (this->vboID == 0) { // If true, we have to rebuild the VBO.
+        glGenBuffers(1, &this->vboID); // Pass in a reference to "THIS" vboID. Only generating one.
+    }
+    if (this->eboID == 0) {
+        glGenBuffers(1, &this->eboID);
+    }
+    if (this->vaoID == 0) {
+        glGenVertexArrays(1, &this->vaoID);
+    }
 
-			vertices[countBuild].textureCoord.x = colCount * (1.0f / ((float)GRID_WIDTH-1));
-			vertices[countBuild].textureCoord.y = rowCount * (1.0f / ((float)GRID_WIDTH-1));
-			++countBuild;
-			++colCount;
-		}
-		++rowCount;
-		colCount = 0;
-	}
+    glBindVertexArray(this->vaoID);
 
-	for (int i = 0; i < TOTAL_VERTICIES; ++i) { // Set all to the same color.
-		int modifier = rand() % 127;
-		vertices[i].color.r = 255 - modifier;
-		vertices[i].color.g = 255 - modifier;
-		vertices[i].color.b = 255 - modifier;
-		vertices[i].color.a = 255;
-	}
+    Vertex vertices[TOTAL_VERTICIES]; // Size of grid.
 
-	vertices[24].color.r = 255;
-	vertices[24].color.g = 0;
-	vertices[24].color.b = 255;
-	vertices[24].color.a = 255;
+    int countBuild = 0;
+    float rowCount = 0.0f;
+    float colCount = 0.0f;
+    for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; --i) {
+        for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; ++j) {
+            vertices[countBuild].position.x = (float)j;
+            vertices[countBuild].position.z = (float)i;
+            vertices[countBuild].position.y = examinePerlin(this->centerX + j, this->centerY + i);
 
-	GLuint indices[INDICES_SIZE];
+            vertices[countBuild].textureCoord.x = colCount * (1.0f / ((float)GRID_WIDTH - 1));
+            vertices[countBuild].textureCoord.y = rowCount * (1.0f / ((float)GRID_WIDTH - 1));
+            ++countBuild;
+            ++colCount;
+        }
+        ++rowCount;
+        colCount = 0;
+    }
 
-	int countIndex = 0;
-	for (int j = 0; j < GRID_WIDTH - 1; ++j) {
-		for (int i = 0; i < GRID_WIDTH - 1; ++i) {
-			int root = i + (j*GRID_WIDTH);
-			indices[countIndex++] = root + 1; // Triangle one.
-			indices[countIndex++] = root + GRID_WIDTH + 1;
-			indices[countIndex++] = root;
+    for (int i = 0; i < TOTAL_VERTICIES; ++i) { // Set all to the same color.
+        int modifier = rand() % 127;
+        vertices[i].color.r = 255 - modifier;
+        vertices[i].color.g = 255 - modifier;
+        vertices[i].color.b = 255 - modifier;
+        vertices[i].color.a = 255;
+    }
 
-			indices[countIndex++] = root + GRID_WIDTH + 1; // Triangle two.
-			indices[countIndex++] = root + GRID_WIDTH;
-			indices[countIndex++] = root;
-		}
-	}
+    vertices[24].color.r = 255;
+    vertices[24].color.g = 0;
+    vertices[24].color.b = 255;
+    vertices[24].color.a = 255;
 
-	glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
-	glBufferData(GL_ARRAY_BUFFER,sizeof(vertices),vertices,GL_STATIC_DRAW);
+    GLuint indices[INDICES_SIZE];
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,this->eboID);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
+    int countIndex = 0;
+    for (int j = 0; j < GRID_WIDTH - 1; ++j) {
+        for (int i = 0; i < GRID_WIDTH - 1; ++i) {
+            int root = i + (j*GRID_WIDTH);
+            indices[countIndex++] = root + 1; // Triangle one.
+            indices[countIndex++] = root + GRID_WIDTH + 1;
+            indices[countIndex++] = root;
 
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position)); // Position.
-	glEnableVertexAttribArray(0);
+            indices[countIndex++] = root + GRID_WIDTH + 1; // Triangle two.
+            indices[countIndex++] = root + GRID_WIDTH;
+            indices[countIndex++] = root;
+        }
+    }
 
-	glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, color)); // Color.
-	glEnableVertexAttribArray(1);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureCoord)); // TextureCoord.
-	glEnableVertexAttribArray(2);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->eboID);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	glBindBuffer(GL_ARRAY_BUFFER,0);
-	glBindVertexArray(0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position)); // Position.
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 4, GL_UNSIGNED_BYTE, GL_TRUE, sizeof(Vertex), (void*)offsetof(Vertex, color)); // Color.
+    glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, textureCoord)); // TextureCoord.
+    glEnableVertexAttribArray(2);
+
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
 }
 
 // Outside method call for building a chunk around a given point.
 void TerrainChunk::rebase(float cX, float cY) {
-	initialize(cX, cY);
-	this->vaoID = 0;// Mark as null so that we know to redraw.
-	this->vboID = 0; 
-	this->eboID = 0;
+    initialize(cX, cY);
+    this->vaoID = 0;// Mark as null so that we know to redraw.
+    this->vboID = 0;
+    this->eboID = 0;
 }
 
 float TerrainChunk::examinePerlin(float x, float y) {
-	double temp = perlin.at(x / TOTAL_VERTICIES_ON_SIDE, y / TOTAL_VERTICIES_ON_SIDE, 0.5);
-	return (float)temp*HEIGHT_LIMIT - HEIGHT_OFFSET;
+    double temp = perlin.at(x / TOTAL_VERTICIES_ON_SIDE, y / TOTAL_VERTICIES_ON_SIDE, 0.5);
+    return (float)temp*HEIGHT_LIMIT - HEIGHT_OFFSET;
 }
 
 void TerrainChunk::draw() {
-	glBindVertexArray(this->vaoID);
-	glDrawElements(GL_TRIANGLES, INDICES_SIZE, GL_UNSIGNED_INT, (void*)0);
-	glBindVertexArray(0);
+    glBindVertexArray(this->vaoID);
+    glDrawElements(GL_TRIANGLES, INDICES_SIZE, GL_UNSIGNED_INT, (void*)0);
+    glBindVertexArray(0);
 
-	glDisableVertexAttribArray(0); // Delete and unbind.
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glDisableVertexAttribArray(0); // Delete and unbind.
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
