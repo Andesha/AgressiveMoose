@@ -5,7 +5,7 @@
 Camera3D::Camera3D() : yaw(90.0f), pitch(0.0f), roll(0.0f), sensitivity(0.5f), speedFace(0.0f), speedLat(0.0f) {
 	camUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	pos = glm::vec3(0.0f, 0.0f, 0.0f);
-	target = glm::vec3(0.0f, 0.0f, 25.0f);
+    target = pos + glm::vec3(0.0f, 0.0f, 1.0f);
 	cameraFront = glm::normalize(target - pos);
 	camRight = glm::normalize(glm::cross(cameraFront, camUp));
 }
@@ -22,30 +22,25 @@ void Camera3D::setDir(glm::vec3& newdir){
     dir = newdir;
 }
 
+void Camera3D::updateTarget(glm::vec3& targetPos){
+    cameraFront = glm::normalize(targetPos - pos);
+}
+
 glm::vec3 Camera3D::getDir(){
 	// std::cout << dir[0] << "\t" << dir[1] << "\t" << dir[2] << "\t" << std::endl;
     return dir;
 }
 
 void Camera3D::mouseUpdatePos(int mouseX, int mouseY){
-    if (!hasMoved){
-        hasMoved = true;
-        prevX = mouseX;
-        prevY = mouseY;
-        return;
-    }
 
-    GLfloat xoffset = mouseX;
-    GLfloat yoffset = mouseY;
-    prevX = mouseX;
-    prevY = mouseY;
+
 
     GLfloat sensitivity = 0.1;
-    xoffset *= sensitivity;
-    yoffset *= -sensitivity;
+    mouseX *= sensitivity;
+    mouseY *= -sensitivity;
 
-    yaw += xoffset;
-    pitch += yoffset;
+    yaw += mouseX;
+    pitch += mouseY;
 
     if (pitch > 89.0f)
         pitch = 89.0f;
@@ -69,7 +64,6 @@ void Camera3D::mouseUpdatePos(int mouseX, int mouseY){
 
 
 glm::vec3 Camera3D::getFront(){
-    // std::cout << cameraFront[0] << "\t" << cameraFront[1] << "\t" << cameraFront[2] << "\t" << std::endl;
     return cameraFront;
 }
 
@@ -109,34 +103,11 @@ void Camera3D::handleKeyDown(){
 
 void Camera3D::handleKeyUp(){
     const Uint8 *state = SDL_GetKeyboardState(NULL);
-    if (state[SDL_SCANCODE_RETURN]) {
-        printf("<RETURN> is pressed.\n");
-    }
     if (state[SDL_SCANCODE_W] == 0 && state[SDL_SCANCODE_S]== 0) {
         speedFace = 0.0f;
     }
     if (state[SDL_SCANCODE_S] == 0 && state[SDL_SCANCODE_D] ==0) {
         speedLat = 0.0f;
-    }
-}
-
-
-void Camera3D::setPrevXY(int x, int y){
-    this->prevX = x;
-    this->prevY = y;
-}
-
-void Camera3D::checkWarp(SDL_Window* window, int x, int y, int windowWidth,
-    int windowHeight){
-
-    // if you're 25% of the way from the border
-    int win_top_lim = windowHeight / 4;
-    int win_bot_lim = 3 * win_top_lim;
-    int win_l_lim = windowWidth / 4;
-    int win_r_lim = 3 * win_l_lim;
-    if (y < win_top_lim || y > win_bot_lim || x < win_l_lim || x > win_r_lim){
-        SDL_WarpMouseInWindow(window, windowWidth / 2, windowHeight / 2);
-        this->setPrevXY(windowWidth / 2, windowHeight / 2);
     }
 }
 

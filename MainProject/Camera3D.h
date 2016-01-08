@@ -47,6 +47,7 @@ public:
 
     void setFront(glm::vec3 &front);
 
+    void updateTarget(glm::vec3& targetPos);
     
     /// <summary>
     /// function for controlling 
@@ -72,11 +73,9 @@ public:
         int windowHeight);
 
     void Camera3D::computePos();
+
+    glm::mat4 Camera3D::getViewMatrix();
 private:
-
-    bool hasMoved = false;
-    int prevX, prevY;
-
     GLfloat yaw, pitch, roll;
     GLfloat sensitivity;
     GLfloat speedFace;
