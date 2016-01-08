@@ -12,7 +12,6 @@ private:
 	SDL_Window* window; // Window information. Possibly auto-detect later.
 	int windowWidth;
 	int windowHeight;
-
 	float fps;
 	float frameTime;
 
@@ -38,10 +37,12 @@ private:
 
 	void calculateFPS(); // Examine the frame ticks via SDL. Eventually needed for delta time.
 
+	void makeTestTexture();
+
 public:
 	SimulationGame();
 	~SimulationGame();
-
+  GLuint tid;
 	void start(); // To be called to start the whole game.
 };
 

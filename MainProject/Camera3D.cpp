@@ -45,7 +45,7 @@ void Camera3D::mouseUpdatePos(int mouseX, int mouseY){
 
     GLfloat sensitivity = 0.1;
     xoffset *= sensitivity;
-    yoffset *= sensitivity;
+    yoffset *= -sensitivity;
 
     yaw += xoffset;
     pitch += yoffset;
@@ -90,7 +90,6 @@ void Camera3D::handleKeyDown(){
     }
     if (state[SDL_SCANCODE_W]) {
         speedFace = 0.75f;
-        
     }
     if (state[SDL_SCANCODE_A]) {
         speedLat = -0.5f;
@@ -109,10 +108,10 @@ void Camera3D::handleKeyUp(){
     if (state[SDL_SCANCODE_RETURN]) {
         printf("<RETURN> is pressed.\n");
     }
-	if (state[SDL_SCANCODE_W] == 0 && state[SDL_SCANCODE_S] == 0) {
+    if (state[SDL_SCANCODE_W] == 0 && state[SDL_SCANCODE_S]== 0) {
         speedFace = 0.0f;
     }
-    if (state[SDL_SCANCODE_A] == 0 && state[SDL_SCANCODE_D] == 0) {
+    if (state[SDL_SCANCODE_S] == 0 && state[SDL_SCANCODE_D] ==0) {
         speedLat = 0.0f;
     }
 }

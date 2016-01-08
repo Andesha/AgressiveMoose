@@ -21,7 +21,28 @@ void SimulationGame::start() {
 
 	initializeShaders();
 
+	makeTestTexture();
+
 	this->gameLoop(); // Run.
+}
+
+void SimulationGame::makeTestTexture() {
+	glGenTextures(1, &this->tid);
+
+	glBindTexture(GL_TEXTURE_2D, this->tid);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);	// Set texture wrapping to GL_REPEAT (usually basic wrapping method)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	// Set texture filtering parameters
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	int width, height;
+	unsigned char* image = SOIL_load_image("wall.jpg", &width, &height, 0, SOIL_LOAD_RGB);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, image);
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	SOIL_free_image_data(image);
+	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
 // Builds the window and creates all of the OpenGL context information we need.
@@ -62,11 +83,7 @@ void SimulationGame::examineInput() {
 			this->gameState = GameState::QUITTING;
 			break;
 		case SDL_MOUSEMOTION: // Mouse event.
-			//std::cout << input.motion.xrel << "\t" << input.motion.yrel << std::endl;
 			camera.mouseUpdatePos(input.motion.xrel, input.motion.yrel);
-            //camera.checkWarp(this->window, input.motion.x, input.motion.y, 
-            //                 this->windowWidth, this->windowHeight);
-
 			break;
 		case SDL_KEYDOWN: // Key presses.
 			if (input.key.keysym.sym == 27)this->gameState = GameState::QUITTING;
@@ -123,6 +140,8 @@ void SimulationGame::drawWorld() {
 	model = glm::rotate(model, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 
 	this->program.useProg();
+	
+	int id = program.getProgID(); // Program ID for shaders needing them for uniform things.
  
 	GLint viewLoc = this->program.getUniformLocation("view");
 	GLint projLoc = this->program.getUniformLocation("proj");
@@ -147,6 +166,10 @@ void SimulationGame::drawWorld() {
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); // Send model matrix.
 
+		glActiveTexture(GL_TEXTURE0);
+		glBindTexture(GL_TEXTURE_2D, this->tid);
+		glUniform1i(glGetUniformLocation(id, "texIm"), 0);
+
 		tc.draw();
 	}
 
@@ -160,6 +183,9 @@ void SimulationGame::initializeShaders() {
                          "Shaders\\basicShader.frg");
 	program.addAttribute("vertexPosition");
 	program.addAttribute("vertexColor");
+
+	program.addAttribute("texCoord");
+
 	program.linkShaders();
 }
 
