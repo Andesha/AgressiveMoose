@@ -54,9 +54,6 @@ void TerrainChunk::initialize(float cX, float cY) {
 	int countBuild = 0;
   float rowCount = 0.0f;
   float colCount = 0.0f;
-  std::ofstream myfile;
-  myfile.open("texCoords.txt");
-  myfile << "Writing this to a file.\n";
   for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; --i) {
 		for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; ++j) {
 			//std::cout << "(" << j << "," << i << ")";
@@ -65,14 +62,12 @@ void TerrainChunk::initialize(float cX, float cY) {
 			vertices[countBuild].position.y = examinePerlin(this->centerX + j, this->centerY + i);
       vertices[countBuild].textureCoord.x = colCount * (1.0f / ((float)GRID_WIDTH-1));
       vertices[countBuild].textureCoord.y = rowCount * (1.0f / ((float)GRID_WIDTH-1));
-      myfile << colCount << "\t" << rowCount << "\t" << vertices[countBuild].textureCoord.x << "\t" << vertices[countBuild].textureCoord.y << "\n";
-      ++countBuild; // I don't know?
+	  ++countBuild;
       ++colCount;
     }
     ++rowCount;
     colCount = 0;
   }
-  myfile.close();
 
 	for (int i = 0; i < TOTAL_VERTICIES; ++i) { // Set all to the same color.
 		int modifier = rand() % 127;

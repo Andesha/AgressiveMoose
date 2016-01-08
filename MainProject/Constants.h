@@ -13,7 +13,7 @@ const int INDICES_SIZE = pow(2.0, GRID_WIDTH) * 3; // 2 ^ GridWidth is the numbe
 
 const int CHUNK_PER_ROW = 10; // In relation to the above number, this is how many the TerrainList will translate per row.
 const int TERRAIN_LIST_SIZE = 100; // Number of TerrainChunk objects inside of the TerrainList.
-const float SCALING_FACTOR = 10.0f; // If we scale the chunks to be bigger - we need to initialize them differently.
+const float SCALING_FACTOR = 5.0f; // If we scale the chunks to be bigger - we need to initialize them differently.
 
 const float TOTAL_VERTICIES_ON_SIDE = GRID_WIDTH*CHUNK_PER_ROW; // Leave this value alone. Will obviously auto compute.
 // Need to be kept track of for properly scaling perlin noise based on all the vertices on screen.
