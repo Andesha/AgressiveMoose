@@ -1,18 +1,23 @@
 #pragma once
 #include "stdafx.h"
 
-enum MoveType {UP, DOWN, LEFT, RIGHT};
-
-
 /// <summary>
-///	Main class for 3d camera object
+///	 Main class for 3d camera object
 /// </summary>
 class Camera3D {
+    friend class  Character; // make it a friend so we can manipulate the member
+    // camera with private functions
 public:
-    
-    int moveType;
 
+    /// <summary>
+    ///
+    /// </summary>
     Camera3D();
+
+    /// <summary>
+    ///
+    /// </summary>
+    Camera3D(glm::vec3 pos, GLfloat yaw, GLfloat pitch, GLfloat roll, float sensitivity);
 
     /// <summary>
     ///
@@ -43,12 +48,21 @@ public:
     /// <returns> returns the view matrix of the camera </return>
     glm::mat4 getViewMatrix();
 
+    /// <summary>
+    ///
+    /// </summary>
     glm::vec3 getFront();
 
+    /// <summary>
+    ///
+    /// </summary>
     void setFront(glm::vec3 &front);
 
+    /// <summary>
+    ///
+    /// </summary>
     void updateTarget(glm::vec3& targetPos);
-    
+
     /// <summary>
     /// function for controlling 
     /// </summary>
@@ -67,19 +81,28 @@ public:
     /// </summary>
     void handleKeyUp();
 
+    /// <summary>
+    ///
+    /// </summary>
     void Camera3D::setPrevXY(int x, int y);
 
+    /// <summary>
+    ///
+    /// </summary>
     void Camera3D::checkWarp(SDL_Window* window, int x, int y, int windowWidth,
         int windowHeight);
 
-    void Camera3D::computePos();
+    /// <summary>
+    ///
+    /// </summary>
+    void Camera3D::computePos(GLfloat speed, GLfloat speedLat);
 
-    glm::mat4 Camera3D::getViewMatrix();
+
+
 private:
     GLfloat yaw, pitch, roll;
     GLfloat sensitivity;
-    GLfloat speedFace;
-    GLfloat speedLat;
+
 
     glm::vec3 pos;
     glm::vec3 dir;

@@ -38,3 +38,4 @@
 #include "Constants.h"
 #include "TextureFactory.h"
 #include "Camera3D.h"
+#include "Character.h"

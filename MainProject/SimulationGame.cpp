@@ -84,15 +84,15 @@ void SimulationGame::examineInput() {
 			this->gameState = GameState::QUITTING;
 			break;
 		case SDL_MOUSEMOTION: // Mouse event.
-			camera.mouseUpdatePos(input.motion.xrel, input.motion.yrel);
+            //TODO add input function on character
 			break;
 		case SDL_KEYDOWN: // Key presses.
 			if (input.key.keysym.sym == 27)this->gameState = GameState::QUITTING;
-            camera.handleKeyDown();
+            //TODO add input function on character
 			break;
-    case SDL_KEYUP:
-        camera.handleKeyUp();
-        break;
+        case SDL_KEYUP:
+            //TODO add input function on character
+            break;
 		}
 	}
 
@@ -115,6 +115,68 @@ void SimulationGame::fpsCaretaker(float startMarker) {
 		SDL_Delay(1000.0f / MAX_FPS - totalTicks);
 	}
 }
+
+void SimulationGame::handleKeyDown(){
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    if (state[SDL_SCANCODE_RETURN]) {
+        printf("<RETURN> is pressed.\n");
+    }
+    if (state[SDL_SCANCODE_W]) {
+         = 0.75f;
+    }
+    if (state[SDL_SCANCODE_A]) {
+        speedLat = -0.5f;
+    }
+    if (state[SDL_SCANCODE_S]) {
+        speedFace = -0.75f;
+    }
+    if (state[SDL_SCANCODE_D]) {
+        speedLat = 0.5f;
+    }
+    if (state[SDL_SCANCODE_LSHIFT]) {
+        speedFace = 1.75f;
+    }
+}
+
+
+void SimulationGame::handleKeyUp(){
+    const Uint8 *state = SDL_GetKeyboardState(NULL);
+    if (state[SDL_SCANCODE_W] == 0 && state[SDL_SCANCODE_S] == 0) {
+        speedFace = 0.0f;
+    }
+    if (state[SDL_SCANCODE_S] == 0 && state[SDL_SCANCODE_D] == 0) {
+        speedLat = 0.0f;
+    }
+}
+
+void SimulationGame::mouseUpdatePos(int mouseX, int mouseY){
+    GLfloat sensitivity = 0.1;
+    mouseX *= sensitivity;
+    mouseY *= -sensitivity;
+
+    yaw += mouseX;
+    pitch += mouseY;
+
+    if (pitch > 89.0f)
+        pitch = 89.0f;
+    if (pitch < -89.0f)
+        pitch = -89.0f;
+
+    camUp = glm::vec3(0.0f, 1.0f, 0.0f); // Defining up relative to world space.
+    cameraFront = glm::vec3(1.0f, 0.0f, 0.0f); // Define front relative to world space.
+
+    glm::mat4 rotationMat(1); // Fun way to get the front vector to rotate around up by yaw.
+    rotationMat = glm::rotate(rotationMat, glm::radians(-yaw), camUp);
+    cameraFront = glm::vec3(rotationMat * glm::vec4(cameraFront, 1.0));
+
+    camRight = glm::cross(cameraFront, camUp); // Cross of front and up.
+
+    rotationMat = glm::mat4(1);
+    rotationMat = glm::rotate(rotationMat, glm::radians(pitch), camRight);
+    cameraFront = glm::vec3(rotationMat * glm::vec4(cameraFront, 1.0));
+    camUp = glm::vec3(rotationMat * glm::vec4(camUp, 1.0));
+}
+
 
 // Main gameloop where all behaviour will exist.
 void SimulationGame::gameLoop() {
