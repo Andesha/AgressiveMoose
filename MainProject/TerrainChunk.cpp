@@ -87,6 +87,11 @@ void TerrainChunk::initialize(float cX, float cY) {
 	vertices[24].color.b = 255;
 	vertices[24].color.a = 255;
 
+	//vertices[49].color.r = 255;
+	//vertices[49].color.g = 0;
+	//vertices[49].color.b = 255;
+	//vertices[49].color.a = 255;
+
 	GLuint indices[INDICES_WORKAROUND];
 
 	int countIndex = 0;
@@ -133,7 +138,7 @@ void TerrainChunk::rebase(float cX, float cY) {
 
 float TerrainChunk::examinePerlin(float x, float y) {
 	double temp = perlin.at(x / TOTAL_VERTICIES_ON_SIDE, y / TOTAL_VERTICIES_ON_SIDE, 0.5);
-	return (float)temp*HEIGHT_LIMIT;
+	return (float)temp*HEIGHT_LIMIT - HEIGHT_OFFSET;
 }
 
 void TerrainChunk::draw() {
@@ -146,15 +151,3 @@ void TerrainChunk::draw() {
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 }
-
-/*
-
-// Bind Textures using texture units
-glActiveTexture(GL_TEXTURE0);
-glBindTexture(GL_TEXTURE_2D, texture1);
-glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture1"), 0);
-glActiveTexture(GL_TEXTURE1);
-glBindTexture(GL_TEXTURE_2D, texture2);
-glUniform1i(glGetUniformLocation(ourShader.Program, "ourTexture2"), 1);
-
-*/
