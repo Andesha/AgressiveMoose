@@ -97,6 +97,24 @@ void SimulationGame::examineInput() {
 
 }
 
+void SimulationGame::fpsCaretaker(float startMarker) {
+	calculateFPS();
+
+	static int frameCount = 0; // Fun cheesey way of making sure we don't print too much.
+	frameCount++;
+	if (frameCount == 10) {
+		std::cout << this->fps << std::endl;
+		frameCount = 0;
+	}
+
+	float totalTicks = SDL_GetTicks() - startMarker;
+
+	//FPS limiting.
+	if (1000.0f / MAX_FPS > totalTicks) {
+		SDL_Delay(1000.0f / MAX_FPS - totalTicks);
+	}
+}
+
 // Main gameloop where all behaviour will exist.
 void SimulationGame::gameLoop() {
 	while (this->gameState != GameState::QUITTING) {
@@ -104,21 +122,8 @@ void SimulationGame::gameLoop() {
 		
 		this->examineInput();
 		this->drawWorld();
-		calculateFPS();
-
-		static int frameCount = 0; // Fun cheesey way of making sure we don't print too much.
-		frameCount++;
-		if (frameCount == 10) {
-			std::cout << this->fps << std::endl;
-			frameCount = 0;
-		}
-
-		float totalTicks = SDL_GetTicks() - startMarker;
-
-		//FPS limiting.
-		if (1000.0f / MAX_FPS > totalTicks) {
-			SDL_Delay(1000.0f / MAX_FPS - totalTicks);
-		}
+		
+		fpsCaretaker(startMarker); // Just trying to clean up the game loop.
 	}
 }
 

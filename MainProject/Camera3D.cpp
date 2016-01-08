@@ -138,7 +138,6 @@ void Camera3D::checkWarp(SDL_Window* window, int x, int y, int windowWidth,
 
 
 void Camera3D::computePos(){
-
     this->pos += this->cameraFront * speedFace;
-    //this->pos += this->camRight * 0.0f; 
+	if (speedLat != 0.0f)this->pos += this->camRight * speedLat;
 }

@@ -39,6 +39,8 @@ private:
 
 	void makeTestTexture();
 
+	void fpsCaretaker(float startMarker);
+
 public:
 	SimulationGame();
 	~SimulationGame();
