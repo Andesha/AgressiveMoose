@@ -62,7 +62,7 @@ void SimulationGame::examineInput() {
 			this->gameState = GameState::QUITTING;
 			break;
 		case SDL_MOUSEMOTION: // Mouse event.
-			std::cout << input.motion.xrel << "\t" << input.motion.yrel << std::endl;
+			//std::cout << input.motion.xrel << "\t" << input.motion.yrel << std::endl;
 			camera.mouseUpdatePos(input.motion.xrel, input.motion.yrel);
             //camera.checkWarp(this->window, input.motion.x, input.motion.y, 
             //                 this->windowWidth, this->windowHeight);
@@ -134,13 +134,16 @@ void SimulationGame::drawWorld() {
 	for (TerrainChunk tc : terrainList.getList()) {
 		glm::mat4 model;
 
+		glm::vec3 toScale = glm::vec3(SCALING_FACTOR); // Scaling matrix.
+		model = glm::scale(model, toScale);
+
 		glm::vec3 pos;
 		pos.x = tc.getCenterX();
 		pos.z = tc.getCenterY(); // Confusing but oh well.
 
 		model = glm::translate(model, pos);
 
-		//no rotate
+		// No rotate
 
 		glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model)); // Send model matrix.
 
