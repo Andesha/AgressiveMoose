@@ -31,7 +31,7 @@ void TerrainList::firstInit() {
 
 	float countX = 0;
 	float countY = 0;
-	
+
 	for (TerrainChunk& tc : terrainList) {
 		tc.initialize(-gridIncrement + (countX * gridIncrement), gridIncrement + (countY * gridIncrement));
 

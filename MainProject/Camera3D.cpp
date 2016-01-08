@@ -2,15 +2,12 @@
 #include "Camera3D.h"
 
 
-// roll is applied by changing camUp based on roll
-Camera3D::Camera3D(): yaw(90.0f), pitch(0.0f), roll(0.0f), sensitivity(0.5f), speedFace(0.0f), speedLat(0.0f){
-    glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f);
-	pos = glm::vec3(0.0f, 25.0f, 0.0f);
-    target = glm::vec3(0.0f, 0.0f, 0.0f);
-    dir = glm::normalize(pos - target);
-    camRight = glm::normalize(glm::cross(up, dir));
-    camUp = glm::normalize(glm::cross(dir, camRight));
-    cameraFront = glm::vec3(0.0f, 0.0f, -1.0f);
+Camera3D::Camera3D() : yaw(90.0f), pitch(0.0f), roll(0.0f), sensitivity(0.5f), speedFace(0.0f), speedLat(0.0f) {
+	camUp = glm::vec3(0.0f, 1.0f, 0.0f);
+	pos = glm::vec3(0.0f, 0.0f, 0.0f);
+	target = glm::vec3(0.0f, 0.0f, 25.0f);
+	cameraFront = glm::normalize(target - pos);
+	camRight = glm::normalize(glm::cross(cameraFront, camUp));
 }
                                                                      
 void Camera3D::setPos(glm::vec3& newpos){
@@ -55,15 +52,19 @@ void Camera3D::mouseUpdatePos(int mouseX, int mouseY){
     if (pitch < -89.0f)
         pitch = -89.0f;
 
-    glm::vec3 front;
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front.y = sin(glm::radians(pitch));
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    setFront(front);
-    // Normalize the vectors, because their length gets closer to 0 the more 
-    // you look up or down which results in slower movement.
-    this->camRight = glm::normalize(glm::cross(this->cameraFront, glm::vec3(0.0f, 1.0f, 0.0f)));  
-    this->camUp = glm::normalize(glm::cross(this->camRight, this->cameraFront));
+	camUp = glm::vec3(0.0f, 1.0f, 0.0f); // Defining up relative to world space.
+	cameraFront = glm::vec3(1.0f, 0.0f, 0.0f); // Define front relative to world space.
+
+	glm::mat4 rotationMat(1); // Fun way to get the front vector to rotate around up by yaw.
+	rotationMat = glm::rotate(rotationMat, glm::radians(-yaw), camUp);
+	cameraFront = glm::vec3(rotationMat * glm::vec4(cameraFront, 1.0));
+
+	camRight = glm::cross(cameraFront,camUp); // Cross of front and up.
+
+	rotationMat = glm::mat4(1);
+	rotationMat = glm::rotate(rotationMat, glm::radians(pitch), camRight);
+	cameraFront = glm::vec3(rotationMat * glm::vec4(cameraFront, 1.0));
+	camUp = glm::vec3(rotationMat * glm::vec4(camUp, 1.0));
 }
 
 
@@ -100,6 +101,9 @@ void Camera3D::handleKeyDown(){
     if (state[SDL_SCANCODE_D]) {
         speedLat = 0.5f;
     }
+	if (state[SDL_SCANCODE_LSHIFT]) {
+		speedFace= 1.75f;
+	}
 }
 
 
@@ -138,7 +142,6 @@ void Camera3D::checkWarp(SDL_Window* window, int x, int y, int windowWidth,
 
 
 void Camera3D::computePos(){
-
     this->pos += this->cameraFront * speedFace;
-    //this->pos += this->camRight * 0.0f; 
+	if (speedLat != 0.0f)this->pos += this->camRight * speedLat;
 }

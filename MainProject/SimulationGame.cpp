@@ -2,7 +2,7 @@
 
 // Initialize game object to default values.
 SimulationGame::SimulationGame() : window(NULL), windowWidth(1024),
-windowHeight(720), gameState(GameState::PLAYING), perlin(1234){
+windowHeight(720), gameState(GameState::PLAYING), perlin(PERLIN_SEED) {
 	terrainList = TerrainList(perlin);
 }
 
@@ -14,7 +14,7 @@ SimulationGame::~SimulationGame() {
 // into the game loop.
 void SimulationGame::start() {
 	this->initialize(); // Build.
-    this->camera = Camera3D();
+    //this->camera = Camera3D();
 	
 	terrainList.buildPool(TERRAIN_LIST_SIZE); // Nine total chunks for the pool.
 	terrainList.firstInit(); // Build the start of the grid.
@@ -68,6 +68,7 @@ void SimulationGame::initialize() {
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
 	if (ENABLE_BFC) { // Toggle for BFC.
+		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glFrontFace(GL_CCW);
 	}
@@ -97,6 +98,24 @@ void SimulationGame::examineInput() {
 
 }
 
+void SimulationGame::fpsCaretaker(float startMarker) {
+	calculateFPS();
+
+	static int frameCount = 0; // Fun cheesey way of making sure we don't print too much.
+	frameCount++;
+	if (frameCount == 10) {
+		std::cout << this->fps << std::endl;
+		frameCount = 0;
+	}
+
+	float totalTicks = SDL_GetTicks() - startMarker;
+
+	//FPS limiting.
+	if (1000.0f / MAX_FPS > totalTicks) {
+		SDL_Delay(1000.0f / MAX_FPS - totalTicks);
+	}
+}
+
 // Main gameloop where all behaviour will exist.
 void SimulationGame::gameLoop() {
 	while (this->gameState != GameState::QUITTING) {
@@ -104,27 +123,14 @@ void SimulationGame::gameLoop() {
 		
 		this->examineInput();
 		this->drawWorld();
-		calculateFPS();
-
-		static int frameCount = 0; // Fun cheesey way of making sure we don't print too much.
-		frameCount++;
-		if (frameCount == 10) {
-			std::cout << this->fps << std::endl;
-			frameCount = 0;
-		}
-
-		float totalTicks = SDL_GetTicks() - startMarker;
-
-		//FPS limiting.
-		if (1000.0f / MAX_FPS > totalTicks) {
-			SDL_Delay(1000.0f / MAX_FPS - totalTicks);
-		}
+		
+		fpsCaretaker(startMarker); // Just trying to clean up the game loop.
 	}
 }
 
 // Method call for drawing all objects we need.
 void SimulationGame::drawWorld() {
-  camera.computePos();
+	camera.computePos();
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
@@ -132,12 +138,7 @@ void SimulationGame::drawWorld() {
 	proj = glm::perspective(45.0f, (float)this->windowWidth / (float)this->windowHeight, 0.1f, 1000.0f);
  
 	glm::mat4 view;
-	// Note :translating the scene in the reverse direction of where we want to move
-	//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 	view = camera.getViewMatrix();
-
-	glm::mat4 model;
-	model = glm::rotate(model, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 
 	this->program.useProg();
 	
@@ -183,7 +184,6 @@ void SimulationGame::initializeShaders() {
                          "Shaders\\basicShader.frg");
 	program.addAttribute("vertexPosition");
 	program.addAttribute("vertexColor");
-
 	program.addAttribute("texCoord");
 
 	program.linkShaders();
