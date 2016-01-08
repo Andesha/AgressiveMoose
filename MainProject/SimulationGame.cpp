@@ -68,6 +68,7 @@ void SimulationGame::initialize() {
 	glClearColor(0.0f, 0.0f, 1.0f, 1.0f);
 
 	if (ENABLE_BFC) { // Toggle for BFC.
+		glEnable(GL_DEPTH_TEST);
 		glEnable(GL_CULL_FACE);
 		glFrontFace(GL_CCW);
 	}
@@ -129,7 +130,7 @@ void SimulationGame::gameLoop() {
 
 // Method call for drawing all objects we need.
 void SimulationGame::drawWorld() {
-  camera.computePos();
+	camera.computePos();
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
@@ -137,12 +138,7 @@ void SimulationGame::drawWorld() {
 	proj = glm::perspective(45.0f, (float)this->windowWidth / (float)this->windowHeight, 0.1f, 1000.0f);
  
 	glm::mat4 view;
-	// Note :translating the scene in the reverse direction of where we want to move
-	//view = glm::translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
 	view = camera.getViewMatrix();
-
-	glm::mat4 model;
-	model = glm::rotate(model, -55.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 
 	this->program.useProg();
 	
@@ -188,7 +184,6 @@ void SimulationGame::initializeShaders() {
                          "Shaders\\basicShader.frg");
 	program.addAttribute("vertexPosition");
 	program.addAttribute("vertexColor");
-
 	program.addAttribute("texCoord");
 
 	program.linkShaders();

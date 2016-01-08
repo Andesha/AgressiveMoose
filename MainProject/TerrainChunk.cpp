@@ -52,22 +52,22 @@ void TerrainChunk::initialize(float cX, float cY) {
 	Vertex vertices[TOTAL_VERTICIES]; // Size of grid.
 	
 	int countBuild = 0;
-  float rowCount = 0.0f;
-  float colCount = 0.0f;
-  for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; --i) {
+	float rowCount = 0.0f;
+	float colCount = 0.0f;
+	for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; --i) {
 		for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; ++j) {
-			//std::cout << "(" << j << "," << i << ")";
 			vertices[countBuild].position.x = (float)j;
 			vertices[countBuild].position.z = (float)i;
 			vertices[countBuild].position.y = examinePerlin(this->centerX + j, this->centerY + i);
-      vertices[countBuild].textureCoord.x = colCount * (1.0f / ((float)GRID_WIDTH-1));
-      vertices[countBuild].textureCoord.y = rowCount * (1.0f / ((float)GRID_WIDTH-1));
-	  ++countBuild;
-      ++colCount;
-    }
-    ++rowCount;
-    colCount = 0;
-  }
+
+			vertices[countBuild].textureCoord.x = colCount * (1.0f / ((float)GRID_WIDTH-1));
+			vertices[countBuild].textureCoord.y = rowCount * (1.0f / ((float)GRID_WIDTH-1));
+			++countBuild;
+			++colCount;
+		}
+		++rowCount;
+		colCount = 0;
+	}
 
 	for (int i = 0; i < TOTAL_VERTICIES; ++i) { // Set all to the same color.
 		int modifier = rand() % 127;
@@ -82,12 +82,7 @@ void TerrainChunk::initialize(float cX, float cY) {
 	vertices[24].color.b = 255;
 	vertices[24].color.a = 255;
 
-	//vertices[49].color.r = 255;
-	//vertices[49].color.g = 0;
-	//vertices[49].color.b = 255;
-	//vertices[49].color.a = 255;
-
-	GLuint indices[INDICES_WORKAROUND];
+	GLuint indices[INDICES_SIZE];
 
 	int countIndex = 0;
 	for (int j = 0; j < GRID_WIDTH - 1; ++j) {
@@ -109,7 +104,6 @@ void TerrainChunk::initialize(float cX, float cY) {
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,this->eboID);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
-	//glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (void*)offsetof(Vertex, position)); // Position.
 	glEnableVertexAttribArray(0);
 
@@ -137,12 +131,10 @@ float TerrainChunk::examinePerlin(float x, float y) {
 }
 
 void TerrainChunk::draw() {
-
 	glBindVertexArray(this->vaoID);
 	glDrawElements(GL_TRIANGLES, INDICES_SIZE, GL_UNSIGNED_INT, (void*)0);
 	glBindVertexArray(0);
 
 	glDisableVertexAttribArray(0); // Delete and unbind.
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
 }

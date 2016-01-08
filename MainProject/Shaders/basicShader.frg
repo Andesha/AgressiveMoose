@@ -8,5 +8,6 @@ out vec4 color;
 uniform sampler2D texIm;
 
 void main(){
-	color = texture(texIm,TexCoord);
+	//color = texture(texIm, TexCoord);
+	color = texture(texIm, TexCoord) * fragmentColor;
 }
