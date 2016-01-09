@@ -5,6 +5,7 @@ SimulationGame::SimulationGame() : window(NULL), windowWidth(1024),
 windowHeight(720), gameState(GameState::PLAYING), perlin(PERLIN_SEED) {
 	terrainList = TerrainList(perlin);
     character = new Character(glm::vec3(0.0f,0.0f,0.0f));
+	skybox = new Skybox();
 }
 
 // Currently no destructor.
@@ -15,10 +16,11 @@ SimulationGame::~SimulationGame() {
 // into the game loop.
 void SimulationGame::start() {
 	this->initialize(); // Build.
-    //this->camera = Camera3D();
 	
 	terrainList.buildPool(TERRAIN_LIST_SIZE); // Nine total chunks for the pool.
 	terrainList.firstInit(); // Build the start of the grid.
+
+	skybox->initialize();
 
 	initializeShaders();
 
@@ -105,10 +107,11 @@ void SimulationGame::examineInput() {
 void SimulationGame::fpsCaretaker(float startMarker) {
 	calculateFPS();
 
+	std::string label = "Flight Simulation: ";
 	static int frameCount = 0; // Fun cheesey way of making sure we don't print too much.
 	frameCount++;
 	if (frameCount == 10) {
-		std::cout << this->fps << std::endl;
+		SDL_SetWindowTitle(this->window, (label + std::to_string(this->fps)).c_str());
 		frameCount = 0;
 	}
 
@@ -165,6 +168,9 @@ void SimulationGame::gameLoop() {
 		float startMarker = SDL_GetTicks(); // Frame time.
 		
 		this->examineInput();
+
+		character->updateCharacter();
+
 		this->drawWorld();
 		
 		fpsCaretaker(startMarker); // Just trying to clean up the game loop.
@@ -174,7 +180,6 @@ void SimulationGame::gameLoop() {
 // Method call for drawing all objects we need.
 void SimulationGame::drawWorld() {
     //compute character pos
-    character->updateCharacter();
 
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -182,10 +187,10 @@ void SimulationGame::drawWorld() {
 	glm::mat4 proj;
 	proj = glm::perspective(45.0f, (float)this->windowWidth / (float)this->windowHeight, 0.1f, 1000.0f);
  
-	glm::mat4 view;
-    //get character view matrix
-	//view = camera.getViewMatrix();
-    view = character->getViewMatrix();
+	glm::mat4 view = glm::mat4(glm::mat3(character->getViewMatrix()));
+
+	skybox->draw(view,proj); // CALL TO THE SKYBOX DRAW IS HERE
+
 	this->program.useProg();
 	
 	int id = program.getProgID(); // Program ID for shaders needing them for uniform things.
@@ -193,6 +198,8 @@ void SimulationGame::drawWorld() {
 	GLint viewLoc = this->program.getUniformLocation("view");
 	GLint projLoc = this->program.getUniformLocation("proj");
 	GLint modelLoc = this->program.getUniformLocation("model");
+
+	view = character->getViewMatrix(); // Update view matrix now that we aren't doing the skybox.
 
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
