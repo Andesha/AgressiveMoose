@@ -105,10 +105,11 @@ void SimulationGame::examineInput() {
 void SimulationGame::fpsCaretaker(float startMarker) {
 	calculateFPS();
 
+	std::string label = "Flight Simulation: ";
 	static int frameCount = 0; // Fun cheesey way of making sure we don't print too much.
 	frameCount++;
 	if (frameCount == 10) {
-		std::cout << this->fps << std::endl;
+		SDL_SetWindowTitle(this->window, (label + std::to_string(this->fps)).c_str());
 		frameCount = 0;
 	}
 
