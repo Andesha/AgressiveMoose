@@ -13,7 +13,7 @@ private:
 	GLuint eboID;
 	Perlin perlin;
 	float examinePerlin(float x, float y); // Examine the perlin system to find out height.
-
+    glm::vec3 calcVertexNormal(float x, float y, float z);
 public:
 	TerrainChunk();
 	~TerrainChunk();
