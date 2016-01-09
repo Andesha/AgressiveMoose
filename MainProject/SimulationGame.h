@@ -6,6 +6,7 @@
 #include "Camera3D.h"
 #include "TerrainList.h"
 #include "Character.h"
+#include "Skybox.h"
 
 // Main class which specifies all behaviour of our game engine.
 class SimulationGame {
@@ -23,6 +24,8 @@ private:
 	GameState gameState; // See GameState.h
 
     Character* character;
+
+	Skybox* skybox;
 
 	Perlin perlin;
 
