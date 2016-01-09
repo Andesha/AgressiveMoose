@@ -6,21 +6,16 @@
 Skybox::Skybox() : vaoID(0), vboID(0) {
 }
 
-void Skybox::draw(glm::mat4 view, glm::mat4 proj) {
+void Skybox::draw(glm::mat4& view, glm::mat4& proj) {
 	glDepthMask(GL_FALSE); // Need to make sure we will actually see anything inside of the cube.
 	program.useProg();
-	
-	GLint viewLoc = program.getUniformLocation("view");
-	GLint projLoc = program.getUniformLocation("proj");
-	//GLint skyLoc = program.getUniformLocation("skybox");
 
-	glUniformMatrix4fv(glGetUniformLocation(viewLoc, "view"), 1, GL_FALSE, glm::value_ptr(view));
-	glUniformMatrix4fv(glGetUniformLocation(projLoc, "projection"), 1, GL_FALSE, glm::value_ptr(proj));
+	glUniformMatrix4fv(program.getUniformLocation("view"), 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(program.getUniformLocation("proj"), 1, GL_FALSE, glm::value_ptr(proj));
 
 	glBindVertexArray(vaoID);
 	glActiveTexture(GL_TEXTURE0);
-	//glUniform1i(skyLoc, 0); // Could be an issue here. Investigate if so.
-	glUniform1i(glGetUniformLocation(program.getProgID(), "skybox"), 0);
+	glUniform1i(program.getUniformLocation("skybox"), 0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
@@ -36,14 +31,15 @@ void Skybox::initialize() {
 
 	program.linkShaders();
 
-	if (this->vboID == 0) { // If true, we have to rebuild the VBO.
-		glGenBuffers(1, &this->vboID); // Pass in a reference to "THIS" vboID. Only generating one.
-	}
 	if (this->vaoID == 0) {
 		glGenVertexArrays(1, &this->vaoID);
 	}
+	if (this->vboID == 0) { // If true, we have to rebuild the VBO.
+		glGenBuffers(1, &this->vboID); // Pass in a reference to "THIS" vboID. Only generating one.
+	}
 
 	glBindVertexArray(this->vaoID);
+
 	glBindBuffer(GL_ARRAY_BUFFER, vboID);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertexList), &skyboxVertexList, GL_STATIC_DRAW);
 	glEnableVertexAttribArray(0);

@@ -17,11 +17,10 @@ private:
 
 public:
 
-	void draw(glm::mat4 view, glm::mat4 proj);
+	void draw(glm::mat4& view, glm::mat4& proj);
 
 	void initialize();
 	
 	Skybox();
 	~Skybox();
 };
-

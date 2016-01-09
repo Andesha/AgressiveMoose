@@ -169,6 +169,8 @@ void SimulationGame::gameLoop() {
 		
 		this->examineInput();
 
+		character->updateCharacter();
+
 		this->drawWorld();
 		
 		fpsCaretaker(startMarker); // Just trying to clean up the game loop.
@@ -178,7 +180,6 @@ void SimulationGame::gameLoop() {
 // Method call for drawing all objects we need.
 void SimulationGame::drawWorld() {
     //compute character pos
-    character->updateCharacter();
 
 	glClearDepth(1.0);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
