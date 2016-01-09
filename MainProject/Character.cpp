@@ -3,12 +3,14 @@
 #include "Character.h"
 
 Character::Character(glm::vec3 position) :
-charPos(position), speed(0.0f), yaw(90.0f), pitch(0.0f), roll(0.0f),
+pos(position), speed(0.0f), yaw(90.0f), pitch(0.0f), roll(0.0f),
 dir(glm::vec3(0.0f, 0.0f, 1.0f)), charUp(0.0f, 1.0f, 0.0f){
-    target = charPos + glm::vec3(0.0f, 0.0f, 1.0f);
+    target = pos + glm::vec3(0.0f, 0.0f, 1.0f);
     charFront = glm::normalize(target - pos);
     charRight = glm::normalize(glm::cross(charFront, charUp));
-    camera = new Camera3D(charPos, yaw, pitch, roll, 0.5);
+
+    camera = new Camera3D(pos, yaw, pitch, roll, 0.5);
+
 }
 
 
@@ -16,6 +18,10 @@ glm::mat4 Character::getViewMatrix(){
     return camera->getViewMatrix();
 }
 
+void Character::setPos(glm::vec3 posi){
+    this->pos = posi;
+    this->camera->setPos(pos);
+}
 
 void Character::updateCharacter(){
     //TODO: APPLY THIRD PERSON LOGIC
@@ -25,7 +31,7 @@ void Character::updateCharacter(){
     if (speedLat != 0.0f)
         pos += glm::normalize(charRight) * speedLat;
     //// update camera position
-    this->camera->pos = pos;
+    this->camera->setPos(pos);
     //test collision?
 }
 
@@ -42,7 +48,7 @@ GLfloat Character::getSpeed(){
 }
 
 glm::vec3 Character::getPos(){
-    return charPos;
+    return this->camera->pos;
 }
 
 void Character::applyMouseInput(int mouseX, int mouseY){

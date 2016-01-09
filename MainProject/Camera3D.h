@@ -22,7 +22,7 @@ public:
     /// <summary>
     ///
     /// </summary>
-    void setPos(glm::vec3& newPos);
+    void setPos(glm::vec3 newPos);
 
     /// <summary>
     /// get position

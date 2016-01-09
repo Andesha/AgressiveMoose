@@ -4,7 +4,8 @@
 SimulationGame::SimulationGame() : window(NULL), windowWidth(1024),
 windowHeight(720), gameState(GameState::PLAYING), perlin(PERLIN_SEED) {
 	terrainList = TerrainList(perlin);
-    character = new Character(glm::vec3(0.0f,0.0f,0.0f));
+    character = new Character(glm::vec3(0.0f, 0.0f,0.0f));
+    character->setPos(glm::vec3(0, 200, 0));
 }
 
 // Currently no destructor.
@@ -23,7 +24,6 @@ void SimulationGame::start() {
 	initializeShaders();
 
 	makeTestTexture();
-
 	this->gameLoop(); // Run.
 }
 
@@ -127,7 +127,6 @@ void SimulationGame::handleKeyDown(){
     }
     if (state[SDL_SCANCODE_W]) {
         character->setSpeed(0.75f);
-        std::cout << character->getSpeed();
     }
     if (state[SDL_SCANCODE_A]) {
         character->setLatSpeed(-0.75f);
@@ -140,6 +139,9 @@ void SimulationGame::handleKeyDown(){
     }
     if (state[SDL_SCANCODE_LSHIFT]) {
         character->setSpeed(1.75f);
+    }
+    if (state[SDL_SCANCODE_SPACE]) {
+
     }
 }
 
@@ -162,12 +164,12 @@ void SimulationGame::mouseUpdatePos(int mouseX, int mouseY){
 // Main gameloop where all behaviour will exist.
 void SimulationGame::gameLoop() {
 	while (this->gameState != GameState::QUITTING) {
-		float startMarker = SDL_GetTicks(); // Frame time.
+		// float startMarker = SDL_GetTicks(); // Frame time.
 		
 		this->examineInput();
 		this->drawWorld();
 		
-		fpsCaretaker(startMarker); // Just trying to clean up the game loop.
+		// fpsCaretaker(startMarker); // Just trying to clean up the game loop.
 	}
 }
 
@@ -194,8 +196,19 @@ void SimulationGame::drawWorld() {
 	GLint projLoc = this->program.getUniformLocation("proj");
 	GLint modelLoc = this->program.getUniformLocation("model");
 
+    GLint lightDir = this->program.getUniformLocation("light.direction");
+    GLint lightDiff = this->program.getUniformLocation("light.diffuse");
+    //GLint lightAmb = this->program.getUniformLocation("light.ambient");
+
+
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+    glUniform3f(lightDir, 0.0f, 1.0f, 0.0f);
+    glUniform3f(lightDiff, 1.0f, 0.0f, 0.0f);
+   // glUniform3f(lightAmb, 0.2f, 0.2f, 0.2f);
+
+
+
 
 	for (TerrainChunk tc : terrainList.getList()) {
 		glm::mat4 model;
