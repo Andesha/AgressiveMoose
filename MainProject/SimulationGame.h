@@ -17,7 +17,7 @@ private:
 	float fps;
 	float frameTime;
 
-	TerrainList terrainList;
+	TerrainList* terrainList;
 
 	GLSLProgram program;
 
@@ -50,6 +50,8 @@ private:
     void handleKeyUp();
 
     void mouseUpdatePos(int mouseX, int mouseY);
+
+	bool inView(glm::mat4 M, glm::vec3 p);
 
 public:
 	SimulationGame();

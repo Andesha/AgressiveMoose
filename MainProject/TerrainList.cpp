@@ -10,6 +10,10 @@ TerrainList::TerrainList(const Perlin& p) {
 TerrainList::~TerrainList() {
 }
 
+void TerrainList::setChar(Character* c) {
+	character = c;
+}
+
 std::list<TerrainChunk> TerrainList::getList() {
     return this->terrainList;
 }
@@ -41,4 +45,11 @@ void TerrainList::firstInit() {
             countY++;
         }
     }
+}
+
+void TerrainList::examineChunks() {
+	TerrainChunk& tc = terrainList.front();
+	tc.drawing = false;
+	std::cout << tc.getCenterX() << "," << tc.getCenterY() << std::endl;
+	std::cout << character->getPos().x / SCALING_FACTOR << "," << character->getPos().z / SCALING_FACTOR << std::endl;
 }

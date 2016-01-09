@@ -10,6 +10,8 @@ enum CamMode{FIRST, THIRD};
 class Character{
 public:
 
+	Character();
+
     /// <summary>
     ///
     /// </summary>
