@@ -12,14 +12,15 @@ void Skybox::draw(glm::mat4 view, glm::mat4 proj) {
 	
 	GLint viewLoc = program.getUniformLocation("view");
 	GLint projLoc = program.getUniformLocation("proj");
-	GLint skyLoc = program.getUniformLocation("skybox");
+	//GLint skyLoc = program.getUniformLocation("skybox");
 
 	glUniformMatrix4fv(glGetUniformLocation(viewLoc, "view"), 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(glGetUniformLocation(projLoc, "projection"), 1, GL_FALSE, glm::value_ptr(proj));
 
 	glBindVertexArray(vaoID);
 	glActiveTexture(GL_TEXTURE0);
-	glUniform1i(skyLoc, 0); // Could be an issue here. Investigate if so.
+	//glUniform1i(skyLoc, 0); // Could be an issue here. Investigate if so.
+	glUniform1i(glGetUniformLocation(program.getProgID(), "skybox"), 0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
@@ -50,12 +51,12 @@ void Skybox::initialize() {
 	glBindVertexArray(0);
 
 	std::vector<const GLchar*> faces;
-	faces.push_back("skybox/right.jpg");
-	faces.push_back("skybox/left.jpg");
-	faces.push_back("skybox/top.jpg");
-	faces.push_back("skybox/bottom.jpg");
-	faces.push_back("skybox/back.jpg");
-	faces.push_back("skybox/front.jpg");
+	faces.push_back("skybox\\right.jpg");
+	faces.push_back("skybox\\left.jpg");
+	faces.push_back("skybox\\top.jpg");
+	faces.push_back("skybox\\bottom.jpg");
+	faces.push_back("skybox\\back.jpg");
+	faces.push_back("skybox\\front.jpg");
 	skyboxTexture = loadCubemap(faces);
 }
 
