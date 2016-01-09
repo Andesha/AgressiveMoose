@@ -6,7 +6,14 @@ class Skybox {
 
 private:
 
+	GLuint vaoID;
+	GLuint vboID;
+
+	GLuint skyboxTexture;
+
 	GLSLProgram program;
+
+	GLuint loadCubemap(vector<const GLchar*> faces);
 
 public:
 
