@@ -55,6 +55,6 @@ void TerrainList::examineChunks() {
 
 	for (TerrainChunk& tc : terrainList) {
 		float dist = glm::distance(glm::vec2(character->getPos().x, character->getPos().z), glm::vec2(tc.getCenterX()*SCALING_FACTOR, tc.getCenterY()*SCALING_FACTOR));
-		if (dist > DISTANCE_CONSTANT) tc.drawing = false;
+		//if (dist > DISTANCE_CONSTANT) tc.drawing = false;
 	}
 }
