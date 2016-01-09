@@ -1,6 +1,7 @@
 #include "stdafx.h"
 
 #include "Skybox.h"
+#include "SkyboxVert.h"
 
 Skybox::Skybox() : vaoID(0), vboID(0) {
 }
@@ -42,7 +43,11 @@ void Skybox::initialize() {
 	}
 
 	glBindVertexArray(this->vaoID);
-	//MORE BINDING AND LOADING HERE
+	glBindBuffer(GL_ARRAY_BUFFER, vboID);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertexList), &skyboxVertexList, GL_STATIC_DRAW);
+	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
+	glBindVertexArray(0);
 
 	std::vector<const GLchar*> faces;
 	faces.push_back("skybox/right.jpg");

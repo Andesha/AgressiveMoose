@@ -13,7 +13,7 @@ private:
 
 	GLSLProgram program;
 
-	GLuint loadCubemap(vector<const GLchar*> faces);
+	GLuint loadCubemap(std::vector<const GLchar*> faces);
 
 public:
 

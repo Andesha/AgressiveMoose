@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-GLfloat skyboxVertices[] = {       
+GLfloat skyboxVertexList[] = {       
 	-1.0f, 1.0f, -1.0f,
 	-1.0f, -1.0f, -1.0f,
 	1.0f, -1.0f, -1.0f,
