@@ -130,7 +130,6 @@ void SimulationGame::handleKeyDown(){
     }
     if (state[SDL_SCANCODE_W]) {
         character->setSpeed(0.75f);
-        std::cout << character->getSpeed();
     }
     if (state[SDL_SCANCODE_A]) {
         character->setLatSpeed(-0.75f);

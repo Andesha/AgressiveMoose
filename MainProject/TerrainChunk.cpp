@@ -58,7 +58,7 @@ void TerrainChunk::initialize(float cX, float cY) {
         for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; ++j) {
             vertices[countBuild].position.x = (float)j;
             vertices[countBuild].position.z = (float)i;
-            vertices[countBuild].position.y = examinePerlin(this->centerX + j, this->centerY + i);
+            vertices[countBuild].position.y = perlin.at(this->centerX + j, this->centerY + i);
 
             vertices[countBuild].textureCoord.x = colCount * (1.0f / ((float)GRID_WIDTH - 1));
             vertices[countBuild].textureCoord.y = rowCount * (1.0f / ((float)GRID_WIDTH - 1));
@@ -125,10 +125,10 @@ void TerrainChunk::rebase(float cX, float cY) {
     this->eboID = 0;
 }
 
-float TerrainChunk::examinePerlin(float x, float y) {
-    double temp = perlin.at(x / TOTAL_VERTICIES_ON_SIDE, y / TOTAL_VERTICIES_ON_SIDE, 0.5);
-    return (float)temp*HEIGHT_LIMIT - HEIGHT_OFFSET;
-}
+//float TerrainChunk::examinePerlin(float x, float y) {
+//    double temp = perlin.at(x / TOTAL_VERTICIES_ON_SIDE, y / TOTAL_VERTICIES_ON_SIDE, 0.5);
+//    return (float)temp*HEIGHT_LIMIT - HEIGHT_OFFSET;
+//}
 
 void TerrainChunk::draw() {
     glBindVertexArray(this->vaoID);
