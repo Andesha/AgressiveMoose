@@ -24,3 +24,5 @@ const float HEIGHT_LIMIT = 200.0f; // Maximum value of the height and as such wi
 const float HEIGHT_OFFSET = HEIGHT_LIMIT / 2; // Just a value to adjust the perlin stuff by to make it easier to see.
 
 const float MAX_FPS = 60.0f;
+
+const float DISTANCE_CONSTANT = 300.0f;
