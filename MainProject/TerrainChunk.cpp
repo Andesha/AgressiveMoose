@@ -58,17 +58,16 @@ void TerrainChunk::initialize(float cX, float cY) {
         for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; ++j) {
             vertices[countBuild].position.x = (float)j;
             vertices[countBuild].position.z = (float)i;
-            vertices[countBuild].position.y = examinePerlin(this->centerX + j, this->centerY + i);
+			vertices[countBuild].position.y = examinePerlin(this->centerX + j, this->centerY + i);
 
             vertices[countBuild].textureCoord.x = colCount * (1.0f / ((float)GRID_WIDTH - 1));
             vertices[countBuild].textureCoord.y = rowCount * (1.0f / ((float)GRID_WIDTH - 1));
             
-           glm::vec3 tempVnorm = this->calcVertexNormal(vertices[countBuild].position.x, 
-                                                        vertices[countBuild].position.y, 
-                                                        vertices[countBuild].position.z);
-           vertices[countBuild].vNorm.x = tempVnorm.x;
-           vertices[countBuild].vNorm.y = tempVnorm.y;
-           vertices[countBuild].vNorm.z = tempVnorm.z;
+			glm::vec3 tempVnorm = calcVertexNormal(vertices[countBuild].position);
+
+			vertices[countBuild].vNorm.x = tempVnorm.x;
+			vertices[countBuild].vNorm.y = tempVnorm.y;
+			vertices[countBuild].vNorm.z = tempVnorm.z;
 
             ++countBuild;
             ++colCount;
@@ -77,20 +76,20 @@ void TerrainChunk::initialize(float cX, float cY) {
         colCount = 0;
     }
 
-    for (int i = 0; i < TOTAL_VERTICIES; ++i) { // Set all to the same color.
-        int modifier = rand() % 127;
-        vertices[i].color.r = 255 - modifier;
-        modifier = rand() % 127;
-        vertices[i].color.g = 255 - modifier;
-        modifier = rand() % 127;
-        vertices[i].color.b = 255 - modifier;
-        vertices[i].color.a = 255;
-    }
+    //for (int i = 0; i < TOTAL_VERTICIES; ++i) { // Set all to the same color.
+    //    int modifier = rand() % 127;
+    //    vertices[i].color.r = 255 - modifier;
+    //    modifier = rand() % 127;
+    //    vertices[i].color.g = 255 - modifier;
+    //    modifier = rand() % 127;
+    //    vertices[i].color.b = 255 - modifier;
+    //    vertices[i].color.a = 255;
+    //}
 
-    vertices[24].color.r = 255;
-    vertices[24].color.g = 0;
-    vertices[24].color.b = 255;
-    vertices[24].color.a = 255;
+    //vertices[24].color.r = 255;
+    //vertices[24].color.g = 0;
+    //vertices[24].color.b = 255;
+    //vertices[24].color.a = 255;
 
     GLuint indices[INDICES_SIZE];
 
@@ -157,10 +156,17 @@ void TerrainChunk::draw() {
 }
 
 //I know this doesnt look pretty, but hey, whatever man.....
-glm::vec3 TerrainChunk::calcVertexNormal(float x, float y, float z){
+glm::vec3 TerrainChunk::calcVertexNormal(Position pos){
+	float x = pos.x + centerX;
+	float y = pos.y;
+	float z = pos.z + centerY;
+
+	//std::cout << x+centerX << "," << y << "," << z+centerY << std::endl;
+
     glm::vec3 vNorm1, vNorm2, vNorm3, vNorm4, vNorm5, vNorm6;
+	glm::vec3 p1, p2, p3;
+
     // Triangle 1
-    glm::vec3 p1, p2, p3;
     p1 = glm::vec3(x, y, z);
     p2 = glm::vec3(x- 1, examinePerlin(x- 1, z), z);
     p3 = glm::vec3(x- 1, examinePerlin(x- 1, z - 1), z - 1);
@@ -176,7 +182,6 @@ glm::vec3 TerrainChunk::calcVertexNormal(float x, float y, float z){
     p3 = glm::vec3(x+ 1, examinePerlin(x+ 1, z), z);
     vNorm3 = glm::normalize(glm::cross((p3 - p1), (p2 - p1)));
 
-
     // Triangle 4
     p3 = glm::vec3(x+ 1, examinePerlin(x+ 1, z), z);
     p3 = glm::vec3(x+ 1, examinePerlin(x+ 1, z + 1), z + 1);
@@ -185,9 +190,7 @@ glm::vec3 TerrainChunk::calcVertexNormal(float x, float y, float z){
     // Triangle 5
     p2 = glm::vec3(x,examinePerlin(x,z + 1), z + 1);
     p3 = glm::vec3(x+ 1, examinePerlin(x+ 1, z + 1), z + 1);
-
     vNorm5 = glm::normalize(glm::cross((p3 - p1), (p2 - p1)));
-
 
     // Triangle 6
     p3 = glm::vec3(x,examinePerlin(x,z + 1), z + 1);
@@ -197,5 +200,4 @@ glm::vec3 TerrainChunk::calcVertexNormal(float x, float y, float z){
    // std::cout << vNorm.x << "\t" << vNorm.y << "\t" << vNorm.z << "\t" << std::endl;
     //std::cout << vNorm.x << "\t" << vNorm.y << "\t" << vNorm.z << std::endl;  
     return glm::normalize(vNorm1 + vNorm2 + vNorm3 + vNorm4 + vNorm5 + vNorm6);
-
 }

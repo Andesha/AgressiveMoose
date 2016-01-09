@@ -205,10 +205,7 @@ void SimulationGame::drawWorld() {
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
     glUniform3f(lightDir, 0.0f, 1.0f, 0.0f);
     glUniform3f(lightDiff, 1.0f, 0.0f, 0.0f);
-   // glUniform3f(lightAmb, 0.2f, 0.2f, 0.2f);
-
-
-
+	//glUniform3f(lightAmb, 0.2f, 0.2f, 0.2f);
 
 	for (TerrainChunk tc : terrainList.getList()) {
 		glm::mat4 model;

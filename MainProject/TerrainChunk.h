@@ -2,6 +2,7 @@
 #include "stdafx.h"
 #include "TextureFactory.h"
 #include "Perlin.h"
+#include "Vertex.h"
 
 // Chunk class that will only ever be called with new as few times as possible.
 // The idea is to avoid new's and just rebase chunks.
@@ -13,7 +14,7 @@ private:
 	GLuint eboID;
 	Perlin perlin;
 	float examinePerlin(float x, float y); // Examine the perlin system to find out height.
-    glm::vec3 calcVertexNormal(float x, float y, float z);
+    glm::vec3 calcVertexNormal(Position pos);
 public:
 	TerrainChunk();
 	~TerrainChunk();
