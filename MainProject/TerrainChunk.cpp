@@ -76,21 +76,6 @@ void TerrainChunk::initialize(float cX, float cY) {
         colCount = 0;
     }
 
-    //for (int i = 0; i < TOTAL_VERTICIES; ++i) { // Set all to the same color.
-    //    int modifier = rand() % 127;
-    //    vertices[i].color.r = 255 - modifier;
-    //    modifier = rand() % 127;
-    //    vertices[i].color.g = 255 - modifier;
-    //    modifier = rand() % 127;
-    //    vertices[i].color.b = 255 - modifier;
-    //    vertices[i].color.a = 255;
-    //}
-
-    //vertices[24].color.r = 255;
-    //vertices[24].color.g = 0;
-    //vertices[24].color.b = 255;
-    //vertices[24].color.a = 255;
-
     GLuint indices[INDICES_SIZE];
 
     int countIndex = 0;
@@ -135,10 +120,17 @@ void TerrainChunk::initialize(float cX, float cY) {
 
 // Outside method call for building a chunk around a given point.
 void TerrainChunk::rebase(float cX, float cY) {
-    initialize(cX, cY);
-    this->vaoID = 0;// Mark as null so that we know to redraw.
-    this->vboID = 0;
-    this->eboID = 0;
+	if (this->vboID != 0) {
+		glDeleteBuffers(1, &this->vboID);
+	}
+	if (this->eboID != 0) {
+		glDeleteBuffers(1, &this->eboID);
+	}
+	//if (this->vaoID != 0) {
+	//	glDeleteVertexArrays();
+	//}
+
+	initialize(cX, cY);
 }
 
 //float TerrainChunk::perlin.at(float x, float y) {

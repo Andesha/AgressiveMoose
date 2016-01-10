@@ -39,3 +39,4 @@
 #include "TextureFactory.h"
 #include "Camera3D.h"
 #include "Character.h"
+#include "ChunkMapper.h"

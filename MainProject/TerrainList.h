@@ -4,6 +4,7 @@
 #include "Perlin.h"
 #include "TerrainChunk.h"
 #include "Character.h"
+#include "ChunkMapper.h"
 
 class TerrainList {
 
@@ -12,6 +13,8 @@ private:
 	std::list<TerrainChunk> terrainList;
 	Perlin perlin;
 	Character* character;
+	ChunkMapper* chunkMapper;
+	glm::vec3 nullVec;
 
 public:
 

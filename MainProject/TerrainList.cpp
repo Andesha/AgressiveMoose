@@ -4,6 +4,8 @@
 
 TerrainList::TerrainList(const Perlin& p) {
     this->perlin = p;
+	nullVec = glm::vec3(0.0f);
+	chunkMapper = new ChunkMapper();
 }
 
 
@@ -48,13 +50,17 @@ void TerrainList::firstInit() {
 }
 
 void TerrainList::examineChunks() {
-	//TerrainChunk& tc = terrainList.front();
-	//std::cout << tc.getCenterX() << "," << tc.getCenterY() << std::endl;
-	//std::cout << character->getPos().x / SCALING_FACTOR << "," << character->getPos().z / SCALING_FACTOR << std::endl;
-	//std::cout << glm::distance(glm::vec2(character->getPos().x, character->getPos().z), glm::vec2(tc.getCenterX()*SCALING_FACTOR, tc.getCenterY()*SCALING_FACTOR)) << std::endl;
-
 	for (TerrainChunk& tc : terrainList) {
 		float dist = glm::distance(glm::vec2(character->getPos().x, character->getPos().z), glm::vec2(tc.getCenterX()*SCALING_FACTOR, tc.getCenterY()*SCALING_FACTOR));
-		//if (dist > DISTANCE_CONSTANT) tc.drawing = false;
+		if (dist > DISTANCE_CONSTANT) { // Too far away now. Must somehow rebase the chunks.
+			tc.drawing = false; // No need to draw it anymore.
+			
+			// Do a check for possible areas for new chunks to be rebased to.
+			// If a possible point exists - say to the left of the player - put the most recently non-drawn chunk there.
+			glm::vec3 possiblePos = chunkMapper->getOpenChunk(character->getPos());
+			if (possiblePos != nullVec) {
+				tc.rebase(possiblePos.x,possiblePos.z);
+			}
+		}
 	}
 }
