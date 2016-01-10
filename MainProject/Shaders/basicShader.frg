@@ -27,6 +27,7 @@ void main(){
 	vec3 lightDir = normalize(-light.direction);
 	float diffFactor = max(dot(Normal,lightDir), 0.0);
 	vec3 diffuse = light.diff * diffFactor * vec3(texture(texIm, TexCoord));
+	
 	//color = texture(texIm, TexCoord);
 	color = vec4(ambiant + diffuse, 1.0);
 }
