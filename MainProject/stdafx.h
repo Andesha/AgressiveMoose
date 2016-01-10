@@ -31,6 +31,7 @@
 #include "SimulationGame.h" // Created classes/files.
 #include "GameState.h"
 #include "TerrainChunk.h"
+#include "TerrainList.h"
 #include "Vertex.h"
 #include "ErrorHandling.h"
 #include "GLSLProgram.h"

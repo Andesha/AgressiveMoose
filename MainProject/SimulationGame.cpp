@@ -169,7 +169,7 @@ void SimulationGame::mouseUpdatePos(int mouseX, int mouseY){
 // Main gameloop where all behaviour will exist.
 void SimulationGame::gameLoop() {
 	while (this->gameState != GameState::QUITTING) {
-		// float startMarker = SDL_GetTicks(); // Frame time.
+		float startMarker = SDL_GetTicks(); // Frame time.
 		
 		this->examineInput();
 
@@ -179,7 +179,7 @@ void SimulationGame::gameLoop() {
 
 		terrainList->examineChunks(); // Examine the chunks and determine which ones are too far away to draw.
 		
-		// fpsCaretaker(startMarker); // Just trying to clean up the game loop.
+		fpsCaretaker(startMarker); // Just trying to clean up the game loop.
 	}
 }
 
