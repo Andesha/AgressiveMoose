@@ -3,11 +3,10 @@
 in vec3 vertexPosition;
 in vec4 vertexColor;
 in vec2 texCoord;
-in vec3 vertexNormal;
+in vec3 vertNorm;
 
 out vec4 fragmentColor;
 out vec2 TexCoord;
-out vec3 FragPos;
 out vec3 Normal;
 
 uniform mat4 proj;
@@ -17,7 +16,6 @@ uniform mat4 model;
 void main(){
 	gl_Position = proj * view * model * vec4(vertexPosition, 1.0);
 	fragmentColor = vertexColor;
-	FragPos = vec3(model * vec4(vertexPosition, 1.0f));
-	Normal = vertexNormal;
 	TexCoord = texCoord;
+	Normal = vertNorm;
 }
