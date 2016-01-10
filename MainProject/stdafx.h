@@ -39,3 +39,5 @@
 #include "TextureFactory.h"
 #include "Camera3D.h"
 #include "Character.h"
+#include "objParser.h"
+#include "Mesh.h"

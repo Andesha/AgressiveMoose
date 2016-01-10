@@ -7,7 +7,7 @@
 #include "TerrainList.h"
 #include "Character.h"
 #include "Skybox.h"
-
+#include "Model.h"
 // Main class which specifies all behaviour of our game engine.
 class SimulationGame {
 private:
@@ -28,6 +28,8 @@ private:
 	Skybox* skybox;
 
 	Perlin perlin;
+
+    Model* model;
 
 	void initialize(); // Builds all objects like OpenGL contexts and our window.
 

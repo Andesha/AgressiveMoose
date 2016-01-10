@@ -22,12 +22,16 @@ void SimulationGame::start() {
 	
 	terrainList->buildPool(TERRAIN_LIST_SIZE); // Nine total chunks for the pool.
 	terrainList->firstInit(); // Build the start of the grid.
-
 	skybox->initialize();
-
 	initializeShaders();
-
 	makeTestTexture();
+
+    ObjParser reader = ObjParser();
+    model = reader.parseFile();
+    for (int i = 0; i < model->components.size(); i++){
+        std::cout << " mesh  " << model->components[i]->objectName << "  " << model->components[i]->vetexes.size() << std::endl;
+    }
+    model->initialize();
 	this->gameLoop(); // Run.
 }
 
@@ -191,14 +195,15 @@ void SimulationGame::drawWorld() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
 	glm::mat4 proj;
-	proj = glm::perspective(45.0f, (float)this->windowWidth / (float)this->windowHeight, 0.1f, 1000.0f);
+	proj = glm::perspective(45.0f, (float)this->windowWidth / (float)this->windowHeight, 0.1f, 100000.0f);
  
 	glm::mat4 view = glm::mat4(glm::mat3(character->getViewMatrix())); // Done this way to ignore rotation.
 
-	skybox->draw(view,proj); // CALL TO THE SKYBOX DRAW IS HERE
+	//skybox->draw(view,proj); // CALL TO THE SKYBOX DRAW IS HERE
 
 	this->program.useProg();
-	
+    //this->model->draw(view, proj);
+
 	int id = program.getProgID(); // Program ID for shaders needing them for uniform things.
  
 	GLint viewLoc = this->program.getUniformLocation("view");
@@ -244,7 +249,9 @@ void SimulationGame::drawWorld() {
 			tc.draw();
 		}
 	}
-
+    glDisable(GL_CULL_FACE);
+    glBindTexture(GL_TEXTURE_2D, this->model->tid);
+    this->model->draw();
 	//std::cout << "Chunks Drawing: " << counter << std::endl;
 
 	this->program.unuseProg();
