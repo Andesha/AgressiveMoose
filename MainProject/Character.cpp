@@ -13,14 +13,16 @@ dir(glm::vec3(0.0f, 0.0f, 1.0f)), charUp(0.0f, 1.0f, 0.0f){
 
 }
 
+Character::Character() {
+}
 
 glm::mat4 Character::getViewMatrix(){
     return camera->getViewMatrix();
 }
 
-void Character::setPos(glm::vec3 posi){
-    this->pos = posi;
-    this->camera->setPos(pos);
+void Character::setPos(glm::vec3 posi) {
+	this->pos = posi;
+	this->camera->setPos(pos);
 }
 
 void Character::updateCharacter(){

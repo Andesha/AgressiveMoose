@@ -8,7 +8,7 @@
 // The idea is to avoid new's and just rebase chunks.
 class TerrainChunk {
 private:
-	bool drawing;
+	
 	float centerX, centerY;
 	GLuint vboID;
 	GLuint eboID;
@@ -18,6 +18,8 @@ private:
 public:
 	TerrainChunk();
 	~TerrainChunk();
+
+	bool drawing;
 
 	GLuint vaoID; // make private again
 

@@ -3,10 +3,12 @@
 // Initialize game object to default values.
 SimulationGame::SimulationGame() : window(NULL), windowWidth(1024),
 windowHeight(720), gameState(GameState::PLAYING), perlin(PERLIN_SEED) {
-	terrainList = TerrainList(perlin);
-    character = new Character(glm::vec3(0.0f,0.0f,0.0f));
-    character = new Character(glm::vec3(0.0f, 200.0f,0.0f));
-    skybox = new Skybox();
+    character = new Character(glm::vec3(0.0f,perlin.at(0.0f,0.0f)*SCALING_FACTOR*2,0.0f)); // Inner perlin function terms should be the same as the vector outer terms.
+
+	terrainList = new TerrainList(perlin);
+	terrainList->setChar(character);
+
+	skybox = new Skybox();
 }
 
 // Currently no destructor.
@@ -18,8 +20,8 @@ SimulationGame::~SimulationGame() {
 void SimulationGame::start() {
 	this->initialize(); // Build.
 	
-	terrainList.buildPool(TERRAIN_LIST_SIZE); // Nine total chunks for the pool.
-	terrainList.firstInit(); // Build the start of the grid.
+	terrainList->buildPool(TERRAIN_LIST_SIZE); // Nine total chunks for the pool.
+	terrainList->firstInit(); // Build the start of the grid.
 
 	skybox->initialize();
 
@@ -174,6 +176,8 @@ void SimulationGame::gameLoop() {
 		character->updateCharacter();
 
 		this->drawWorld();
+
+		terrainList->examineChunks(); // Examine the chunks and determine which ones are too far away to draw.
 		
 		// fpsCaretaker(startMarker); // Just trying to clean up the game loop.
 	}
@@ -189,7 +193,7 @@ void SimulationGame::drawWorld() {
 	glm::mat4 proj;
 	proj = glm::perspective(45.0f, (float)this->windowWidth / (float)this->windowHeight, 0.1f, 1000.0f);
  
-	glm::mat4 view = glm::mat4(glm::mat3(character->getViewMatrix()));
+	glm::mat4 view = glm::mat4(glm::mat3(character->getViewMatrix())); // Done this way to ignore rotation.
 
 	skybox->draw(view,proj); // CALL TO THE SKYBOX DRAW IS HERE
 
@@ -213,7 +217,8 @@ void SimulationGame::drawWorld() {
     glUniform3f(lightDiff, 0.4f, 0.4f, 0.4f);
 	glUniform3f(lightAmb, 0.2f, 0.2f, 0.2f);
 
-	for (TerrainChunk tc : terrainList.getList()) {
+	int counter = 0;
+	for (TerrainChunk tc : terrainList->getList()) {
 		glm::mat4 model;
 
 		glm::vec3 toScale = glm::vec3(SCALING_FACTOR); // Scaling matrix.
@@ -231,8 +236,16 @@ void SimulationGame::drawWorld() {
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, this->tid);
-		tc.draw();
+
+		glUniform1i(glGetUniformLocation(id, "texIm"), 0);
+
+		if (tc.isDrawing()) {
+			counter++;
+			tc.draw();
+		}
 	}
+
+	//std::cout << "Chunks Drawing: " << counter << std::endl;
 
 	this->program.unuseProg();
 

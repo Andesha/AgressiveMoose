@@ -10,6 +10,10 @@ TerrainList::TerrainList(const Perlin& p) {
 TerrainList::~TerrainList() {
 }
 
+void TerrainList::setChar(Character* c) {
+	character = c;
+}
+
 std::list<TerrainChunk> TerrainList::getList() {
     return this->terrainList;
 }
@@ -41,4 +45,16 @@ void TerrainList::firstInit() {
             countY++;
         }
     }
+}
+
+void TerrainList::examineChunks() {
+	//TerrainChunk& tc = terrainList.front();
+	//std::cout << tc.getCenterX() << "," << tc.getCenterY() << std::endl;
+	//std::cout << character->getPos().x / SCALING_FACTOR << "," << character->getPos().z / SCALING_FACTOR << std::endl;
+	//std::cout << glm::distance(glm::vec2(character->getPos().x, character->getPos().z), glm::vec2(tc.getCenterX()*SCALING_FACTOR, tc.getCenterY()*SCALING_FACTOR)) << std::endl;
+
+	for (TerrainChunk& tc : terrainList) {
+		float dist = glm::distance(glm::vec2(character->getPos().x, character->getPos().z), glm::vec2(tc.getCenterX()*SCALING_FACTOR, tc.getCenterY()*SCALING_FACTOR));
+		//if (dist > DISTANCE_CONSTANT) tc.drawing = false;
+	}
 }

@@ -12,11 +12,13 @@ public:
 
     Perlin(int seed); //Only constructor forces us to use a random seed.
 
-    double at(double x, double y, double z); //Function which actually will generate the noise.
+    float at(float x, float y); //Function which actually will generate the noise.
 
 private:
     //Below functions are needed to create our image.
     //All functions below functions are from Ken Perlin: http://mrl.nyu.edu/~perlin/noise/
+
+	double examinePerlin(double x, double y, double z);
 
     double fade(double t);
 

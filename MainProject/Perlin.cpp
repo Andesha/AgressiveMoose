@@ -28,7 +28,7 @@ Perlin::Perlin(int seed) {
 	perm.insert(perm.end(), perm.begin(), perm.end()); //Double the list because reasons.
 }
 
-double Perlin::at(double x, double y, double z) {
+double Perlin::examinePerlin(double x, double y, double z) {
 	// Find the unit cube that contains the point
 	int X = (int)floor(x) & 255;
 	int Y = (int)floor(y) & 255;
@@ -71,4 +71,9 @@ double Perlin::grad(int hash, double x, double y, double z) {//Lower four bits o
 	double u = h < 8 ? x : y,
 		v = h < 4 ? y : h == 12 || h == 14 ? x : z;
 	return ((h & 1) == 0 ? u : -u) + ((h & 2) == 0 ? v : -v);
+}
+
+float Perlin::at(float x, float y) {
+	double temp = examinePerlin(x / TOTAL_VERTICIES_ON_SIDE, y / TOTAL_VERTICIES_ON_SIDE, 0.5);
+	return (float)temp*HEIGHT_LIMIT - HEIGHT_OFFSET;
 }
