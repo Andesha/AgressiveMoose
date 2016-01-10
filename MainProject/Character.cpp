@@ -20,15 +20,9 @@ glm::mat4 Character::getViewMatrix(){
     return camera->getViewMatrix();
 }
 
-<<<<<<< HEAD
 void Character::setPos(glm::vec3 posi) {
 	this->pos = posi;
 	this->camera->setPos(pos);
-=======
-void Character::setPos(glm::vec3 posi){
-    this->pos = posi;
-    this->camera->setPos(pos);
->>>>>>> master
 }
 
 void Character::updateCharacter(){
@@ -56,11 +50,7 @@ GLfloat Character::getSpeed(){
 }
 
 glm::vec3 Character::getPos(){
-<<<<<<< HEAD
-    return pos;
-=======
     return this->camera->pos;
->>>>>>> master
 }
 
 void Character::applyMouseInput(int mouseX, int mouseY){
