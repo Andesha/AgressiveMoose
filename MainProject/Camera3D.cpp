@@ -3,15 +3,18 @@
 
 
 Camera3D::Camera3D() : yaw(90.0f), pitch(0.0f), roll(0.0f), sensitivity(0.5f) {
+    std::cout << "wrong" << std::endl;
 	camUp = glm::vec3(0.0f, 1.0f, 0.0f);
-	pos = glm::vec3(0.0f, 0.0f, 0.0f);
+	pos = glm::vec3(0.0f, 100.0f, 0.0f);
     target = pos + glm::vec3(0.0f, 0.0f, 1.0f);
 	cameraFront = glm::normalize(target - pos);
 	camRight = glm::normalize(glm::cross(cameraFront, camUp));
 }
 
-Camera3D::Camera3D(glm::vec3 pos, GLfloat yaw, GLfloat pitch, GLfloat roll, float sensitivity):
-pos(pos), yaw(90.0f), pitch(0.0f), roll(0.0f), sensitivity(0.5f){
+Camera3D::Camera3D(glm::vec3 posi, GLfloat yaw, GLfloat pitch, GLfloat roll, float sensitivity):
+pos(posi), yaw(90.0f), pitch(0.0f), roll(0.0f), sensitivity(0.5f){
+    std::cout << "right" << std::endl;
+    pos = glm::vec3(0, 100, 0);
     camUp = glm::vec3(0.0f, 1.0f, 0.0f);
     target = pos + glm::vec3(0.0f, 0.0f, 1.0f);
     cameraFront = glm::normalize(target - pos);
@@ -19,7 +22,7 @@ pos(pos), yaw(90.0f), pitch(0.0f), roll(0.0f), sensitivity(0.5f){
 }
 
                                                                      
-void Camera3D::setPos(glm::vec3& newpos){
+void Camera3D::setPos(glm::vec3 newpos){
     pos = newpos;
 }
 
@@ -56,6 +59,6 @@ glm::mat4 Camera3D::getViewMatrix(){
 
 
 void Camera3D::computePos(GLfloat speed, GLfloat speedLat){
-    this->pos += this->cameraFront * speed;
+    this->pos += glm::normalize(this->cameraFront) * speed;
 	if (speedLat != 0.0f)this->pos += this->camRight * speedLat;
 }

@@ -28,7 +28,6 @@ void SimulationGame::start() {
 	initializeShaders();
 
 	makeTestTexture();
-
 	this->gameLoop(); // Run.
 }
 
@@ -146,6 +145,9 @@ void SimulationGame::handleKeyDown(){
     if (state[SDL_SCANCODE_LSHIFT]) {
         character->setSpeed(1.75f);
     }
+    if (state[SDL_SCANCODE_SPACE]) {
+
+    }
 }
 
 
@@ -167,7 +169,7 @@ void SimulationGame::mouseUpdatePos(int mouseX, int mouseY){
 // Main gameloop where all behaviour will exist.
 void SimulationGame::gameLoop() {
 	while (this->gameState != GameState::QUITTING) {
-		float startMarker = SDL_GetTicks(); // Frame time.
+		// float startMarker = SDL_GetTicks(); // Frame time.
 		
 		this->examineInput();
 
@@ -177,7 +179,7 @@ void SimulationGame::gameLoop() {
 
 		terrainList->examineChunks(); // Examine the chunks and determine which ones are too far away to draw.
 		
-		fpsCaretaker(startMarker); // Just trying to clean up the game loop.
+		// fpsCaretaker(startMarker); // Just trying to clean up the game loop.
 	}
 }
 
@@ -205,8 +207,15 @@ void SimulationGame::drawWorld() {
 
 	view = character->getViewMatrix(); // Update view matrix now that we aren't doing the skybox.
 
+    GLint lightDir = this->program.getUniformLocation("light.direction");
+    GLint lightDiff = this->program.getUniformLocation("light.diff");
+    GLint lightAmb = this->program.getUniformLocation("light.amb");
+
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
+    glUniform3f(lightDir, 0.9f, -1.0f, 0.0f);
+    glUniform3f(lightDiff, 0.4f, 0.4f, 0.4f);
+	glUniform3f(lightAmb, 0.2f, 0.2f, 0.2f);
 
 	int counter = 0;
 	for (TerrainChunk tc : terrainList->getList()) {
@@ -227,6 +236,7 @@ void SimulationGame::drawWorld() {
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, this->tid);
+
 		glUniform1i(glGetUniformLocation(id, "texIm"), 0);
 
 		if (tc.isDrawing()) {

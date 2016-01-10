@@ -5,10 +5,12 @@
 Character::Character(glm::vec3 position) :
 pos(position), speed(0.0f), yaw(90.0f), pitch(0.0f), roll(0.0f),
 dir(glm::vec3(0.0f, 0.0f, 1.0f)), charUp(0.0f, 1.0f, 0.0f){
-    target = charPos + glm::vec3(0.0f, 0.0f, 1.0f);
+    target = pos + glm::vec3(0.0f, 0.0f, 1.0f);
     charFront = glm::normalize(target - pos);
     charRight = glm::normalize(glm::cross(charFront, charUp));
-    camera = new Camera3D(charPos, yaw, pitch, roll, 0.5);
+
+    camera = new Camera3D(pos, yaw, pitch, roll, 0.5);
+
 }
 
 Character::Character() {
@@ -18,9 +20,15 @@ glm::mat4 Character::getViewMatrix(){
     return camera->getViewMatrix();
 }
 
+<<<<<<< HEAD
 void Character::setPos(glm::vec3 posi) {
 	this->pos = posi;
 	this->camera->setPos(pos);
+=======
+void Character::setPos(glm::vec3 posi){
+    this->pos = posi;
+    this->camera->setPos(pos);
+>>>>>>> master
 }
 
 void Character::updateCharacter(){
@@ -31,7 +39,7 @@ void Character::updateCharacter(){
     if (speedLat != 0.0f)
         pos += glm::normalize(charRight) * speedLat;
     //// update camera position
-    this->camera->pos = pos;
+    this->camera->setPos(pos);
     //test collision?
 }
 
@@ -48,7 +56,11 @@ GLfloat Character::getSpeed(){
 }
 
 glm::vec3 Character::getPos(){
+<<<<<<< HEAD
     return pos;
+=======
+    return this->camera->pos;
+>>>>>>> master
 }
 
 void Character::applyMouseInput(int mouseX, int mouseY){

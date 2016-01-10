@@ -56,15 +56,12 @@ public:
     ///
     /// </summary>
     void applyMouseInput(int x, int y);
-
+    Camera3D* camera;
 private:
     
-    Camera3D* camera;
-
+  
     int cameraState = FIRST;
     
-    glm::vec3 charPos;
-
     GLfloat yaw, pitch, roll;
 
     GLfloat speed, speedLat;
