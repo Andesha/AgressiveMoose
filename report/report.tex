@@ -1,30 +1,6 @@
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% LaTeX Example: Project Report
-%
-% Source: http://www.howtotex.com
-%
-% Feel free to distribute this example, but please keep the referral
-% to howtotex.com
-% Date: March 2011 
-% 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% How to use writeLaTeX: 
-%
-% You edit the source code here on the left, and the preview on the
-% right shows you the result within a few seconds.
-%
-% Bookmark this page and share the URL with your co-authors. They can
-% edit at the same time!
-%
-% You can upload figures, bibliographies, custom classes and
-% styles using the files menu.
-%
-% If you're new to LaTeX, the wikibook is a great place to start:
-% http://en.wikibooks.org/wiki/LaTeX
-%
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Edit the title below to update the display in My Documents
-%\title{Project Report}
+\title{Modern OpenGL and Procedural Terrain Generation Exploration}
+
 %
 %%% Preamble
 \documentclass[paper=a4, fontsize=11pt]{scrartcl}
@@ -67,15 +43,20 @@
 \title{
 		%\vspace{-1in} 	
 		\usefont{OT1}{bch}{b}{n}
-		\normalfont \normalsize \textsc{School of random department names} \\ [25pt]
+		\normalfont \normalsize \textsc{Brock University Computer Science 3P98} \\ [25pt]
 		\horrule{0.5pt} \\[0.4cm]
-		\huge This is the title of the template report \\
+		\huge Modern OpenGL and Procedural Terrain Generation Exploration \\
 		\horrule{2pt} \\[0.5cm]
 }
 \author{
 		\normalfont 								\normalsize
-        Firstname Lastname\\[-3pt]		\normalsize
-        \today
+        Tyler Kennedy Collins\\[-3pt]				\normalsize
+        tk11br@brocku.ca\\[-3pt]					\normalsize
+        4956637\\									\normalsize
+        \and
+        Preston Engstrom\\[-3pt]					\normalsize
+        pe12nh@brocku.ca\\[-3pt]					\normalsize
+        5228549\\									\normalsize
 }
 \date{}
 
@@ -83,57 +64,8 @@
 %%% Begin document
 \begin{document}
 \maketitle
-\section{Heading on level 1 (section)}
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aliquam lorem ante, dapibus in, viverra quis, feugiat a, tellus:
-\begin{align} 
-	\begin{split}
-	(x+y)^3 	&= (x+y)^2(x+y)\\
-					&=(x^2+2xy+y^2)(x+y)\\
-					&=(x^3+2x^2y+xy^2) + (x^2y+2xy^2+y^3)\\
-					&=x^3+3x^2y+3xy^2+y^3
-	\end{split}					
-\end{align}
-Phasellus viverra nulla ut metus varius laoreet. Quisque rutrum. Aenean imperdiet. Etiam ultricies nisi vel augue. Curabitur ullamcorper ultricies 
+\section{Introduction}
+The main purpose of this project was to explore not only the use of modern OpenGL, (version 3.3) but to experiment with the process of developing a system which could procedurally generate terrain. An additional motivation was the ability to obtain experience working with third party libraries. Some examples from among these were glm, SDL, and SOIL. Included with our project is a small C\# based application which we used to explore the boundaries of Perlin Noise in relation to terrain generation. An additional two avenues that we explored were model loading, and engine building. Luckily for us, our implementation of a physics engine was simply just collision with a surface. On the other hand, our model loading system allows for us to import complex meshed objects with different materials.
 
-\subsection{Heading on level 2 (subsection)}
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. 
-\begin{align}
-	A = 
-	\begin{bmatrix}
-	A_{11} & A_{21} \\
-  	A_{21} & A_{22}
-	\end{bmatrix}
-\end{align}
-Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem.
-
-\subsubsection{Heading on level 3 (subsubsection)}
-Nulla consequat massa quis enim. Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu. In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium. Integer tincidunt. Cras dapibus. Vivamus elementum semper nisi. Aenean vulputate eleifend tellus. Aenean leo ligula, porttitor eu, consequat vitae, eleifend ac, enim.
-
-\paragraph{Heading on level 4 (paragraph)}
-Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim. 
-
-
-\section{Lists}
-
-\subsection{Example for list (3*itemize)}
-\begin{itemize}
-	\item First item in a list 
-		\begin{itemize}
-		\item First item in a list 
-			\begin{itemize}
-			\item First item in a list 
-			\item Second item in a list 
-			\end{itemize}
-		\item Second item in a list 
-		\end{itemize}
-	\item Second item in a list 
-\end{itemize}
-
-\subsection{Example for list (enumerate)}
-\begin{enumerate}
-	\item First item in a list 
-	\item Second item in a list 
-	\item Third item in a list
-\end{enumerate}
 %%% End document
 \end{document}
