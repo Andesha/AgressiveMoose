@@ -12,8 +12,8 @@ const int BUILD_INCREMENT = GRID_WIDTH / 2; // Should work fine. 3->1, 5->2, 9->
 const int INDICES_SIZE = ((GRID_WIDTH - 1)*(GRID_WIDTH - 1)) * 2 * 3;
 // The above define needs to be set to the same value as INDICES_SIZE . Just a workaround for now.
 
-const int CHUNK_PER_ROW = 10; // In relation to the above number, this is how many the TerrainList will translate per row.
-const int TERRAIN_LIST_SIZE = 100; // Number of TerrainChunk objects inside of the TerrainList.
+const int CHUNK_PER_ROW = 11; // In relation to the above number, this is how many the TerrainList will translate per row.
+const int TERRAIN_LIST_SIZE = 121; // Number of TerrainChunk objects inside of the TerrainList.
 const float SCALING_FACTOR = 5.0f; // If we scale the chunks to be bigger - we need to initialize them differently.
 
 const float TOTAL_VERTICIES_ON_SIDE = GRID_WIDTH*CHUNK_PER_ROW; // Leave this value alone. Will obviously auto compute.
