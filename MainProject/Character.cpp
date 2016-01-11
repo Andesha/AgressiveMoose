@@ -68,6 +68,8 @@ void Character::applyMouseInput(int mouseX, int mouseY){
     pitch = 89.0f;
     if (pitch < -89.0f)
         pitch = -89.0f;
+
+	// Above changes are considered to be all mouse input.
     
     charUp = glm::vec3(0.0f, 1.0f, 0.0f); // Defining up relative to world space.
     charFront = glm::vec3(1.0f, 0.0f, 0.0f); // Define front relative to world space.
@@ -78,12 +80,12 @@ void Character::applyMouseInput(int mouseX, int mouseY){
     
     charRight = glm::cross(charFront, charUp); // Cross of front and up.
     
-    rotationMat = glm::mat4(1);
-    rotationMat = glm::rotate(rotationMat, glm::radians(pitch), charRight);
+    rotationMat = glm::mat4(1); // Get new rotation identity matrix.
+    rotationMat = glm::rotate(rotationMat, glm::radians(pitch), charRight); // Rotate the char front and up by pitch this time.
     charFront = glm::vec3(rotationMat * glm::vec4(charFront, 1.0));
     charUp = glm::vec3(rotationMat * glm::vec4(charUp, 1.0));
 
-    camera->camUp = charUp;
+    camera->camUp = charUp; // Pass through to the camera.
     camera->cameraFront = charFront;
     camera->camRight = charRight;
 }
