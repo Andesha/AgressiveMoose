@@ -18,12 +18,17 @@ void SimulationGame::start() {
 	
 	terrainList->buildPool(TERRAIN_LIST_SIZE); // Nine total chunks for the pool.
 	terrainList->firstInit(); // Build the start of the grid.
-
 	skybox->initialize();
 
 	initializeShaders(); // Will add all behaviours on its own.
 
 	makeTestTexture();
+
+    ObjParser reader = ObjParser();
+    model = reader.parseFile();
+
+    model->initialize();
+
 	this->gameLoop(); // Run.
 }
 
@@ -194,7 +199,14 @@ void SimulationGame::drawWorld() {
 	GLint modelLoc = this->program.getUniformLocation("model");
 
 	view = character->getViewMatrix(); // Update view matrix now that we aren't doing the skybox.
+    glDisable(GL_CULL_FACE);
+    glBindTexture(GL_TEXTURE_2D, this->model->tid);
+    glm::mat4 model;
 
+    glm::vec3 pos;
+    pos = this->character->getPos() + (glm::normalize(this->character->camera->getFront())*3.0f);
+
+    model = glm::translate(model, pos);
     GLint lightDir = this->program.getUniformLocation("light.direction");
     GLint lightDiff = this->program.getUniformLocation("light.diff");
     GLint lightAmb = this->program.getUniformLocation("light.amb");
@@ -204,6 +216,10 @@ void SimulationGame::drawWorld() {
     glUniform3f(lightDir, 0.9f, -1.0f, 0.0f);
     glUniform3f(lightDiff, 0.4f, 0.4f, 0.4f);
 	glUniform3f(lightAmb, 0.2f, 0.2f, 0.2f);
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+    this->model->draw();
+    glEnable(GL_CULL_FACE);
 
 	for (TerrainChunk tc : terrainList->getList()) {
 		glm::mat4 model;
