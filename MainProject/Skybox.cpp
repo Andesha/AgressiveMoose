@@ -8,20 +8,21 @@ Skybox::Skybox() : vaoID(0), vboID(0) {
 
 void Skybox::draw(glm::mat4& view, glm::mat4& proj) {
 	glDepthMask(GL_FALSE); // Need to make sure we will actually see anything inside of the cube.
-	program.useProg();
+	program.useProg(); // Use proper shader.
 
+	// Send VP matrix information.
 	glUniformMatrix4fv(program.getUniformLocation("view"), 1, GL_FALSE, glm::value_ptr(view));
 	glUniformMatrix4fv(program.getUniformLocation("proj"), 1, GL_FALSE, glm::value_ptr(proj));
 
-	glBindVertexArray(vaoID);
+	glBindVertexArray(vaoID); // Standard draw copied from TerrainChunk.
 	glActiveTexture(GL_TEXTURE0);
 	glUniform1i(program.getUniformLocation("skybox"), 0);
 	glBindTexture(GL_TEXTURE_CUBE_MAP, skyboxTexture);
 	glDrawArrays(GL_TRIANGLES, 0, 36);
 	glBindVertexArray(0);
 
-	program.unuseProg();
-	glDepthMask(GL_TRUE);
+	program.unuseProg(); // No need to use this anymore.
+	glDepthMask(GL_TRUE); // Turn BFC back on.
 }
 
 void Skybox::initialize() {
@@ -31,7 +32,10 @@ void Skybox::initialize() {
 
 	program.linkShaders();
 
-	if (this->vaoID == 0) {
+	// Above is shader inits.
+
+	// Below OpenGL generates the needed buffers for the cube.
+	if (this->vaoID == 0) { 
 		glGenVertexArrays(1, &this->vaoID);
 	}
 	if (this->vboID == 0) { // If true, we have to rebuild the VBO.
@@ -46,6 +50,7 @@ void Skybox::initialize() {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(GLfloat), (GLvoid*)0);
 	glBindVertexArray(0);
 
+	// Loading of skybox textures. Standard from example code.
 	std::vector<const GLchar*> faces;
 	faces.push_back("skybox\\right.jpg");
 	faces.push_back("skybox\\left.jpg");
@@ -60,6 +65,10 @@ Skybox::~Skybox() {
 }
 
 GLuint Skybox::loadCubemap(std::vector<const GLchar*> faces) {
+
+	// Standard from example code.
+	// Modified to use SOIL.
+
 	GLuint textureID;
 	glGenTextures(1, &textureID);
 

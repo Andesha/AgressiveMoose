@@ -54,30 +54,34 @@ void TerrainChunk::initialize(float cX, float cY) {
     int countBuild = 0;
     float rowCount = 0.0f;
     float colCount = 0.0f;
+	// Code block below builds all of the vertices in model space.
+	// Also at this time, the normals are computed.
+	// Computes texture information too.
     for (int i = BUILD_INCREMENT; i >= -BUILD_INCREMENT; --i) {
         for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; ++j) {
-            vertices[countBuild].position.x = (float)j;
+            vertices[countBuild].position.x = (float)j; // Position coords.
             vertices[countBuild].position.z = (float)i;
             vertices[countBuild].position.y = perlin.at(this->centerX + j, this->centerY + i);
 
-            vertices[countBuild].textureCoord.x = colCount * (1.0f / ((float)GRID_WIDTH - 1));
+            vertices[countBuild].textureCoord.x = colCount * (1.0f / ((float)GRID_WIDTH - 1)); // Texture coords to send.
             vertices[countBuild].textureCoord.y = rowCount * (1.0f / ((float)GRID_WIDTH - 1));
             
-			glm::vec3 tempVnorm = calcVertexNormal(vertices[countBuild].position);
+			glm::vec3 tempVnorm = calcVertexNormal(vertices[countBuild].position); /// Normal call.
 
-			vertices[countBuild].vNorm.x = tempVnorm.x;
+			vertices[countBuild].vNorm.x = tempVnorm.x; // Assign normals.
 			vertices[countBuild].vNorm.y = tempVnorm.y;
 			vertices[countBuild].vNorm.z = tempVnorm.z;
 
-            ++countBuild;
+            ++countBuild; // Increment.
             ++colCount;
         }
-        ++rowCount;
+		++rowCount; // Increment.
         colCount = 0;
     }
 
     GLuint indices[INDICES_SIZE];
 
+	// Below code block builds all of the needed triangles via an EBO from the lattice of points.
     int countIndex = 0;
     for (int j = 0; j < GRID_WIDTH - 1; ++j) {
         for (int i = 0; i < GRID_WIDTH - 1; ++i) {
@@ -92,10 +96,10 @@ void TerrainChunk::initialize(float cX, float cY) {
         }
     }
 
-    glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
+    glBindBuffer(GL_ARRAY_BUFFER, this->vboID); // Bind the VBO to the proper vertex array.
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->eboID);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->eboID); // Bind the EBO.
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
     // Positions
@@ -126,17 +130,9 @@ void TerrainChunk::rebase(float cX, float cY) {
 	if (this->eboID != 0) {
 		glDeleteBuffers(1, &this->eboID);
 	}
-	//if (this->vaoID != 0) {
-	//	glDeleteVertexArrays();
-	//}
 
 	initialize(cX, cY);
 }
-
-//float TerrainChunk::perlin.at(float x, float y) {
-//    double temp = perlin.at(x / TOTAL_VERTICIES_ON_SIDE, y / TOTAL_VERTICIES_ON_SIDE, 0.5);
-//    return (float)temp*HEIGHT_LIMIT - HEIGHT_OFFSET;
-//}
 
 void TerrainChunk::draw() {
     glBindVertexArray(this->vaoID);
@@ -147,13 +143,11 @@ void TerrainChunk::draw() {
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
-//I know this doesnt look pretty, but hey, whatever man.....
+//I know this doesnt look pretty, but hey man.....
 glm::vec3 TerrainChunk::calcVertexNormal(Position pos){
 	float x = pos.x + centerX;
 	float y = pos.y;
 	float z = pos.z + centerY;
-
-	//std::cout << x+centerX << "," << y << "," << z+centerY << std::endl;
 
     glm::vec3 vNorm1, vNorm2, vNorm3, vNorm4, vNorm5, vNorm6;
 	glm::vec3 p1, p2, p3;
@@ -189,7 +183,5 @@ glm::vec3 TerrainChunk::calcVertexNormal(Position pos){
     p2 = glm::vec3(x- 1, perlin.at(x- 1, z), z);
     vNorm6 = glm::normalize(glm::cross((p3 - p1), (p2 - p1)));
 
-   // std::cout << vNorm.x << "\t" << vNorm.y << "\t" << vNorm.z << "\t" << std::endl;
-    //std::cout << vNorm.x << "\t" << vNorm.y << "\t" << vNorm.z << std::endl;  
     return glm::normalize(vNorm1 + vNorm2 + vNorm3 + vNorm4 + vNorm5 + vNorm6);
 }
