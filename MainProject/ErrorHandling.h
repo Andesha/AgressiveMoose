@@ -2,5 +2,9 @@
 
 #include "stdafx.h"
 
-// Helper method for determining any crashes when actually debugging the game.
+/// <summary>
+/// Method for outputting an error to console.
+/// Used mostly by our OpenGL/GLSL shader classes.
+/// </summary>
+/// <param name="error">String to output to console.</param>
 extern void outputError(std::string error);

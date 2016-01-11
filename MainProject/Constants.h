@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-#define PERLIN_SEED 1234
+#define PERLIN_SEED 1234 // Obivous reference to the seed of the area.
 
 const bool ENABLE_BFC = true; // Debugging flag for enabling Back Face Culling.
 
@@ -23,6 +23,6 @@ const float TOTAL_VERTICIES_ON_SIDE = GRID_WIDTH*CHUNK_PER_ROW; // Leave this va
 const float HEIGHT_LIMIT = 200.0f; // Maximum value of the height and as such will scale the open interval for the perlin noise.
 const float HEIGHT_OFFSET = HEIGHT_LIMIT / 2; // Just a value to adjust the perlin stuff by to make it easier to see.
 
-const float MAX_FPS = 60.0f;
+const float MAX_FPS = 60.0f; // Pretty obvious.
 
-const float DISTANCE_CONSTANT = 300.0f;
+const float DISTANCE_CONSTANT = 300.0f; // "View distance."

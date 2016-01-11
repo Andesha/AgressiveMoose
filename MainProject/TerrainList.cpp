@@ -4,7 +4,6 @@
 
 TerrainList::TerrainList(const Perlin& p) {
     this->perlin = p;
-	nullVec = glm::vec3(0.0f);
 	chunkMapper = new ChunkMapper();
 	chunkMapper->setListRef(&terrainList);
 }
@@ -24,6 +23,7 @@ std::list<TerrainChunk> TerrainList::getList() {
 void TerrainList::buildPool(int chunkCount) {
     this->chunkCount = chunkCount;
 
+	// Note that this only builds and does not initialize.
     for (int i = 0; i < chunkCount; i++) {
         TerrainChunk temp = TerrainChunk();
         temp.sendPerlin(perlin);
@@ -48,7 +48,7 @@ void TerrainList::firstInit() {
 		tc.initialize(xTrans,zTrans);
 
         countX++;
-        if (countX > rowCounter) { // Hard coded for now - eventually make a consant as part of the Constants.h
+        if (countX > rowCounter) { // Make the grid of chunks square.
             countX = 0;
             countY++;
         }
@@ -59,17 +59,16 @@ void TerrainList::examineChunks() {
 	for (TerrainChunk& tc : terrainList) { // MAKE THIS NOT JUST REBASE WHEN DEALLOCATING
 		if (tc.isDrawing()) { // only do computations if theres a CHANGED.
 			float dist = glm::distance(glm::vec2(character->getPos().x, character->getPos().z), glm::vec2(tc.getCenterX()*SCALING_FACTOR, tc.getCenterY()*SCALING_FACTOR));
-			if (dist > DISTANCE_CONSTANT) { // Too far away now. Must somehow rebase the chunks.
+			if (dist > DISTANCE_CONSTANT) { // View distance.
 				tc.drawing = false;
 			}
 		}
 
 		// Slightly-cheesy-on-purpose-fall-through-if
 		if(!tc.isDrawing()) {
-			//Check for open positions to redraw things.
-			glm::vec3 possiblePos;
+			glm::vec3 possiblePos; // Check for open positions to redraw things.
 			if (chunkMapper->getOpenChunk(character->getPos(),possiblePos)) {
-				tc.rebase(possiblePos.x, possiblePos.z);
+				tc.rebase(possiblePos.x, possiblePos.z); // If here - rebase at possiblePos.
 			}
 		}
 	}

@@ -1,6 +1,5 @@
 #include "stdafx.h"
 
-// Initialize game object to default values.
 SimulationGame::SimulationGame() : window(NULL), windowWidth(1024),
 windowHeight(720), gameState(GameState::PLAYING), perlin(PERLIN_SEED) {
     character = new Character(glm::vec3(0.0f,perlin.at(0.0f,0.0f)*SCALING_FACTOR*2,0.0f)); // Inner perlin function terms should be the same as the vector outer terms.
@@ -11,12 +10,9 @@ windowHeight(720), gameState(GameState::PLAYING), perlin(PERLIN_SEED) {
 	skybox = new Skybox();
 }
 
-// Currently no destructor.
 SimulationGame::~SimulationGame() {
 }
 
-// Start will call initialize to build all windows, followed by jumping 
-// into the game loop.
 void SimulationGame::start() {
 	this->initialize(); // Build.
 	
@@ -25,7 +21,7 @@ void SimulationGame::start() {
 
 	skybox->initialize();
 
-	initializeShaders();
+	initializeShaders(); // Will add all behaviours on its own.
 
 	makeTestTexture();
 	this->gameLoop(); // Run.
@@ -50,7 +46,6 @@ void SimulationGame::makeTestTexture() {
 	glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-// Builds the window and creates all of the OpenGL context information we need.
 void SimulationGame::initialize() {
 	SDL_Init(SDL_INIT_EVERYTHING); // SDL initial call.
     
@@ -79,7 +74,6 @@ void SimulationGame::initialize() {
 	}
 }
 
-// Input polling.
 void SimulationGame::examineInput() {
 	SDL_Event input; // Input event.
 
@@ -126,6 +120,8 @@ void SimulationGame::fpsCaretaker(float startMarker) {
 }
 
 void SimulationGame::handleKeyDown(){
+	// Keypressing function handler
+
     const Uint8 *state = SDL_GetKeyboardState(NULL);
     if (state[SDL_SCANCODE_RETURN]) {
         printf("<RETURN> is pressed.\n");
@@ -145,11 +141,7 @@ void SimulationGame::handleKeyDown(){
     if (state[SDL_SCANCODE_LSHIFT]) {
         character->setSpeed(1.75f);
     }
-    if (state[SDL_SCANCODE_SPACE]) {
-
-    }
 }
-
 
 void SimulationGame::handleKeyUp(){
     const Uint8 *state = SDL_GetKeyboardState(NULL);
@@ -165,17 +157,15 @@ void SimulationGame::mouseUpdatePos(int mouseX, int mouseY){
     character->applyMouseInput(mouseX, mouseY);
 }
 
-
-// Main gameloop where all behaviour will exist.
 void SimulationGame::gameLoop() {
 	while (this->gameState != GameState::QUITTING) {
 		float startMarker = SDL_GetTicks(); // Frame time.
 		
-		this->examineInput();
+		this->examineInput(); // Input handle
 
-		character->updateCharacter();
+		character->updateCharacter(); // Movement call
 
-		this->drawWorld();
+		this->drawWorld(); // Big draw call
 
 		terrainList->examineChunks(); // Examine the chunks and determine which ones are too far away to draw.
 		
@@ -183,21 +173,19 @@ void SimulationGame::gameLoop() {
 	}
 }
 
-// Method call for drawing all objects we need.
 void SimulationGame::drawWorld() {
-    //compute character pos
-
-	glClearDepth(1.0);
+	glClearDepth(1.0); // Clears
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
-	glm::mat4 proj;
+	glm::mat4 proj; // P matrix
 	proj = glm::perspective(45.0f, (float)this->windowWidth / (float)this->windowHeight, 0.1f, 1000.0f);
- 
-	glm::mat4 view = glm::mat4(glm::mat3(character->getViewMatrix())); // Done this way to ignore rotation.
+	
+	// V matrix for skybox without rotations.
+	glm::mat4 view = glm::mat4(glm::mat3(character->getViewMatrix()));
 
 	skybox->draw(view,proj); // CALL TO THE SKYBOX DRAW IS HERE
 
-	this->program.useProg();
+	this->program.useProg(); // Use proper shaders.
 	
 	int id = program.getProgID(); // Program ID for shaders needing them for uniform things.
  
@@ -211,13 +199,12 @@ void SimulationGame::drawWorld() {
     GLint lightDiff = this->program.getUniformLocation("light.diff");
     GLint lightAmb = this->program.getUniformLocation("light.amb");
 
-	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view)); // Send information.
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
     glUniform3f(lightDir, 0.9f, -1.0f, 0.0f);
     glUniform3f(lightDiff, 0.4f, 0.4f, 0.4f);
 	glUniform3f(lightAmb, 0.2f, 0.2f, 0.2f);
 
-	int counter = 0;
 	for (TerrainChunk tc : terrainList->getList()) {
 		glm::mat4 model;
 
@@ -239,17 +226,12 @@ void SimulationGame::drawWorld() {
 
 		glUniform1i(glGetUniformLocation(id, "texIm"), 0);
 
-		if (tc.isDrawing()) {
-			counter++;
-			tc.draw();
-		}
+		if (tc.isDrawing()) tc.draw();
 	}
 
-	//std::cout << "Chunks Drawing: " << counter << std::endl;
+	this->program.unuseProg(); // Safe to un use.
 
-	this->program.unuseProg();
-
-	SDL_GL_SwapWindow(this->window);
+	SDL_GL_SwapWindow(this->window); // Double buffer.
 }
 
 void SimulationGame::initializeShaders() {

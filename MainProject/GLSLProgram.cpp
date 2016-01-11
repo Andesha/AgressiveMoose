@@ -3,11 +3,9 @@
 
 GLSLProgram::GLSLProgram() :
 progID(0), vertexID(0), fragID(0), attributeCount(0) {
-
 }
 
 GLSLProgram::~GLSLProgram() {
-
 }
 
 int GLSLProgram::getProgID() {
