@@ -1,6 +1,4 @@
-intro - DONE
-
-libs  - DONE
+intro - ADD TO INTRO SAYING WHAT DOES WHAT AND WHY
 
 architechture of program (class design bullshit)
 	memory management

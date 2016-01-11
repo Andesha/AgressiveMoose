@@ -65,7 +65,7 @@
 \begin{document}
 \maketitle
 \section{Introduction}
-The main purpose of this project was to explore not only the use of modern OpenGL, (version 3.3) but to experiment with the process of developing a system which could procedurally generate terrain. An additional motivation was the ability to obtain experience working with third party libraries. Some examples from among these were glm, SDL, and SOIL. Included with our project is a small C\# based application which we used to explore the boundaries of Perlin Noise in relation to terrain generation. An additional two avenues that we explored were model loading, and engine building. Luckily for us, our implementation of a physics engine was simply just collision with a surface. On the other hand, our model loading system allows for us to import complex meshed objects with different materials.
+The main purpose of this project was to explore not only the use of modern OpenGL, (version 3.3) but to experiment with the process of developing a system which could procedurally generate terrain. An additional motivation was the ability to obtain experience working with third party libraries. Some examples from among these were glm, SDL, and SOIL. Included with our project is a small C\# based application which we used to explore the boundaries of Perlin Noise in relation to terrain generation. An additional two avenues that we explored were model loading, and engine building. Luckily for us, our implementation of a physics engine was simply just collision with a surface. On the other hand, our model loading system allows for us to import complex meshed objects with different materials. This project thus takes on the form of a graphics application style game, with the ability to fly a model around some world that possesses completely procedurally generated terrain.
 
 \section{Libraries}
 Below is an explanation of the function of the main libraries included in our project, their main uses, and why we chose them over the alternatives.
@@ -77,6 +77,11 @@ The library we chose for creating windows and handling user input was the popula
 In modern OpenGL a lot of functionality has been removed for the purpose of giving you more of an ability to customize behavior. One of the things lost was the ability to simply transform any sort of view space or other that you were using. GLM does not add this back in, instead it gives you all of the tools to compute vector and matrix math for rotations, translations, and scaling. Without GLM, you would have to implement all of these methods yourself. The reason we chose GLM was its availability as well as its functionality when creating new vector and matrix objects.
 \subsection{SOIL}
 SOIL stands for Simple OpenGL Image Library which suited our needs perfectly. The same way that FreeImage functioned in class - SOIL did for us. Meaning it allowed us to quickly and easily important images for our textures and skyboxes without any issues.
+
+\section{Architecture and Class Design}
+Early in our design process we decided to make the switch to modern OpenGL. Knowing that this would be much more work with having to learn things like GLSL, shader language, we designed a graphics application in the form of a game. This would allow us to explore different portions of modern computer graphics in many directions. This section will highlight the most important classes and their functions, why they were designed the way they were, and how they interact with modern OpenGL.
+\subsection{SimulationGame}
+This class is the main body of the entire project. From here, it was designed that any interactions from the user would be handled by SDL, and then passed to the proper external classes containing anything from character movement to camera updates.
 
 %%% End document
 \end{document}
