@@ -4,7 +4,6 @@
 
 TerrainList::TerrainList(const Perlin& p) {
     this->perlin = p;
-	nullVec = glm::vec3(0.0f);
 	chunkMapper = new ChunkMapper();
 	chunkMapper->setListRef(&terrainList);
 }
@@ -60,7 +59,7 @@ void TerrainList::examineChunks() {
 	for (TerrainChunk& tc : terrainList) { // MAKE THIS NOT JUST REBASE WHEN DEALLOCATING
 		if (tc.isDrawing()) { // only do computations if theres a CHANGED.
 			float dist = glm::distance(glm::vec2(character->getPos().x, character->getPos().z), glm::vec2(tc.getCenterX()*SCALING_FACTOR, tc.getCenterY()*SCALING_FACTOR));
-			if (dist > DISTANCE_CONSTANT) { // Too far away from the chunk. No longer drawing it.
+			if (dist > DISTANCE_CONSTANT) { // View distance.
 				tc.drawing = false;
 			}
 		}
