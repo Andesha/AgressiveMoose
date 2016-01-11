@@ -69,6 +69,12 @@
     <ClInclude Include="SkyboxVert.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="GlobalLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChunkMapper.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -105,6 +111,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Skybox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChunkMapper.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

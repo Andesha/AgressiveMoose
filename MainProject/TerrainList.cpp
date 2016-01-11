@@ -4,6 +4,9 @@
 
 TerrainList::TerrainList(const Perlin& p) {
     this->perlin = p;
+	nullVec = glm::vec3(0.0f);
+	chunkMapper = new ChunkMapper();
+	chunkMapper->setListRef(&terrainList);
 }
 
 
@@ -37,7 +40,12 @@ void TerrainList::firstInit() {
     float countY = 0;
 
     for (TerrainChunk& tc : terrainList) {
-        tc.initialize(-gridIncrement + (countX * gridIncrement), gridIncrement + (countY * gridIncrement));
+		float xTrans = -gridIncrement + (countX * gridIncrement);
+		float zTrans = -gridIncrement + (countY * gridIncrement); // Confusing but that's life.
+
+		//std::cout << xTrans << "," << zTrans << std::endl; // Note that this is very much so in world coordinates.
+
+		tc.initialize(xTrans,zTrans);
 
         countX++;
         if (countX > rowCounter) { // Hard coded for now - eventually make a consant as part of the Constants.h
@@ -48,13 +56,21 @@ void TerrainList::firstInit() {
 }
 
 void TerrainList::examineChunks() {
-	//TerrainChunk& tc = terrainList.front();
-	//std::cout << tc.getCenterX() << "," << tc.getCenterY() << std::endl;
-	//std::cout << character->getPos().x / SCALING_FACTOR << "," << character->getPos().z / SCALING_FACTOR << std::endl;
-	//std::cout << glm::distance(glm::vec2(character->getPos().x, character->getPos().z), glm::vec2(tc.getCenterX()*SCALING_FACTOR, tc.getCenterY()*SCALING_FACTOR)) << std::endl;
+	for (TerrainChunk& tc : terrainList) { // MAKE THIS NOT JUST REBASE WHEN DEALLOCATING
+		if (tc.isDrawing()) { // only do computations if theres a CHANGED.
+			float dist = glm::distance(glm::vec2(character->getPos().x, character->getPos().z), glm::vec2(tc.getCenterX()*SCALING_FACTOR, tc.getCenterY()*SCALING_FACTOR));
+			if (dist > DISTANCE_CONSTANT) { // Too far away now. Must somehow rebase the chunks.
+				tc.drawing = false;
+			}
+		}
 
-	for (TerrainChunk& tc : terrainList) {
-		float dist = glm::distance(glm::vec2(character->getPos().x, character->getPos().z), glm::vec2(tc.getCenterX()*SCALING_FACTOR, tc.getCenterY()*SCALING_FACTOR));
-		//if (dist > DISTANCE_CONSTANT) tc.drawing = false;
+		// Slightly-cheesy-on-purpose-fall-through-if
+		if(!tc.isDrawing()) {
+			//Check for open positions to redraw things.
+			glm::vec3 possiblePos;
+			if (chunkMapper->getOpenChunk(character->getPos(),possiblePos)) {
+				tc.rebase(possiblePos.x, possiblePos.z);
+			}
+		}
 	}
 }
