@@ -21,6 +21,8 @@ glm::vec3 ChunkMapper::getOpenChunk(glm::vec3 charPos) {
 
 	glm::vec2 mappedPos = mapToMultiple((int)(charPos.x / SCALING_FACTOR), (charPos.z / SCALING_FACTOR));
 
+	//use of static vars over each?
+
 	for (TerrainChunk& tc : *terrainListRef) { // Check all of the chunks that are actually drawing for the pos below the char.
 		if (tc.isDrawing()) {
 			if (glm::vec2(tc.getCenterX(), tc.getCenterY()) == mappedPos) {
