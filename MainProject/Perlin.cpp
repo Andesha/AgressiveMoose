@@ -74,6 +74,7 @@ double Perlin::grad(int hash, double x, double y, double z) {//Lower four bits o
 }
 
 float Perlin::at(float x, float y) {
+	// Mapping of the function is controlled properly by Constants.h
 	double temp = examinePerlin(x / TOTAL_VERTICIES_ON_SIDE, y / TOTAL_VERTICIES_ON_SIDE, 0.5);
 	return (float)temp*HEIGHT_LIMIT - HEIGHT_OFFSET;
 }
