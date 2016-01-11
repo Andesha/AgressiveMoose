@@ -1,0 +1,27 @@
+
+
+
+--------------
+2. Graphics application
+
+• Game: It may use OpenGL, CG, Direct3D, or some other graphics library. It
+should be significantly different than the assignment questions.
+
+• Implement an application that uses pixel and vertex shading.
+
+• Plug-in: Implement a plug-in module for a graphics application, for example,
+Adobe Photoshop or Blender. You can download a software developer’s kit
+(SDK) from the Adobe web site. It contains library modules, programming
+interfaces, and documentation for implementing software that interfaces with
+their host applications. For example, an interesting plug-in might be a new
+Photoshop filter. It could be a unique filter of your own invention, with lots of
+algorithmic parameters controlled by the user interface.
+
+• Implement a 3D visualization app.
+
+Hand in an electronic and hard-copy of your project: compiled application, and hardcopy
+of all source code and data. Include a 6 to 8 page paper describing your system's
+functionality, architecture and implementation, user manual, references, etc.
+
+For games, make sure to describe all algorithms used, and cite sources of libraries,
+textures, models, sounds, etc
