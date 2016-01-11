@@ -28,6 +28,7 @@ void SimulationGame::start() {
     model = reader.parseFile();
 
     model->initialize();
+
 	this->gameLoop(); // Run.
 }
 
