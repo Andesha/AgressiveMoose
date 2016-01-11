@@ -1,6 +1,12 @@
 #include "stdafx.h"
 #include "MTLParser.h"
 #include <memory>
+/*********************************************
+
+Rudementary file parser to create material objects
+from an OBJ format
+**********************************************/
+
 enum lineHeads{_NEWMTL, _NS, _KA, _KS, _KD, _KE, _NI, _D, _ILLUM, _MAP};
 
 MTLParser::MTLParser(){}
@@ -29,9 +35,8 @@ void MTLParser::parseMTL(){
         case _NEWMTL:
         {
                         currentMat = new Material();
-                        fscanf(file, "%s\n", currentMat->name); 
+                        fscanf(file, "%s\n", &currentMat->name); 
                         std::cout << currentMat->name;
-                        this->matList.emplace_back(std::move(currentMat));
                         break;
         }
         case _NS:

@@ -25,15 +25,11 @@ void SimulationGame::start() {
 	skybox->initialize();
 	initializeShaders();
 	makeTestTexture();
-    MTLParser parser = MTLParser();
-    parser.parseMTL();
+
+
     ObjParser reader = ObjParser();
     model = reader.parseFile();
-    for (int i = 0; i < model->components.size(); i++){
-        for (int j = 0; j < model->components[i]->components.size(); j++){
-            std::cout << model->components[i]->components[j]->materialName << "  MATTER" << std::endl ;
-        }
-    }
+
     model->initialize();
 	this->gameLoop(); // Run.
 }

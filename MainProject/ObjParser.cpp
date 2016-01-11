@@ -108,7 +108,7 @@ Model *ObjParser::parseFile(){
 
     //std::cout << new_m->components.size() << "number of models" << std::endl;
     
-    
+    fclose(file);
     return new_m;
 }
 
