@@ -41,3 +41,8 @@
 #include "Camera3D.h"
 #include "Character.h"
 #include "ChunkMapper.h"
+#include "objParser.h"
+#include "Mesh.h"
+#include "Object.h"
+#include "MTLParser.h"
+#include "Material.h"

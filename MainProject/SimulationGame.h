@@ -7,6 +7,8 @@
 #include "TerrainList.h"
 #include "Character.h"
 #include "Skybox.h"
+#include "Model.h"
+
 
 /// <summary>
 /// Main class for the entire project. All behaviour is controlled from here.
@@ -96,6 +98,11 @@ private:
 	/// <param name="mouseX">SDL relative mouse X.</param>
 	/// <param name="mouseY">SDL relative mouse Y.</param>
     void mouseUpdatePos(int mouseX, int mouseY);
+
+    /// <summary>
+	/// Pointer to our model class.
+	/// </summary>
+    Model* model;
 
 public:
 	/// <summary>
