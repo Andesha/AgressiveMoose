@@ -17,31 +17,27 @@ void ChunkMapper::setListRef(std::list<TerrainChunk>* tlr) {
 	this->terrainListRef = tlr;
 }
 
-glm::vec3 ChunkMapper::getOpenChunk(glm::vec3 charPos) {
-
-	glm::vec2 mappedPos = mapToMultiple((int)(charPos.x / SCALING_FACTOR), (charPos.z / SCALING_FACTOR));
+bool ChunkMapper::examineChunk(glm::vec3 charPos, glm::vec3& outPos, int x, int z) {
+	glm::vec2 mappedPos = mapToMultiple((int)(charPos.x / SCALING_FACTOR) + (x * 8), (charPos.z / SCALING_FACTOR) + (z * 8)); // Char pos to 8's
 
 	for (TerrainChunk& tc : *terrainListRef) { // Check all of the chunks that are actually drawing for the pos below the char.
 		if (tc.isDrawing()) {
 			if (glm::vec2(tc.getCenterX(), tc.getCenterY()) == mappedPos) {
-				return glm::vec3(0.0f);
+				return false;
 			}
-			//if -> check one above middle
-			//	 ->	returns true? -> return null vec
 		}
 	}
-	///VVVVVVVVVVVVVVVV
-	return glm::vec3(mappedPos.x, 0, mappedPos.y);
+	
+	outPos = glm::vec3(mappedPos.x , 0, mappedPos.y);
+	return true;
 }
 
-//int chunkMapHelper[] = { // Mapper which contains the offset of chunks that should
-//	-8, 8,
-//	0, 8, // Top row
-//	8, 8
-//	- 8, 0,
-//	0, 0, // Middle check first.
-//	8, 0
-//	- 8, -8,
-//	0, -8, // Middle check first.
-//	8, -8
-//}
+bool ChunkMapper::getOpenChunk(glm::vec3 charPos, glm::vec3& outPos) {
+	for (int i = 1; i >= -1; --i) {
+		for (int j = -1; j <= 1; ++j) {
+			if (examineChunk(charPos, outPos, j, i)) return true;
+		}
+	}
+	
+	return false;
+}

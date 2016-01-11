@@ -67,8 +67,8 @@ void TerrainList::examineChunks() {
 		// Slightly-cheesy-on-purpose-fall-through-if
 		if(!tc.isDrawing()) {
 			//Check for open positions to redraw things.
-			glm::vec3 possiblePos = chunkMapper->getOpenChunk(character->getPos());
-			if (possiblePos != nullVec) {
+			glm::vec3 possiblePos;
+			if (chunkMapper->getOpenChunk(character->getPos(),possiblePos)) {
 				tc.rebase(possiblePos.x, possiblePos.z);
 			}
 		}
