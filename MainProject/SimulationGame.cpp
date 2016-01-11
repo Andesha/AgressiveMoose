@@ -25,9 +25,9 @@ void SimulationGame::start() {
 	makeTestTexture();
 
     ObjParser reader = ObjParser();
-    model = reader.parseFile();
+    this->character->model = reader.parseFile();
 
-    model->initialize();
+    this->character->model->initialize();
 
 	this->gameLoop(); // Run.
 }
@@ -170,6 +170,8 @@ void SimulationGame::gameLoop() {
 
 		character->updateCharacter(); // Movement call
 
+        character->testCollision(&this->perlin);
+
 		this->drawWorld(); // Big draw call
 
 		terrainList->examineChunks(); // Examine the chunks and determine which ones are too far away to draw.
@@ -200,11 +202,11 @@ void SimulationGame::drawWorld() {
 
 	view = character->getViewMatrix(); // Update view matrix now that we aren't doing the skybox.
     glDisable(GL_CULL_FACE);
-    glBindTexture(GL_TEXTURE_2D, this->model->tid);
+    glBindTexture(GL_TEXTURE_2D, this->character->model->tid);
     glm::mat4 model;
 
     glm::vec3 pos;
-    pos = this->character->getPos() + (glm::normalize(this->character->camera->getFront())*3.0f);
+    pos = this->character->getPos();
 
     model = glm::translate(model, pos);
     GLint lightDir = this->program.getUniformLocation("light.direction");
@@ -213,13 +215,13 @@ void SimulationGame::drawWorld() {
 
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view)); // Send information.
 	glUniformMatrix4fv(projLoc, 1, GL_FALSE, glm::value_ptr(proj));
-    glUniform3f(lightDir, 0.9f, -1.0f, 0.0f);
+    glUniform3f(lightDir, 0.9f, -1.0f, 0.3f);
     glUniform3f(lightDiff, 0.4f, 0.4f, 0.4f);
 	glUniform3f(lightAmb, 0.2f, 0.2f, 0.2f);
     glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-    this->model->draw();
-    glEnable(GL_CULL_FACE);
+    this->character->model->draw();
+    //glEnable(GL_CULL_FACE);
 
 	for (TerrainChunk tc : terrainList->getList()) {
 		glm::mat4 model;
@@ -229,7 +231,7 @@ void SimulationGame::drawWorld() {
 
 		glm::vec3 pos;
 		pos.x = tc.getCenterX();
-		pos.z = tc.getCenterY(); // Confusing but oh well.
+		pos.z = tc.getCenterY();
 
 		model = glm::translate(model, pos);
 

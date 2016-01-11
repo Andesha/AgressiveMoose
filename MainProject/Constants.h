@@ -2,7 +2,7 @@
 
 #include "stdafx.h"
 
-#define PERLIN_SEED 1234 // Obivous reference to the seed of the area.
+#define PERLIN_SEED 3244 // Obivous reference to the seed of the area.
 
 const bool ENABLE_BFC = true; // Debugging flag for enabling Back Face Culling.
 

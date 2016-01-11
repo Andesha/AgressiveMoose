@@ -1,7 +1,7 @@
 #pragma once
 
 #include "stdafx.h"
-
+#include "Model.h"
 enum CamMode{FIRST, THIRD};
 
 /// <summary>
@@ -64,8 +64,13 @@ public:
 	/// <param name="y">Mouse input y.</param>
     void applyMouseInput(int x, int y);
 
+    bool testCollision(Perlin* p);
+
 	/// Reference to this classes 'friend' camera.
     Camera3D* camera;
+
+    Model* model;
+
 
 private:
   
@@ -85,7 +90,6 @@ private:
     glm::vec3 target;
     glm::vec3 charRight;
     glm::vec3 charUp;
-
     /// <summary>
     /// Call for updating the internal position of the character.
     /// </summary>

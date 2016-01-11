@@ -8,8 +8,7 @@ dir(glm::vec3(0.0f, 0.0f, 1.0f)), charUp(0.0f, 1.0f, 0.0f){
     target = pos + glm::vec3(0.0f, 0.0f, 1.0f);
     charFront = glm::normalize(target - pos);
     charRight = glm::normalize(glm::cross(charFront, charUp));
-
-    camera = new Camera3D(pos, yaw, pitch, roll, 0.5);
+    camera = new Camera3D(pos - (4.0f * charFront), yaw, pitch, roll, 0.5);
 
 }
 
@@ -33,7 +32,7 @@ void Character::updateCharacter(){
     if (speedLat != 0.0f)
         pos += glm::normalize(charRight) * speedLat;
     //// update camera position
-    this->camera->setPos(pos);
+    this->camera->setPos(pos - (4.0f * charFront));
     //test collision?
 }
 
@@ -50,7 +49,7 @@ GLfloat Character::getSpeed(){
 }
 
 glm::vec3 Character::getPos(){
-    return this->camera->pos;
+    return this->pos;
 }
 
 void Character::applyMouseInput(int mouseX, int mouseY){
@@ -88,4 +87,13 @@ void Character::applyMouseInput(int mouseX, int mouseY){
     camera->camUp = charUp; // Pass through to the camera.
     camera->cameraFront = charFront;
     camera->camRight = charRight;
+}
+
+bool Character::testCollision(Perlin* p){
+    float height = p->at(this->pos.x * SCALING_FACTOR, this->pos.z * SCALING_FACTOR) * SCALING_FACTOR;
+    if (height > pos.y){
+        std::cout << "TERRAIN";
+        return true;
+    }
+    return false;
 }
