@@ -67,5 +67,16 @@
 \section{Introduction}
 The main purpose of this project was to explore not only the use of modern OpenGL, (version 3.3) but to experiment with the process of developing a system which could procedurally generate terrain. An additional motivation was the ability to obtain experience working with third party libraries. Some examples from among these were glm, SDL, and SOIL. Included with our project is a small C\# based application which we used to explore the boundaries of Perlin Noise in relation to terrain generation. An additional two avenues that we explored were model loading, and engine building. Luckily for us, our implementation of a physics engine was simply just collision with a surface. On the other hand, our model loading system allows for us to import complex meshed objects with different materials.
 
+\section{Libraries}
+Below is an explanation of the function of the main libraries included in our project, their main uses, and why we chose them over the alternatives.
+\subsection{GLEW}
+GLEW stands for The OpenGL Extension Wrangler Library. The function of GLEW is to provide some sort of open source C++ extension loading dependency. This means that it would be GLEW's responsibility to determine if certain functions are available on the hardware running a project with GLEW. If a function were not supported - it is possible GLEW would throw an error. But in a better case, GLEW would be able to translate the impossible call into something the hardware could understand and then execute it properly. The reason we chose GLEW is its constant good reviews and simplicity as well as its ability to work on multiple operation systems.
+\subsection{SDL}
+The library we chose for creating windows and handling user input was the popular SDL framework. SDL stands for Simple DirectMedia Layer, and it aims to provide access to all sorts of low level input, and output. Again, keeping with theme, SDL was chosen for its ability to work natively with C, and as such work on multiple operating systems. Another factor in choosing SDL was the availability of documentation and code examples. When learning a new library, one should not have to go scouring the depth of forums to find your input output functions.\footnote{It should perhaps be noted that the GLFW library had its Oculus Rift guide on the front page - so at least it has that going for it.}
+\subsection{GLM}
+In modern OpenGL a lot of functionality has been removed for the purpose of giving you more of an ability to customize behavior. One of the things lost was the ability to simply transform any sort of view space or other that you were using. GLM does not add this back in, instead it gives you all of the tools to compute vector and matrix math for rotations, translations, and scaling. Without GLM, you would have to implement all of these methods yourself. The reason we chose GLM was its availability as well as its functionality when creating new vector and matrix objects.
+\subsection{SOIL}
+SOIL stands for Simple OpenGL Image Library which suited our needs perfectly. The same way that FreeImage functioned in class - SOIL did for us. Meaning it allowed us to quickly and easily important images for our textures and skyboxes without any issues.
+
 %%% End document
 \end{document}

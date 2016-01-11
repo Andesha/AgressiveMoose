@@ -1,4 +1,16 @@
+intro - DONE
 
+libs  - DONE
+
+architechture of program (class design bullshit)
+	memory management
+
+procedural stuff and perlin math
+
+OpenGL
+	model loading
+	lighting
+	shaders
 
 
 --------------
