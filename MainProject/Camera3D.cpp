@@ -3,7 +3,6 @@
 
 
 Camera3D::Camera3D() : yaw(90.0f), pitch(0.0f), roll(0.0f), sensitivity(0.5f) {
-    std::cout << "wrong" << std::endl;
 	camUp = glm::vec3(0.0f, 1.0f, 0.0f);
 	pos = glm::vec3(0.0f, 100.0f, 0.0f);
     target = pos + glm::vec3(0.0f, 0.0f, 1.0f);
@@ -38,7 +37,6 @@ void Camera3D::updateTarget(glm::vec3& targetPos){
 }
 
 glm::vec3 Camera3D::getDir(){
-	// std::cout << dir[0] << "\t" << dir[1] << "\t" << dir[2] << "\t" << std::endl;
     return dir;
 }
 
