@@ -28,14 +28,15 @@ void Model::makeTexture() {
 
 void Model::initialize(){
     makeTexture();
-    for (int i = 0; i < this->components.size(); i++)
-        this->components[i]->initialize();
+    for (int i = 0; i < this->components.size(); i++){
+        this->components[i]->init();
+    }
+
 }
 
 
 void Model::draw(){
-    //bind model texture cause why not
-    for (int i = 0; i < this->components.size(); i++)
+    for (int i = 0; i < this->components.size(); i++){
         this->components[i]->draw();
-    
+    }
 }

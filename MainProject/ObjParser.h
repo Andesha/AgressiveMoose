@@ -3,10 +3,12 @@
 #include "stdafx.h"
 #include "Model.h"
 #include "objData.h"
+#include "Material.h"
 
 class ObjParser{
 public:
     ObjParser();
+    
 
     Model *parseFile();
 
@@ -14,6 +16,10 @@ public:
     
 private:
     Mesh *current_mesh;
+
+    Object *current_object;
+
+    Material *current_material;
  
     int testLine(char* line);
 

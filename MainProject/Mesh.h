@@ -3,8 +3,6 @@
 class Mesh{
 public:
     Mesh();
-
-    char* objectName;
     char* materialName;
     GLuint texture;
 

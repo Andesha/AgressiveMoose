@@ -1,6 +1,3 @@
-# Blender MTL File: 'None'
-# Material Count: 8
-
 newmtl (null)
 Ns 96.078431
 Ka 1.000000 1.000000 1.000000
@@ -30,27 +27,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd C:\Users\Preston\Desktop\reap\predator.jpg
-
-newmtl VR_Light_Green
-Ns 94.117647
-Ka 0.000000 0.000000 0.000000
-Kd 0.000000 1.000000 0.098039
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
-
-newmtl VR_Light_Red
-Ns 94.117647
-Ka 0.000000 0.000000 0.000000
-Kd 1.000000 0.000000 0.000000
-Ks 0.000000 0.000000 0.000000
-Ke 0.000000 0.000000 0.000000
-Ni 1.000000
-d 1.000000
-illum 2
+map_Kd predator.jpg
 
 newmtl _6___Default
 Ns 94.117647
@@ -61,7 +38,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd C:\Users\Preston\Desktop\reap\missile.jpg
+map_Kd missile.jpg
 
 newmtl mq_9
 Ns 94.117647
@@ -72,7 +49,7 @@ Ke 0.000000 0.000000 0.000000
 Ni 1.000000
 d 1.000000
 illum 2
-map_Kd C:\Users\Preston\Desktop\reap\predator.jpg
+map_Kd predator.jpg
 
 newmtl rudder_control_pivotDefault
 Ns 94.117647

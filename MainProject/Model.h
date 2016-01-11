@@ -4,6 +4,7 @@
 #include <memory>
 #include "objData.h"
 #include "Mesh.h"
+#include "Object.h"
 
 /// <summary>
 /// A model is a composition (or single) of meshes, which represent a 
@@ -20,7 +21,7 @@ public:
 
     ~Model();
  
-    std::vector<std::unique_ptr<Mesh>> components;
+    std::vector<std::unique_ptr<Object>> components;
 
     void Model::draw();
     GLuint tid;

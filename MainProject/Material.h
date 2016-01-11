@@ -1,11 +1,22 @@
 #pragma once
 #include "stdafx.h"
 
-struct LightComponent{
-    float r, g, b;
-};
+class Material{
+public:
 
-struct Material{
-    char name[25];
-    LightComponent Amb, Diff, Spec;
+    Material::Material();
+    glm::vec3 amb;
+    glm::vec3 diff;
+    glm::vec3 spec;
+    glm::vec3 kE;
+    float Ni;
+    float ns;
+    float d;
+    int illum;
+
+
+    char *name;
+    char *textureFile;
+
+    
 };

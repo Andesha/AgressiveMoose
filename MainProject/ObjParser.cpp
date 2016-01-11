@@ -7,18 +7,14 @@ enum lineType{
     _V, _VT, _VN, _F, _O, _MTLLIB, _USEMTL, _CMT, _S
 };
 
-ObjParser::ObjParser(){
-    
-
-}
+ObjParser::ObjParser(){}
 
 Model *ObjParser::parseFile(){
-    bool noObj = true;
+    bool noMat = true;
     Model* new_m = new Model();
     std::FILE* file; 
-    std::cout << fopen_s(&file, "reap/reaperTri.obj", "r");
-    this->current_mesh = new Mesh();
-    this->current_mesh->objectName = "default";
+    std::cout << fopen_s(&file, "reap/untitled.obj", "r");
+
     if (file == NULL){
         std::cout << "Unable to read OBJ!" << std::endl;
         return NULL;
@@ -34,15 +30,10 @@ Model *ObjParser::parseFile(){
         switch (testLine(line))
         {
         case _CMT:
-            std::cout << "sdsadas" << std::endl;
             break;
 
         case _V:
         {   
-            if (current_mesh->objectName == "default" && noObj){
-                noObj = false;
-                new_m->components.emplace_back(std::move(current_mesh));
-            }
             float x, y, z;
             fscanf(file, "%f %f %f\n",&x, &y, &z);
             this->file_vertexs.push_back(glm::vec3(x, y, z));
@@ -68,6 +59,7 @@ Model *ObjParser::parseFile(){
             int vertindex, texindex, normieindex;
             fscanf(file, "%d/%d/%d", &vertindex, &texindex, &normieindex);
             this->current_mesh->vetexes.push_back(getMeshVertex(vertindex, texindex, normieindex));
+
             fscanf(file, "%d/%d/%d", &vertindex, &texindex, &normieindex);
             this->current_mesh->vetexes.push_back(getMeshVertex(vertindex, texindex, normieindex));
 
@@ -78,10 +70,14 @@ Model *ObjParser::parseFile(){
         case _O:
         {
             //THIS MIGHT BE AN ISSUE
+            this->current_object = new Object();
+            fscanf(file, "%s\n", this->current_object->objectName);
+            new_m->components.emplace_back(std::move(current_object));
             this->current_mesh = new Mesh();
-            new_m->components.emplace_back(std::move(current_mesh));
-            fscanf(file, "%s", this->current_mesh->objectName);
-            std::cout << "OBJECT NAMED " << this->current_mesh->objectName << std::endl;
+            this->current_mesh->materialName = "default";
+            noMat = true;
+            //this->current_object->components.emplace_back(std::move(current_mesh));
+            //std::cout << "OBJECT NAMED " << this->current_object->objectName << std::endl;
             break;
         }
         case _S:
@@ -92,12 +88,16 @@ Model *ObjParser::parseFile(){
         }
         case _MTLLIB:
         {
+            
             fscanf(file, "%s\n", this->matlib);
             break;
         }
         case _USEMTL:
-        {
+        {   
+            this->current_mesh = new Mesh();
             fscanf(file, "%s\n", this->current_mesh->materialName);
+            
+            this->current_object->components.emplace_back(std::move(current_mesh));
             break;
         }
         default:
@@ -105,8 +105,10 @@ Model *ObjParser::parseFile(){
         }
         
     }
-    std::cout << new_m->components.size() << "number of models" << std::endl;
 
+    //std::cout << new_m->components.size() << "number of models" << std::endl;
+    
+    
     return new_m;
 }
 

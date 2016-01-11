@@ -2,13 +2,12 @@
 #include "Mesh.h"
 
 Mesh::Mesh(){
-    this->objectName = new char[25];
-    this->materialName = new char[25];
+    //this->objectName = new char[25];
+    this->materialName = new char[45];
 }
 
 
 void Mesh::initialize(){
-    std::cout << "initializing " << this->objectName << this->vetexes.size() << std::endl;
     if (this->vboID == 0) { // If true, we have to rebuild the VBO.
         glGenBuffers(1, &this->vboID); // Pass in a reference to "THIS" vboID. Only generating one.
     }
@@ -19,9 +18,6 @@ void Mesh::initialize(){
         glGenVertexArrays(1, &this->vaoID);
     }
 
-    if (objectName == "lg_R02_pivot"){
-     int   x=3;
-    }
 
     glBindVertexArray(this->vaoID);
     int index = vetexes.size();
@@ -31,8 +27,6 @@ void Mesh::initialize(){
             indices[j] = (GLuint)j;
     }
     
-
-
     glBindBuffer(GL_ARRAY_BUFFER, this->vboID);
     glBufferData(GL_ARRAY_BUFFER, vetexes.size() * sizeof(Vertex), &vetexes[0], GL_STATIC_DRAW);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this->eboID);
@@ -61,10 +55,8 @@ void Mesh::initialize(){
 
 void Mesh::draw() {
     glBindVertexArray(this->vaoID);
-
     glDrawElements(GL_TRIANGLES, vetexes.size(), GL_UNSIGNED_INT, (void*)0);
     glBindVertexArray(0);
-
     glDisableVertexAttribArray(0); // Delete and unbind.
     glBindBuffer(GL_ARRAY_BUFFER, 0);
 }

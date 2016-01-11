@@ -25,11 +25,14 @@ void SimulationGame::start() {
 	skybox->initialize();
 	initializeShaders();
 	makeTestTexture();
-
+    MTLParser parser = MTLParser();
+    parser.parseMTL();
     ObjParser reader = ObjParser();
     model = reader.parseFile();
     for (int i = 0; i < model->components.size(); i++){
-        std::cout << " mesh  " << model->components[i]->objectName << "  " << model->components[i]->vetexes.size() << std::endl;
+        for (int j = 0; j < model->components[i]->components.size(); j++){
+            std::cout << model->components[i]->components[j]->materialName << "  MATTER" << std::endl ;
+        }
     }
     model->initialize();
 	this->gameLoop(); // Run.
@@ -199,10 +202,9 @@ void SimulationGame::drawWorld() {
  
 	glm::mat4 view = glm::mat4(glm::mat3(character->getViewMatrix())); // Done this way to ignore rotation.
 
-	//skybox->draw(view,proj); // CALL TO THE SKYBOX DRAW IS HERE
-
+    this->skybox->draw(view, proj);
 	this->program.useProg();
-    //this->model->draw(view, proj);
+ 
 
 	int id = program.getProgID(); // Program ID for shaders needing them for uniform things.
  
@@ -211,7 +213,14 @@ void SimulationGame::drawWorld() {
 	GLint modelLoc = this->program.getUniformLocation("model");
 
 	view = character->getViewMatrix(); // Update view matrix now that we aren't doing the skybox.
+    glDisable(GL_CULL_FACE);
+    glBindTexture(GL_TEXTURE_2D, this->model->tid);
+    glm::mat4 model;
 
+    glm::vec3 pos;
+    pos = this->character->getPos() + (glm::normalize(this->character->camera->getFront())*3.0f);
+
+    model = glm::translate(model, pos);
     GLint lightDir = this->program.getUniformLocation("light.direction");
     GLint lightDiff = this->program.getUniformLocation("light.diff");
     GLint lightAmb = this->program.getUniformLocation("light.amb");
@@ -221,6 +230,10 @@ void SimulationGame::drawWorld() {
     glUniform3f(lightDir, 0.9f, -1.0f, 0.0f);
     glUniform3f(lightDiff, 0.4f, 0.4f, 0.4f);
 	glUniform3f(lightAmb, 0.2f, 0.2f, 0.2f);
+    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+
+    this->model->draw();
+    glEnable(GL_CULL_FACE);
 
 	int counter = 0;
 	for (TerrainChunk tc : terrainList->getList()) {
@@ -249,10 +262,6 @@ void SimulationGame::drawWorld() {
 			tc.draw();
 		}
 	}
-    glDisable(GL_CULL_FACE);
-    glBindTexture(GL_TEXTURE_2D, this->model->tid);
-    this->model->draw();
-	//std::cout << "Chunks Drawing: " << counter << std::endl;
 
 	this->program.unuseProg();
 
