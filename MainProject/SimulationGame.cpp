@@ -210,9 +210,11 @@ void SimulationGame::drawWorld() {
     glm::mat4 model;
 
 	model = glm::translate(model, glm::vec3(0.f, 0.f, -3.f));
+	model = glm::rotate(model, glm::radians(180.f), glm::vec3(0.f, 1.f, 0.f));
+
     GLint lightDir = this->program.getUniformLocation("light.direction");
     GLint lightDiff = this->program.getUniformLocation("light.diff");
-    GLint lightAmb = this->program.getUniformLocation("light.amb");
+	GLint lightAmb = this->program.getUniformLocation("light.amb");
 
 	glm::mat4 fixedPlaneView;
 

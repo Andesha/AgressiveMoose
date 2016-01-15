@@ -163,8 +163,8 @@ Vertex ObjParser::getMeshVertex(int vIndex, int uvIndex, int normieIndex){
     modelVert.color.a = 0;
 
     modelVert.vNorm.x = tempnormie.x;
-    modelVert.vNorm.x = tempnormie.y;
-    modelVert.vNorm.x = tempnormie.z;
+    modelVert.vNorm.y = tempnormie.y;
+    modelVert.vNorm.z = tempnormie.z;
 
     return modelVert;
 }
