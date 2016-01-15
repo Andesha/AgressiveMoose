@@ -11,14 +11,14 @@ Object::~Object() {
 
 
 void Object::init(){
-    for (int i = 0; i < this->components.size(); i++){
+	for (unsigned int i = 0; i < this->components.size(); i++) {
         components[i]->initialize();
     }
 }
 
 
 void Object::draw(){
-    for (int i = 0; i < this->components.size(); i++){
+	for (unsigned int i = 0; i < this->components.size(); i++) {
         components[i]->draw();
     }
 }

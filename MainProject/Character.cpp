@@ -63,9 +63,9 @@ glm::vec3 Character::getPos(){
 }
 
 void Character::applyMouseInput(int mouseX, int mouseY){
-    GLfloat sensitivity = 0.1;
-    GLfloat xoffset = mouseX;
-    GLfloat yoffset = mouseY;
+    GLfloat sensitivity = 0.1f;
+    GLfloat xoffset = (GLfloat)mouseX;
+	GLfloat yoffset = (GLfloat)mouseY;
 
     xoffset *= sensitivity;
     yoffset *= -sensitivity;

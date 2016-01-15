@@ -18,7 +18,7 @@ void ChunkMapper::setListRef(std::list<TerrainChunk>* tlr) {
 }
 
 bool ChunkMapper::examineChunk(glm::vec3 charPos, glm::vec3& outPos, int x, int z) {
-	glm::vec2 mappedPos = mapToMultiple((int)(charPos.x / SCALING_FACTOR) + (x * 8), (charPos.z / SCALING_FACTOR) + (z * 8));
+	glm::vec2 mappedPos = mapToMultiple((int)(charPos.x / SCALING_FACTOR) + (x * 8), (int)(charPos.z / SCALING_FACTOR) + (z * 8));
 	// Scaling of above is done by first rounding to int - scaling down from world space - then doing an offset by the params.
 
 	for (TerrainChunk& tc : *terrainListRef) { // Check over list... 

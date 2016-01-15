@@ -41,7 +41,6 @@ void MTLParser::parseMTL(){
         }
         case _NS:
         {
-                        float f;
                         fscanf(file, "%f\n", &this->currentMat->ns);
                         break;
         }

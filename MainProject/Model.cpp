@@ -28,7 +28,7 @@ void Model::makeTexture() {
 
 void Model::initialize(){
     makeTexture();
-    for (int i = 0; i < this->components.size(); i++){
+	for (unsigned int i = 0; i < this->components.size(); i++) {
         this->components[i]->init();
     }
 
@@ -36,7 +36,7 @@ void Model::initialize(){
 
 
 void Model::draw(){
-    for (int i = 0; i < this->components.size(); i++){
+	for (unsigned int i = 0; i < this->components.size(); i++) {
         this->components[i]->draw();
     }
 }

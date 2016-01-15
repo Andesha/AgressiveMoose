@@ -27,7 +27,7 @@ void Mesh::initialize(){
     int index = vetexes.size();
     std::vector<GLuint> indices;
     indices.resize(index);
-    for (int j = 0; j < indices.size(); ++j) {
+    for (unsigned int j = 0; j < indices.size(); ++j) {
             indices[j] = (GLuint)j;
     }
     

@@ -125,7 +125,7 @@ void SimulationGame::fpsCaretaker(float startMarker) {
 
 	//FPS limiting.
 	if (1000.0f / MAX_FPS > totalTicks) {
-		SDL_Delay(1000.0f / MAX_FPS - totalTicks);
+		SDL_Delay((Uint32)(1000.0f / MAX_FPS - totalTicks));
 	}
 }
 
@@ -170,7 +170,7 @@ void SimulationGame::mouseUpdatePos(int mouseX, int mouseY){
 
 void SimulationGame::gameLoop() {
 	while (this->gameState != GameState::QUITTING) {
-		float startMarker = SDL_GetTicks(); // Frame time.
+		float startMarker = (float)SDL_GetTicks(); // Frame time.
 		
 		this->examineInput(); // Input handle
 
@@ -272,9 +272,9 @@ void SimulationGame::calculateFPS() {
 	static const int samples = 10; // Need the next three variables to be accessed again as the same values. 
 	static float frameTimes[samples]; // Thus we make them static variables.
 	static int framePointer = 0;
-	static float previousTicks = SDL_GetTicks(); // Idea of the implementation is a circular buffer.
+	static float previousTicks = (float)SDL_GetTicks(); // Idea of the implementation is a circular buffer.
 	
-	float currentTicks = SDL_GetTicks();
+	float currentTicks = (float)SDL_GetTicks();
 
 	this->frameTime = currentTicks - previousTicks;
 
