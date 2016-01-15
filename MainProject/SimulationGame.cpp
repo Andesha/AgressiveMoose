@@ -186,7 +186,7 @@ void SimulationGame::drawWorld() {
 	proj = glm::perspective(45.0f, (float)this->windowWidth / (float)this->windowHeight, 0.1f, 1000.0f);
 	
 	// V matrix for skybox without rotations.
-	glm::mat4 view = glm::mat4(glm::mat3(character->getViewMatrix()));
+	glm::mat4 view;
 
 	skybox->draw(view,proj); // CALL TO THE SKYBOX DRAW IS HERE
 
@@ -198,15 +198,11 @@ void SimulationGame::drawWorld() {
 	GLint projLoc = this->program.getUniformLocation("proj");
 	GLint modelLoc = this->program.getUniformLocation("model");
 
-	view = character->getViewMatrix(); // Update view matrix now that we aren't doing the skybox.
     glDisable(GL_CULL_FACE);
     glBindTexture(GL_TEXTURE_2D, this->model->tid);
     glm::mat4 model;
 
-    glm::vec3 pos;
-    pos = this->character->getPos() + (glm::normalize(this->character->camera->getFront())*3.0f);
-
-    model = glm::translate(model, pos);
+	model = glm::translate(model, glm::vec3(0.f, 0.f, -3.f));
     GLint lightDir = this->program.getUniformLocation("light.direction");
     GLint lightDiff = this->program.getUniformLocation("light.diff");
     GLint lightAmb = this->program.getUniformLocation("light.amb");
@@ -216,10 +212,14 @@ void SimulationGame::drawWorld() {
     glUniform3f(lightDir, 0.9f, -1.0f, 0.0f);
     glUniform3f(lightDiff, 0.4f, 0.4f, 0.4f);
 	glUniform3f(lightAmb, 0.2f, 0.2f, 0.2f);
-    glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
+	glUniformMatrix4fv(modelLoc, 1, GL_FALSE, glm::value_ptr(model));
 
-    this->model->draw();
-    glEnable(GL_CULL_FACE);
+	this->model->draw();
+	glEnable(GL_CULL_FACE);
+
+	view = glm::mat4(glm::mat3(character->getViewMatrix()));
+	view = character->getViewMatrix(); // Update view matrix now that we aren't doing the skybox.
+	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view)); // Send information.
 
 	for (TerrainChunk tc : terrainList->getList()) {
 		glm::mat4 model;

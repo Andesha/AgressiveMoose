@@ -35,8 +35,8 @@ bool ChunkMapper::examineChunk(glm::vec3 charPos, glm::vec3& outPos, int x, int 
 }
 
 bool ChunkMapper::getOpenChunk(glm::vec3 charPos, glm::vec3& outPos) {
-	for (int i = 5; i >= -5; --i) { // These two nested for loops contain the open
-		for (int j = -5; j <= 5; ++j) { // area for the class to check for chunks.
+	for (int i = 7; i >= -7; --i) { // These two nested for loops contain the open
+		for (int j = -7; j <= 7; ++j) { // area for the class to check for chunks.
 			if (examineChunk(charPos, outPos, j, i)) return true; // Found one - quick return.
 		}
 	}

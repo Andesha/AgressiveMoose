@@ -1,7 +1,10 @@
 ThirdParty/
+Debug
+Release
 ipch/*
 *.opensdf
 *.sdf
 *.ipch
 *.tlog
 *.idb
+*.suo
