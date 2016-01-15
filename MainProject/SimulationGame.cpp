@@ -21,7 +21,6 @@ SimulationGame::~SimulationGame() {
 void SimulationGame::start() {
 	this->initialize(); // Build.
 	
-	terrainList->buildPool(TERRAIN_LIST_SIZE); // Nine total chunks for the pool.
 	terrainList->firstInit(); // Build the start of the grid.
 	skybox->initialize();
 
@@ -189,7 +188,7 @@ void SimulationGame::drawWorld() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
 	glm::mat4 proj; // P matrix
-	proj = glm::perspective(45.0f, (float)this->windowWidth / (float)this->windowHeight, 0.1f, 1000.0f);
+	proj = glm::perspective(45.0f, (float)this->windowWidth / (float)this->windowHeight, 0.1f, FARCLIP);
 	
 	// V matrix for skybox without rotations.
 	glm::mat4 view = glm::mat4(glm::mat3(character->getViewMatrix()));
@@ -229,15 +228,15 @@ void SimulationGame::drawWorld() {
 
 	glUniformMatrix4fv(viewLoc, 1, GL_FALSE, glm::value_ptr(view));
 
-	for (TerrainChunk tc : terrainList->getList()) {
+	for (TerrainList::ChunkRef cr : *terrainList) {
 		glm::mat4 model;
 
 		glm::vec3 toScale = glm::vec3(SCALING_FACTOR); // Scaling matrix.
 		model = glm::scale(model, toScale);
 
 		glm::vec3 pos;
-		pos.x = tc.getCenterX();
-		pos.z = tc.getCenterY(); // Confusing but oh well.
+		pos.x = cr.centerX;
+		pos.z = cr.centerY; // Confusing but oh well.
 
 		model = glm::translate(model, pos);
 
@@ -250,7 +249,7 @@ void SimulationGame::drawWorld() {
 
 		glUniform1i(glGetUniformLocation(id, "texIm"), 0);
 
-		if (tc.isDrawing()) tc.draw();
+		cr.chunk->draw();
 	}
 
 	this->program.unuseProg(); // Safe to un use.

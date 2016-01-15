@@ -40,7 +40,6 @@
 #include "TextureFactory.h"
 #include "Camera3D.h"
 #include "Character.h"
-#include "ChunkMapper.h"
 #include "objParser.h"
 #include "Mesh.h"
 #include "Object.h"

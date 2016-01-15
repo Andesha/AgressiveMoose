@@ -2,11 +2,7 @@
 #include "TerrainChunk.h"
 
 // Default constructor.
-TerrainChunk::TerrainChunk() : vaoID(0), vboID(0), eboID(0), drawing(false), perlin(NULL){
-}
-
-void TerrainChunk::sendPerlin(Perlin& p) {
-    this->perlin = p;
+TerrainChunk::TerrainChunk() : vaoID(0), vboID(0), eboID(0){
 }
 
 TerrainChunk::~TerrainChunk() {
@@ -18,25 +14,8 @@ TerrainChunk::~TerrainChunk() {
     }
 }
 
-bool TerrainChunk::isDrawing() {
-    return this->drawing;
-}
-
-float TerrainChunk::getCenterX() {
-    return this->centerX;
-}
-
-float TerrainChunk::getCenterY() {
-    return this->centerY;
-}
-
 // Private method to be called when first building, AND rebuilding chunks.
-void TerrainChunk::initialize(float cX, float cY) {
-    this->drawing = true;
-
-    this->centerX = cX;
-    this->centerY = cY;
-
+void TerrainChunk::initialize(float cX, float cY, Perlin* perlin) {
     if (this->vboID == 0) { // If true, we have to rebuild the VBO.
         glGenBuffers(1, &this->vboID); // Pass in a reference to "THIS" vboID. Only generating one.
     }
@@ -61,12 +40,12 @@ void TerrainChunk::initialize(float cX, float cY) {
         for (int j = -BUILD_INCREMENT; j <= BUILD_INCREMENT; ++j) {
             vertices[countBuild].position.x = (float)j; // Position coords.
             vertices[countBuild].position.z = (float)i;
-            vertices[countBuild].position.y = perlin.at(this->centerX + j, this->centerY + i);
+            vertices[countBuild].position.y = perlin->at(cX + j, cY + i);
 
             vertices[countBuild].textureCoord.x = colCount * (1.0f / ((float)GRID_WIDTH - 1)); // Texture coords to send.
             vertices[countBuild].textureCoord.y = rowCount * (1.0f / ((float)GRID_WIDTH - 1));
             
-			glm::vec3 tempVnorm = calcVertexNormal(vertices[countBuild].position); /// Normal call.
+			glm::vec3 tempVnorm = calcVertexNormal(vertices[countBuild].position, cX, cY, perlin); /// Normal call.
 
 			vertices[countBuild].vNorm.x = tempVnorm.x; // Assign normals.
 			vertices[countBuild].vNorm.y = tempVnorm.y;
@@ -123,7 +102,7 @@ void TerrainChunk::initialize(float cX, float cY) {
 }
 
 // Outside method call for building a chunk around a given point.
-void TerrainChunk::rebase(float cX, float cY) {
+void TerrainChunk::rebase(float cX, float cY, Perlin* perlin) {
 	if (this->vboID != 0) {
 		glDeleteBuffers(1, &this->vboID);
 	}
@@ -131,10 +110,10 @@ void TerrainChunk::rebase(float cX, float cY) {
 		glDeleteBuffers(1, &this->eboID);
 	}
 
-	initialize(cX, cY);
+	initialize(cX, cY, perlin);
 }
 
-void TerrainChunk::draw() {
+void TerrainChunk::draw() const {
     glBindVertexArray(this->vaoID);
     glDrawElements(GL_TRIANGLES, INDICES_SIZE, GL_UNSIGNED_INT, (void*)0);
     glBindVertexArray(0);
@@ -144,43 +123,43 @@ void TerrainChunk::draw() {
 }
 
 //I know this doesnt look pretty, but hey man.....
-glm::vec3 TerrainChunk::calcVertexNormal(Position pos){
-	float x = pos.x + centerX;
+glm::vec3 TerrainChunk::calcVertexNormal(Position pos, float cX, float cY, Perlin* perlin) {
+	float x = pos.x + cX;
 	float y = pos.y;
-	float z = pos.z + centerY;
+	float z = pos.z + cY;
 
     glm::vec3 vNorm1, vNorm2, vNorm3, vNorm4, vNorm5, vNorm6;
 	glm::vec3 p1, p2, p3;
 
     // Triangle 1
     p1 = glm::vec3(x, y, z);
-    p2 = glm::vec3(x- 1, perlin.at(x- 1, z), z);
-    p3 = glm::vec3(x- 1, perlin.at(x- 1, z - 1), z - 1);
+    p2 = glm::vec3(x- 1, perlin->at(x- 1, z), z);
+    p3 = glm::vec3(x- 1, perlin->at(x- 1, z - 1), z - 1);
     vNorm1 = glm::normalize(glm::cross((p3 - p1), (p2 - p1)));
 
     // Triangle 2
-    p2 = glm::vec3(x- 1, perlin.at(x- 1, z - 1), z - 1);
-    p3 = glm::vec3(x,perlin.at(x,z - 1), z - 1);
+    p2 = glm::vec3(x- 1, perlin->at(x- 1, z - 1), z - 1);
+    p3 = glm::vec3(x,perlin->at(x,z - 1), z - 1);
     vNorm2 = glm::normalize(glm::cross((p3 - p1), (p2 - p1)));
 
     // Triangle 3
-    p2 = glm::vec3(x,perlin.at(x,z - 1), z - 1);
-    p3 = glm::vec3(x+ 1, perlin.at(x+ 1, z), z);
+    p2 = glm::vec3(x,perlin->at(x,z - 1), z - 1);
+    p3 = glm::vec3(x+ 1, perlin->at(x+ 1, z), z);
     vNorm3 = glm::normalize(glm::cross((p3 - p1), (p2 - p1)));
 
     // Triangle 4
-    p3 = glm::vec3(x+ 1, perlin.at(x+ 1, z), z);
-    p3 = glm::vec3(x+ 1, perlin.at(x+ 1, z + 1), z + 1);
+    p3 = glm::vec3(x+ 1, perlin->at(x+ 1, z), z);
+    p3 = glm::vec3(x+ 1, perlin->at(x+ 1, z + 1), z + 1);
     vNorm4 = glm::normalize(glm::cross((p3 - p1), (p2 - p1)));
 
     // Triangle 5
-    p2 = glm::vec3(x,perlin.at(x,z + 1), z + 1);
-    p3 = glm::vec3(x+ 1, perlin.at(x+ 1, z + 1), z + 1);
+    p2 = glm::vec3(x,perlin->at(x,z + 1), z + 1);
+    p3 = glm::vec3(x+ 1, perlin->at(x+ 1, z + 1), z + 1);
     vNorm5 = glm::normalize(glm::cross((p3 - p1), (p2 - p1)));
 
     // Triangle 6
-    p3 = glm::vec3(x,perlin.at(x,z + 1), z + 1);
-    p2 = glm::vec3(x- 1, perlin.at(x- 1, z), z);
+    p3 = glm::vec3(x,perlin->at(x,z + 1), z + 1);
+    p2 = glm::vec3(x- 1, perlin->at(x- 1, z), z);
     vNorm6 = glm::normalize(glm::cross((p3 - p1), (p2 - p1)));
 
     return glm::normalize(vNorm1 + vNorm2 + vNorm3 + vNorm4 + vNorm5 + vNorm6);

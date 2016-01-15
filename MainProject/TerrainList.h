@@ -4,7 +4,8 @@
 #include "Perlin.h"
 #include "TerrainChunk.h"
 #include "Character.h"
-#include "ChunkMapper.h"
+
+class ChunkMap;
 
 /// <summary>
 /// This class is to store a list of TerrainChunk's and control when to rebase them.
@@ -13,9 +14,7 @@
 class TerrainList {
 
 private:
-
-	/// Actual list of chunks.
-	std::list<TerrainChunk> terrainList;
+	ChunkMap* chunkMap;
 
 	/// Perlin object for pass through.
 	Perlin perlin;
@@ -23,10 +22,32 @@ private:
 	/// Reference to our character for getting the position.
 	Character* character;
 
-	/// Reference to the ChunkMapper for finding open chunks to draw in.
-	ChunkMapper* chunkMapper;
+	float chunkX, chunkZ;
 
 public:
+
+	struct ChunkRef {
+		const TerrainChunk* chunk;
+		float centerX;
+		float centerY;
+	};
+
+	class const_iterator {
+	friend class TerrainList;
+
+	public:
+		ChunkRef operator*() const;
+		bool operator!=(const const_iterator& other) const;
+		const_iterator& operator++();
+
+	private:
+		const_iterator(int32_t x, int32_t z, const TerrainList* list);
+		int32_t x, z;
+		const TerrainList* list;
+	};
+
+	const_iterator begin() const;
+	const_iterator end() const;
 
 	/// <summary>
 	/// Set the reference to the character we are playing with.
@@ -43,24 +64,12 @@ public:
 	/// Count of chunks to first build.
 	int chunkCount;
 
-	/// <summary>
-	/// Return the terrainList that this class is holding.
-	/// </summary>
-	/// <returns>Standard list of TerrainChunk type</return>
-	std::list<TerrainChunk> getList();
-
 	TerrainList(const Perlin& p = Perlin());
 
 	/// <summary>
 	/// Default destructor to never really be called.
 	/// </summary>
 	~TerrainList();
-
-	/// <summary>
-	/// Build/allocate a given number of chunks.
-	/// </summary>
-	/// <param name="chunkCount">Number of chunks to build.</param>
-	void buildPool(int chunkCount);
 
 	/// <summary>
 	/// Translate the freshly built chunks into their first positions.

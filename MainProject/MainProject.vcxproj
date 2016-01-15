@@ -92,7 +92,6 @@ if not exist "$(TargetDir)glew32.dll" copy "$(SolutionDir)\ThirdParty\glew\glew3
   <ItemGroup>
     <ClInclude Include="Camera3D.h" />
     <ClInclude Include="Character.h" />
-    <ClInclude Include="ChunkMapper.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="ErrorHandling.h" />
     <ClInclude Include="Gamestate.h" />
@@ -118,7 +117,6 @@ if not exist "$(TargetDir)glew32.dll" copy "$(SolutionDir)\ThirdParty\glew\glew3
   <ItemGroup>
     <ClCompile Include="Camera3D.cpp" />
     <ClCompile Include="Character.cpp" />
-    <ClCompile Include="ChunkMapper.cpp" />
     <ClCompile Include="ErrorHandling.cpp" />
     <ClCompile Include="GLSLProgram.cpp" />
     <ClCompile Include="MainProject.cpp" />
