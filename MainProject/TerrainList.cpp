@@ -10,6 +10,7 @@ TerrainList::TerrainList(const Perlin& p) {
 
 
 TerrainList::~TerrainList() {
+	delete chunkMapper;
 }
 
 void TerrainList::setChar(Character* c) {

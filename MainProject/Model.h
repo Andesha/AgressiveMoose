@@ -18,8 +18,6 @@ class Model{
 public:
 
     Model();
-
-    ~Model();
  
     std::vector<std::unique_ptr<Object>> components;
 

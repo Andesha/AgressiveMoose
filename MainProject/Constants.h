@@ -25,4 +25,4 @@ const float HEIGHT_OFFSET = HEIGHT_LIMIT / 2; // Just a value to adjust the perl
 
 const float MAX_FPS = 1000.0f; // Pretty obvious.
 
-const float DISTANCE_CONSTANT = 500.0f; // "View distance."
+const float DISTANCE_CONSTANT = 30.0f; // "View distance."

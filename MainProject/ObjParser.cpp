@@ -73,8 +73,8 @@ Model *ObjParser::parseFile(){
             this->current_object = new Object();
             fscanf(file, "%s\n", this->current_object->objectName);
             new_m->components.emplace_back(std::move(current_object));
-            this->current_mesh = new Mesh();
-            this->current_mesh->materialName = "default";
+            //this->current_mesh = new Mesh();
+            //this->current_mesh->materialName = "default";
             noMat = true;
             //this->current_object->components.emplace_back(std::move(current_mesh));
             //std::cout << "OBJECT NAMED " << this->current_object->objectName << std::endl;

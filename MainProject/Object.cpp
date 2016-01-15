@@ -5,6 +5,10 @@ Object::Object(){
 
 }
 
+Object::~Object() {
+	delete objectName;
+}
+
 
 void Object::init(){
     for (int i = 0; i < this->components.size(); i++){

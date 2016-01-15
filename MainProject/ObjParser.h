@@ -18,8 +18,6 @@ private:
     Mesh *current_mesh;
 
     Object *current_object;
-
-    Material *current_material;
  
     int testLine(char* line);
 

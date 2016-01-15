@@ -16,6 +16,10 @@ dir(glm::vec3(0.0f, 0.0f, 1.0f)), charUp(0.0f, 1.0f, 0.0f){
 Character::Character() {
 }
 
+Character::~Character() {
+	delete camera;
+}
+
 glm::mat4 Character::getViewMatrix(){
     return camera->getViewMatrix();
 }
@@ -43,6 +47,11 @@ void Character::setSpeed(GLfloat spd){
 
 void Character::setLatSpeed(GLfloat spd){
     this->speedLat = spd;
+}
+
+void Character::multiplySpeed(GLfloat factor){
+	this->speed *= factor;
+	this->speedLat *= factor;
 }
 
 GLfloat Character::getSpeed(){

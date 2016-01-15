@@ -6,6 +6,10 @@ Mesh::Mesh(){
     this->materialName = new char[45];
 }
 
+Mesh::~Mesh() {
+	delete materialName;
+}
+
 
 void Mesh::initialize(){
     if (this->vboID == 0) { // If true, we have to rebuild the VBO.

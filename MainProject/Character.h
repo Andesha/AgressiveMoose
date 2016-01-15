@@ -12,6 +12,7 @@ class Character{
 public:
 
 	Character();
+	~Character();
 
     /// <summary>
     /// Default constructor for the character class. Takes in the default position as the only parameter.
@@ -56,6 +57,8 @@ public:
     /// </summary>
 	/// <param name="spd">Speed to set.</param>
     void setLatSpeed(GLfloat spd);
+
+	void multiplySpeed(GLfloat factor);
 
     /// <summary>
     /// Read the input from the mouse and apply to the proper methods which will move the character.
