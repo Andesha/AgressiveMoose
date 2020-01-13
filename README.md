@@ -1,8 +1,4 @@
-# AgressiveMoose
-3P98 Graphics Final Build
+# Brock University COSC 3P98 Graphics Project
+Once upon a time this was a course project that was used to teach modern OpenGL, shaders, and get a better handle on actual C++ that wasn't just numerical methods. It was a lot of work. A lot.
 
-# Don't forget a lot of the files are missing and to get the 7zip of them.
-
-7zip of the ThirdParty stuff is available via a link on the wiki.
-
-![alt tag](http://i1081.photobucket.com/albums/j350/beehappy/smiling_moose-655x303_zps82e570d2.jpg)
+Thanks to the Lizard Wizard for helping us fix the production issues.
